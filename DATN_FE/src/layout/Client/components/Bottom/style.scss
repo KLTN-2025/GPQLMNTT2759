@@ -1,0 +1,56 @@
+.footer-end {
+  width: 100%;
+  height: 300px;
+  padding: 50px;
+  background-color: #000;
+
+  .footer-mani {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    .footer-content {
+      width: 400px;
+      h3 {
+        margin-bottom: 20px;
+
+        color: #fff;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-weight: 700;
+      }
+      .item-note {
+        line-height: 1.9;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #fff;
+      }
+      .logo-contact {
+        margin-top: 20px;
+        width: 100%;
+        .item-logo {
+          margin-right: 20px;
+        }
+      }
+    }
+    .footer-contact {
+      width: 800px;
+      display: flex;
+      justify-content: space-between;
+      .contact {
+        h3 {
+          margin-bottom: 20px;
+          font-size: 20px;
+          color: #fff;
+          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+          font-weight: 700;
+        }
+        .item-note {
+          line-height: 1.9;
+          font-size: 12px;
+          font-family: Arial, Helvetica, sans-serif;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
