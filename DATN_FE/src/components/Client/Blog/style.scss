@@ -1,0 +1,453 @@
+.blog-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px 90px;
+  .blog-main {
+    margin-top: 100px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    .txt-new {
+      width: 100%;
+      border-bottom: solid 1px #e3d8d8;
+      padding: 20px 0px;
+      color: #000;
+      font-weight: 600;
+      font-size: 20px;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    }
+    .form-new-post {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      justify-content: space-between;
+      .img-thumbnail {
+        padding: 0px;
+        width: 48%;
+        height: 100%;
+        .item-thumbnail {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .form-content {
+        width: 48%;
+        height: 100%;
+        background-color: white;
+        .form-status {
+          margin-top: 15px;
+          display: flex;
+          .item-new {
+            padding: 5px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background-color: #fcefea;
+            color: #d04f2a;
+          }
+          .item-inspiration {
+            padding: 5px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background-color: #eee9fb;
+            color: #7b5fc0;
+          }
+          .item-date {
+            padding: 5px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background-color: rgb(148, 237, 219);
+            color: rgb(53, 181, 155);
+          }
+        }
+        h3 {
+          margin-top: 20px;
+          font-weight: 600;
+          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        }
+        .txt-short {
+          line-height: 2;
+          margin-left: 20px;
+        }
+        .btn-view {
+          margin-top: 10px;
+          width: 150px;
+          height: 50px;
+          border-radius: 20px;
+          background-color: rgb(204, 224, 224);
+          color: #000;
+          border: none;
+          cursor: pointer;
+          transition: all 0.25s ease;
+
+          &:hover {
+            background-color: rgb(190, 210, 210);
+            transform: scale(1.02);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          &:active {
+            transform: scale(0.99);
+            box-shadow: none;
+          }
+        }
+      }
+    }
+    .blog-information {
+      margin-top: 50px;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .item-information {
+        width: 900px;
+        h2 {
+          text-align: center;
+          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+          margin-bottom: 20px;
+          font-weight: 600;
+        }
+        p {
+          font-size: 15px;
+          text-align: center;
+          line-height: 2;
+        }
+      }
+    }
+    .form-posts {
+      margin-top: 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      .item-post {
+        cursor: pointer;
+        width: 310px;
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        background-color: #fff;
+        transition: transform 0.3s ease;
+        &:hover {
+          transform: translateY(-4px);
+        }
+
+        .form-img-post {
+          width: 100%;
+          height: 200px;
+          overflow: hidden;
+          .img-post {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .form-detail {
+          padding: 16px;
+
+          .tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            .tag {
+              font-size: 12px;
+              padding: 4px 8px;
+              border-radius: 8px;
+              font-weight: 500;
+            }
+            .tag-news {
+              background-color: #fcefea;
+              color: #d04f2a;
+            }
+            .tag-inspiration {
+              background-color: #eee9fb;
+              color: #7b5fc0;
+            }
+          }
+
+          .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.7;
+          }
+
+          .post-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.6;
+          }
+
+          .author-info {
+            display: flex;
+            align-items: center;
+            .author-avatar {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              margin-right: 8px;
+            }
+            .author-meta {
+              .author-name {
+                font-size: 14px;
+                font-weight: 500;
+                margin-bottom: 5px;
+              }
+              .author-date {
+                font-size: 12px;
+                color: #999;
+                margin-bottom: 0px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .newsletter-container {
+      background-color: #f4f9ff;
+      border-radius: 40px;
+      padding: 50px 60px;
+      max-width: 1000px;
+      margin: 80px auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: -60px;
+        bottom: -30px;
+        width: 150px;
+        height: 150px;
+        background-color: #fff1d6;
+        border-radius: 50%;
+        z-index: 0;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 150px;
+        height: 150px;
+        background-image: radial-gradient(#e2ecff 20%, transparent 20%);
+        background-size: 10px 10px;
+        z-index: 0;
+      }
+      .newsletter-content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+      }
+
+      .newsletter-text {
+        width: 300px;
+        h2 {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 10px;
+        }
+
+        p {
+          color: #777;
+          font-size: 15px;
+        }
+      }
+
+      .newsletter-form {
+        position: relative; // ✨ Thêm dòng này
+        background-color: #2639ed;
+        border-radius: 60px;
+        height: 150px;
+        width: 400px;
+        padding: 12px;
+
+        .form-email {
+          position: absolute;
+          border-radius: 40px;
+          background-color: white;
+          left: -15%;
+          top: 50%; // canh giữa theo chiều dọc
+          transform: translateY(-50%); // giúp canh giữa chính xác
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s ease;
+
+          &:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25),
+              0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-52%) scale(1.02); // hiệu ứng nhô nhẹ
+          }
+          input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 14px 20px;
+            font-size: 14px;
+            border-radius: 40px;
+          }
+
+          button {
+            width: 130px;
+            padding: 12px 20px;
+            background-color: white;
+            color: #2639ed;
+            font-weight: 600;
+            margin-right: 5px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: #5170ff;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Scroll Animation Styles
+.animate-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &.animate-visible {
+    opacity: 1;
+  }
+}
+
+// Animation Types
+.animate-fade-up {
+  transform: translateY(0);
+}
+
+.animate-on-scroll:not(.animate-visible).animate-fade-up {
+  transform: translateY(50px);
+
+  &.animate-visible {
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-down {
+  transform: translateY(0);
+}
+
+.animate-on-scroll:not(.animate-visible).animate-fade-down {
+  transform: translateY(-50px);
+
+  &.animate-visible {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-left {
+  transform: translateX(-50px);
+
+  &.animate-visible {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-right {
+  transform: translateX(50px);
+
+  &.animate-visible {
+    transform: translateX(0);
+  }
+}
+
+.animate-zoom-in {
+  transform: scale(1);
+}
+
+.animate-on-scroll:not(.animate-visible).animate-zoom-in {
+  transform: scale(0.8);
+
+  &.animate-visible {
+    transform: scale(1);
+  }
+}
+
+.animate-zoom-out {
+  transform: scale(1);
+}
+
+.animate-on-scroll:not(.animate-visible).animate-zoom-out {
+  transform: scale(1.2);
+
+  &.animate-visible {
+    transform: scale(1);
+  }
+}
+
+.animate-rotate-in {
+  transform: rotate(-10deg) scale(0.8);
+
+  &.animate-visible {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.animate-bounce-in {
+  transform: scale(1);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-on-scroll:not(.animate-visible).animate-bounce-in {
+  transform: scale(0.3);
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  &.animate-visible {
+    transform: scale(1);
+  }
+}
+
+// Staggered animation delays for multiple elements
+.item-post {
+  &:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  &:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+  &:nth-child(4) {
+    transition-delay: 0.4s;
+  }
+  &:nth-child(5) {
+    transition-delay: 0.5s;
+  }
+  &:nth-child(6) {
+    transition-delay: 0.6s;
+  }
+}
