@@ -10,6 +10,11 @@ const routes = [
     component: () => import("../components/Client/HomePage/index.vue"),
     meta: { layout: "client" },
   },
+  {
+    path: "/blog",
+    component: () => import("../components/Client/Blog/index.vue"),
+    meta: { layout: "client" },
+  },
 ];
 
 const router = createRouter({
