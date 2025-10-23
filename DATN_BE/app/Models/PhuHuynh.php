@@ -6,27 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class NhanVien extends Authenticatable
+class PhuHuynh extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
-
-    protected $table = 'nhan_viens';
+    protected $table = 'phu_huynhs';
 
     protected $fillable = [
         'ho_va_ten',
         'so_dien_thoai',
         'avatar',
         'email',
-        'id_chuc_vu',
+        'dia_chi',
+        'quan_he',
         'password',
         'gioi_tinh',
-        'dia_chi',
+        'nghe_nghiep',
         'ngay_sinh',
         'is_block',
-        'tinh_trang',
+        'is_active',
         'hash_reset',
     ];
+
+
 }
