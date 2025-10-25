@@ -25,6 +25,16 @@ const routes = [
     component: () => import("../components/Client/SchoolBlog/index.vue"),
     meta: { layout: "client" },
   },
+  {
+    path: "/notebook",
+    component: () => import("../components/Client/Notebook/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/notebook-detail",
+    component: () => import("../components/Client/NotebookDetail/index.vue"),
+    meta: { layout: "client" },
+  },
 ];
 
 const router = createRouter({
