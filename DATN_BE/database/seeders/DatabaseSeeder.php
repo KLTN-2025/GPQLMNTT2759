@@ -15,9 +15,29 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            // Seeder cơ bản
+            ChucVuSeeder::class,
+            KhoiLopSeeder::class,
+            NamHocSeeder::class,
+            ChucNangSeeder::class,
+
+            // Seeder dữ liệu chính
+            PhuHuynhSeeder::class,
+            LopHocSeeder::class,
+
+            // Seeder dữ liệu bổ sung
+            ThucDonSeeder::class,
+
+            // Seeder quản lý
+            PhanQuyenSeeder::class,
+
+            // Seeder nội dung
+            BaiVietSeeder::class,
+
+            // Seeder theo dõi
+            DiemDanhSeeder::class,
+            SucKhoeSeeder::class,
         ]);
     }
 }
