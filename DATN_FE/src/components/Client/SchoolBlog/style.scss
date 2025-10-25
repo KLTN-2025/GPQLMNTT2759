@@ -1,0 +1,592 @@
+.school-blog-container {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+  .school-blog-main {
+    padding: 120px 90px 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    // Hero Section
+    .hero-section {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      margin-bottom: 100px;
+      background: white;
+      border-radius: 20px;
+      padding: 60px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+
+      .hero-content {
+        flex: 1;
+
+        .hero-title {
+          font-size: 3.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 20px;
+          background: linear-gradient(90deg, #ff66c4, #ffde59);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .hero-subtitle {
+          font-size: 1.2rem;
+          color: #7f8c8d;
+          line-height: 1.8;
+          margin: 0;
+        }
+      }
+
+      .hero-image {
+        flex: 1;
+
+        .hero-img {
+          width: 100%;
+          height: 400px;
+          object-fit: cover;
+          border-radius: 15px;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+
+    // Section Header
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .divider {
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 0 auto;
+        border-radius: 2px;
+      }
+    }
+
+    // About Section
+    .about-section {
+      margin-bottom: 100px;
+
+      .about-content {
+        display: flex;
+        gap: 60px;
+        align-items: center;
+
+        .about-text {
+          flex: 2;
+
+          p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+
+        .about-stats {
+          flex: 1;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 30px;
+
+          .stat-item {
+            text-align: center;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+              transform: translateY(-5px);
+
+              .stat-number {
+                background: linear-gradient(90deg, #ff66c4, #ffde59);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+              }
+
+              .stat-label {
+                background: linear-gradient(90deg, #ff66c4, #ffde59);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+              }
+            }
+
+            .stat-number {
+              font-size: 2.5rem;
+              font-weight: 700;
+              color: #667eea;
+              margin-bottom: 10px;
+              transition: color 0.3s ease;
+            }
+
+            .stat-label {
+              font-size: 0.9rem;
+              color: #7f8c8d;
+              font-weight: 500;
+              transition: color 0.3s ease;
+            }
+          }
+        }
+      }
+    }
+
+    // Mission & Vision Section
+    .mission-vision-section {
+      margin-bottom: 100px;
+
+      .mission-vision-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+
+        .mission-card,
+        .vision-card {
+          background: white;
+          padding: 40px;
+          border-radius: 20px;
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+          text-align: center;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: translateY(-10px);
+          }
+          .card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: linear-gradient(90deg, #ff66c4, #ffde59);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+              font-size: 2rem;
+              color: white;
+            }
+          }
+
+          h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+          }
+
+          p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    // School News Section
+    .school-news-section {
+      margin-bottom: 100px;
+
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+
+        .news-item {
+          background: white;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: translateY(-10px);
+          }
+
+          .news-image {
+            height: 250px;
+            overflow: hidden;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              transition: transform 0.3s ease;
+            }
+
+            &:hover img {
+              transform: scale(1.05);
+            }
+          }
+
+          .news-content {
+            padding: 30px;
+
+            .news-meta {
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              margin-bottom: 15px;
+
+              .news-date {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+              }
+
+              .news-category {
+                background: #667eea;
+                color: white;
+                padding: 4px 12px;
+                border-radius: 15px;
+                font-size: 0.8rem;
+                font-weight: 500;
+              }
+            }
+
+            .news-title {
+              font-size: 1.3rem;
+              color: #2c3e50;
+              margin-bottom: 15px;
+              font-weight: 600;
+              line-height: 1.7;
+            }
+
+            .news-excerpt {
+              color: #7f8c8d;
+              line-height: 1.6;
+              margin-bottom: 20px;
+            }
+
+            .read-more-btn {
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: white;
+              border: none;
+              padding: 12px 24px;
+              border-radius: 25px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: transform 0.3s ease;
+
+              &:hover {
+                transform: translateY(-2px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Facilities Section
+    .facilities-section {
+      margin-bottom: 100px;
+
+      .facilities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+
+        .facility-item {
+          background: white;
+          padding: 40px 30px;
+          border-radius: 20px;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: translateY(-5px);
+          }
+
+          .facility-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+              font-size: 1.8rem;
+              color: white;
+            }
+          }
+
+          h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.6;
+          }
+
+          p {
+            color: #7f8c8d;
+            line-height: 1.5;
+            margin: 0;
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+
+    // Contact Section
+    .contact-section {
+      background: white;
+      border-radius: 20px;
+      padding: 60px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+
+      .contact-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+
+        .contact-info {
+          h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+          }
+
+          p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 30px;
+          }
+
+          .contact-details {
+            .contact-item {
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              margin-bottom: 20px;
+
+              i {
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1rem;
+              }
+
+              span {
+                color: #555;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+
+        .contact-form {
+          h4 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 600;
+          }
+
+          .form-group {
+            margin-bottom: 20px;
+
+            input,
+            textarea {
+              width: 100%;
+              padding: 15px 20px;
+              border: 2px solid #e9ecef;
+              border-radius: 10px;
+              font-size: 1rem;
+              transition: border-color 0.3s ease;
+
+              &:focus {
+                outline: none;
+                border-color: #667eea;
+              }
+
+              &::placeholder {
+                color: #adb5bd;
+              }
+            }
+
+            textarea {
+              height: 120px;
+              resize: vertical;
+            }
+          }
+
+          .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+
+            &:hover {
+              transform: translateY(-2px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animation Classes
+.animate-on-scroll {
+  opacity: 0;
+  transition: all 0.8s ease;
+
+  &.animate-visible {
+    opacity: 1;
+  }
+
+  &.animate-fade-up {
+    transform: translateY(30px);
+
+    &.animate-visible {
+      transform: translateY(0);
+    }
+  }
+
+  &.animate-slide-left {
+    transform: translateX(-50px);
+
+    &.animate-visible {
+      transform: translateX(0);
+    }
+  }
+
+  &.animate-slide-right {
+    transform: translateX(50px);
+
+    &.animate-visible {
+      transform: translateX(0);
+    }
+  }
+
+  &.animate-slide-up {
+    transform: translateY(30px);
+
+    &.animate-visible {
+      transform: translateY(0);
+    }
+  }
+
+  &.animate-zoom-in {
+    transform: scale(0.8);
+
+    &.animate-visible {
+      transform: scale(1);
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .school-blog-container .school-blog-main {
+    padding: 100px 60px 40px;
+
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+
+      .hero-content .hero-title {
+        font-size: 3rem;
+      }
+    }
+
+    .about-content {
+      flex-direction: column;
+
+      .about-stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .mission-vision-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-content {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .school-blog-container .school-blog-main {
+    padding: 80px 30px 30px;
+
+    .hero-section {
+      padding: 40px 30px;
+
+      .hero-content .hero-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+    }
+
+    .about-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .facilities-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .contact-section {
+      padding: 40px 30px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .school-blog-container .school-blog-main {
+    padding: 60px 20px 20px;
+
+    .hero-content .hero-title {
+      font-size: 2rem;
+    }
+
+    .about-stats,
+    .facilities-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
