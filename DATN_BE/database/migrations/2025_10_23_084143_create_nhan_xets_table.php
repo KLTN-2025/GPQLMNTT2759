@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lop_hocs', function (Blueprint $table) {
+        Schema::create('nhan_xets', function (Blueprint $table) {
             $table->id();
-             $table->string('ten_lop')->unique();
-            $table->integer('id_khoi_lop');
-            $table->integer('id_nam_hoc');
+            $table->integer('id_hoc_sinh');
+            $table->date('ngay_nhan_xet');
             $table->integer('id_giao_vien');
-            $table->integer('so_luong')->default(0)->comment('Số lượng học sinh tối đa trong lớp (tối đa 25)');
-            $table->integer('is_block')->default(0);
+            $table->text('noi_dung');
+            $table->string('danh_gia');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lop_hocs');
+        Schema::dropIfExists('nhan_xets');
     }
 };
