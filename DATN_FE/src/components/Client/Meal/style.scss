@@ -1,0 +1,320 @@
+// Animation keyframes
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Scroll reveal classes
+.scroll-reveal {
+  opacity: 0;
+  transition: all 0.6s ease-out;
+
+  &.revealed {
+    opacity: 1;
+    animation-fill-mode: both;
+  }
+}
+
+.meal-container {
+  width: 100%;
+  padding: 20px 50px;
+
+  .form-swiper {
+    margin-top: 100px;
+    width: 100%;
+    height: 500px;
+
+    // Animation cho swiper
+    &.scroll-reveal.revealed {
+      animation: scaleIn 0.8s ease-out;
+    }
+
+    .mySwiper {
+      width: 100%;
+      height: 100%;
+
+      .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .slide-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .meal-main {
+    margin-top: 50px;
+
+    h1 {
+      text-align: center;
+
+      // Animation cho title
+      &.scroll-reveal.revealed {
+        animation: fadeInUp 0.8s ease-out;
+      }
+    }
+
+    .form-posts {
+      margin-top: 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+
+      .item-post {
+        cursor: pointer;
+        width: 310px;
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        background-color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        // Animation cho post items
+        &.scroll-reveal.revealed {
+          animation: fadeInUp 0.8s ease-out;
+        }
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-img-post {
+          width: 100%;
+          height: 200px;
+          overflow: hidden;
+
+          .img-post {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+        }
+
+        &:hover .img-post {
+          transform: scale(1.05);
+        }
+
+        .form-detail {
+          padding: 16px;
+
+          .tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+
+            .tag {
+              font-size: 12px;
+              padding: 4px 8px;
+              border-radius: 8px;
+              font-weight: 500;
+              transition: transform 0.2s ease;
+            }
+
+            .tag:hover {
+              transform: scale(1.05);
+            }
+
+            .tag-news {
+              background-color: #fcefea;
+              color: #d04f2a;
+            }
+
+            .tag-inspiration {
+              background-color: #eee9fb;
+              color: #7b5fc0;
+            }
+          }
+
+          .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.7;
+            transition: color 0.3s ease;
+          }
+
+          .post-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.6;
+          }
+
+          .author-info {
+            display: flex;
+            align-items: center;
+
+            .author-avatar {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              margin-right: 8px;
+              transition: transform 0.3s ease;
+            }
+
+            .author-meta {
+              .author-name {
+                font-size: 14px;
+                font-weight: 500;
+                margin-bottom: 5px;
+              }
+
+              .author-date {
+                font-size: 12px;
+                color: #999;
+                margin-bottom: 0px;
+              }
+            }
+          }
+
+          &:hover .author-avatar {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
+    .form-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin-top: 40px;
+
+      // Animation cho button
+      &.scroll-reveal.revealed {
+        animation: fadeInUp 0.8s ease-out;
+      }
+
+      .btn-show {
+        width: 120px;
+        border-radius: 10px;
+        height: 50px;
+        background-color: #009688;
+        border: none;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+          background-color: #00796b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(0, 150, 136, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+
+        // Ripple effect
+        &::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.3);
+          transition: width 0.3s, height 0.3s;
+          transform: translate(-50%, -50%);
+        }
+
+        &:active::before {
+          width: 120px;
+          height: 120px;
+        }
+      }
+    }
+  }
+}
+
+// Responsive animations
+@media (max-width: 768px) {
+  .meal-container {
+    padding: 20px 20px;
+
+    .form-posts {
+      .item-post {
+        width: 100%;
+
+        &.scroll-reveal.revealed {
+          animation: fadeInUp 0.6s ease-out;
+        }
+      }
+    }
+  }
+}
+
+// Reduced motion for accessibility
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    transition: opacity 0.3s ease;
+
+    &.revealed {
+      animation: none;
+    }
+  }
+
+  .meal-container .form-posts .item-post:hover {
+    transform: none;
+  }
+
+  .meal-container .form-btn .btn-show:hover {
+    transform: none;
+  }
+}
