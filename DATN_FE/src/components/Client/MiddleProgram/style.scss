@@ -1,0 +1,190 @@
+.programme-container {
+  width: 100%;
+  height: 100%;
+  padding: 40px 50px;
+
+  .program-list {
+    margin-top: 100px;
+    .preschool-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+
+      .section-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 24px;
+        color: #1c1c1c;
+      }
+
+      .section-image {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 24px;
+
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      }
+
+      .section-description {
+        text-align: justify;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+
+        p {
+          margin-bottom: 16px;
+        }
+      }
+      .from-bnt-quality {
+        width: 100%;
+        display: flex;
+        .btn-quality {
+          width: 100%;
+          height: 50px;
+          background-color: white;
+
+          border: 1px solid #ff66c4;
+          border-radius: 12px;
+          font-weight: bold;
+          cursor: pointer;
+          font-size: 15px;
+          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+          color: #fb6ec2;
+          margin-right: 20px;
+
+          transition: background-color 0.3s ease, border-color 0.3s ease,
+            color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+
+          &:hover {
+            background-color: #ffeff9;
+            border-color: #fb6ec2;
+            color: #e91e63;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 102, 196, 0.3);
+          }
+        }
+      }
+      .item-word {
+        border-bottom: solid 1px;
+        padding: 10px 0px;
+        margin-top: 40px;
+        text-align: start;
+      }
+    }
+  }
+}
+
+// Scroll Animation Styles
+.scroll-animate {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &.animate {
+    opacity: 1;
+  }
+
+  // Fade Up Animation
+  &.fade-up {
+    transform: translateY(50px);
+
+    &.animate {
+      transform: translateY(0);
+    }
+  }
+
+  // Fade Down Animation
+  &.fade-down {
+    transform: translateY(-50px);
+
+    &.animate {
+      transform: translateY(0);
+    }
+  }
+
+  // Fade Left Animation
+  &.fade-left {
+    transform: translateX(50px);
+
+    &.animate {
+      transform: translateX(0);
+    }
+  }
+
+  // Fade Right Animation
+  &.fade-right {
+    transform: translateX(-50px);
+
+    &.animate {
+      transform: translateX(0);
+    }
+  }
+
+  // Zoom In Animation
+  &.zoom-in {
+    transform: scale(0.8);
+
+    &.animate {
+      transform: scale(1);
+    }
+  }
+
+  // Zoom Out Animation
+  &.zoom-out {
+    transform: scale(1.2);
+
+    &.animate {
+      transform: scale(1);
+    }
+  }
+
+  // Rotate Animation
+  &.rotate {
+    transform: rotate(10deg);
+
+    &.animate {
+      transform: rotate(0deg);
+    }
+  }
+
+  // Slide Up Animation
+  &.slide-up {
+    transform: translateY(100px);
+
+    &.animate {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .scroll-animate {
+    &.fade-up,
+    &.slide-up {
+      transform: translateY(30px);
+    }
+
+    &.fade-left {
+      transform: translateX(30px);
+    }
+
+    &.fade-right {
+      transform: translateX(-30px);
+    }
+  }
+}
+
+// Performance optimization
+.scroll-animate {
+  will-change: transform, opacity;
+}
+
+// Smooth scrolling for better UX
+html {
+  scroll-behavior: smooth;
+}
