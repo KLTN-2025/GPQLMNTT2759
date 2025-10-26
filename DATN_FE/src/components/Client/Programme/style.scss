@@ -1,0 +1,183 @@
+.programme-container {
+  width: 100%;
+  height: 100%;
+  padding: 40px 50px;
+
+  .program-list {
+    margin-top: 100px;
+    .preschool-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+
+      .section-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 24px;
+        color: #1c1c1c;
+      }
+
+      .section-image {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 24px;
+
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      }
+
+      .section-description {
+        text-align: justify;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+
+        p {
+          margin-bottom: 16px;
+        }
+      }
+      .from-bnt-quality {
+        width: 100%;
+        display: flex;
+        .btn-quality {
+          width: 100%;
+          height: 50px;
+          background-color: white;
+
+          border: 1px solid #ff66c4;
+          border-radius: 12px;
+          font-weight: bold;
+          cursor: pointer;
+          font-size: 15px;
+          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+          color: #fb6ec2;
+          margin-right: 20px;
+
+          transition: background-color 0.3s ease, border-color 0.3s ease,
+            color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+
+          &:hover {
+            background-color: #ffeff9;
+            border-color: #fb6ec2;
+            color: #e91e63;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 102, 196, 0.3);
+          }
+        }
+      }
+      .item-word {
+        border-bottom: solid 1px;
+        padding: 10px 0px;
+        margin-top: 40px;
+        text-align: start;
+      }
+    }
+  }
+}
+
+// Animation styles
+.animate-element {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-in {
+  opacity: 1;
+}
+
+// Fade up animation
+.animate-fade-up {
+  transform: translateY(0);
+}
+
+.animate-element:not(.animate-in) {
+  &[data-animation="fade-up"] {
+    transform: translateY(50px);
+  }
+}
+
+// Zoom in animation
+.animate-zoom-in {
+  transform: scale(1);
+}
+
+.animate-element:not(.animate-in) {
+  &[data-animation="zoom-in"] {
+    transform: scale(0.8);
+  }
+}
+
+// Fade left animation
+.animate-fade-left {
+  transform: translateX(0);
+}
+
+.animate-element:not(.animate-in) {
+  &[data-animation="fade-left"] {
+    transform: translateX(50px);
+  }
+}
+
+// Fade right animation
+.animate-fade-right {
+  transform: translateX(0);
+}
+
+.animate-element:not(.animate-in) {
+  &[data-animation="fade-right"] {
+    transform: translateX(-50px);
+  }
+}
+
+// Stagger animation for buttons
+.from-bnt-quality {
+  .btn-quality {
+    transition: all 0.3s ease, opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    &:nth-child(1) {
+      transition-delay: 0.1s;
+    }
+
+    &:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .programme-container {
+    padding: 20px 15px;
+
+    .program-list {
+      margin-top: 50px;
+
+      .preschool-section {
+        padding: 20px 10px;
+
+        .section-title {
+          font-size: 24px;
+        }
+
+        .from-bnt-quality {
+          flex-direction: column;
+          gap: 15px;
+
+          .btn-quality {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Smooth scrolling for better animation experience
+html {
+  scroll-behavior: smooth;
+}
