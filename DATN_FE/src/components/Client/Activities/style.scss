@@ -1,0 +1,1011 @@
+// Variables
+$primary-color: #667eea;
+$secondary-color: #764ba2;
+$accent-color: #f093fb;
+$success-color: #27ae60;
+$warning-color: #f39c12;
+$danger-color: #e74c3c;
+$info-color: #3498db;
+$light-color: #f8f9fa;
+$dark-color: #2c3e50;
+$text-color: #333;
+$text-muted: #666;
+$border-color: #e9ecef;
+$shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0 5px 20px rgba(0, 0, 0, 0.15);
+$shadow-heavy: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin gradient-bg($color1, $color2) {
+  background: linear-gradient(135deg, $color1 0%, $color2 100%);
+}
+
+@mixin card-hover {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow-heavy;
+  }
+}
+
+@mixin button-style($bg-color, $text-color: white) {
+  background: $bg-color;
+  color: $text-color;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba($bg-color, 0.4);
+  }
+}
+
+// Base Styles
+.activities-container {
+  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: $text-color;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// Hero Section
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  @include flex-center;
+  @include gradient-bg($primary-color, $secondary-color);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .animated-bg {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      .floating-element {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        animation: float 6s ease-in-out infinite;
+
+        &.element-1 {
+          width: 100px;
+          height: 100px;
+          top: 20%;
+          left: 10%;
+          animation-delay: 0s;
+        }
+
+        &.element-2 {
+          width: 150px;
+          height: 150px;
+          top: 60%;
+          right: 15%;
+          animation-delay: 2s;
+        }
+
+        &.element-3 {
+          width: 80px;
+          height: 80px;
+          bottom: 20%;
+          left: 20%;
+          animation-delay: 4s;
+        }
+      }
+    }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 60px;
+
+      .stat-card {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        min-width: 120px;
+
+        .stat-icon {
+          font-size: 2rem;
+          margin-bottom: 10px;
+        }
+
+        .stat-number {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 5px;
+        }
+
+        .stat-label {
+          font-size: 0.9rem;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
+// Categories Section
+.categories-section {
+  padding: 100px 0;
+  background: $light-color;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $dark-color;
+      margin-bottom: 15px;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: $text-muted;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .categories-filter {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: 2px solid $border-color;
+      background: white;
+      border-radius: 25px;
+      font-weight: 600;
+      color: $text-color;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+
+      &.active {
+        @include gradient-bg($primary-color, $secondary-color);
+        color: white;
+        border-color: transparent;
+      }
+    }
+  }
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+
+    .activity-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: $shadow-light;
+      @include card-hover;
+      cursor: pointer;
+
+      .card-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+
+        .card-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          @include flex-center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+
+          .overlay-content {
+            color: white;
+            text-align: center;
+
+            i {
+              font-size: 2rem;
+              margin-bottom: 10px;
+            }
+
+            span {
+              font-weight: 600;
+            }
+          }
+        }
+
+        &:hover {
+          img {
+            transform: scale(1.1);
+          }
+
+          .card-overlay {
+            opacity: 1;
+          }
+        }
+      }
+
+      .card-content {
+        padding: 25px;
+
+        .card-category {
+          display: inline-block;
+          background: $primary-color;
+          color: white;
+          padding: 4px 12px;
+          border-radius: 15px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          margin-bottom: 15px;
+        }
+
+        h3 {
+          font-size: 1.3rem;
+          font-weight: 700;
+          margin-bottom: 10px;
+          color: $dark-color;
+        }
+
+        p {
+          color: $text-muted;
+          margin-bottom: 20px;
+          line-height: 1.6;
+        }
+
+        .card-meta {
+          display: flex;
+          gap: 20px;
+
+          .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: $text-muted;
+            font-size: 0.9rem;
+
+            i {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Schedule Section
+.schedule-section {
+  padding: 100px 0;
+  background: white;
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $dark-color;
+    margin-bottom: 50px;
+  }
+
+  .schedule-calendar {
+    background: white;
+    border-radius: 20px;
+    box-shadow: $shadow-medium;
+    overflow: hidden;
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px;
+      @include gradient-bg($primary-color, $secondary-color);
+      color: white;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .nav-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        @include flex-center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+      }
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1px;
+      background: $border-color;
+
+      .day-column {
+        background: white;
+        min-height: 200px;
+
+        .day-header {
+          padding: 15px;
+          text-align: center;
+          border-bottom: 1px solid $border-color;
+          background: $light-color;
+
+          .day-name {
+            font-weight: 600;
+            color: $dark-color;
+            margin-bottom: 5px;
+          }
+
+          .day-date {
+            font-size: 0.9rem;
+            color: $text-muted;
+          }
+        }
+
+        .day-activities {
+          padding: 15px;
+
+          .schedule-item {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 0.8rem;
+
+            .schedule-time {
+              font-weight: 600;
+              margin-bottom: 2px;
+            }
+
+            .schedule-title {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Gallery Section
+.gallery-section {
+  padding: 100px 0;
+  background: $light-color;
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $dark-color;
+    margin-bottom: 50px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+
+    .gallery-item {
+      position: relative;
+      height: 200px;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      @include card-hover;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .gallery-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        @include flex-center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+
+        i {
+          color: white;
+          font-size: 2rem;
+        }
+      }
+
+      &:hover {
+        img {
+          transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+// CTA Section
+.cta-section {
+  padding: 100px 0;
+  @include gradient-bg($primary-color, $secondary-color);
+  color: white;
+  text-align: center;
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+
+      .btn-primary {
+        @include button-style(white, $primary-color);
+      }
+
+      .btn-secondary {
+        @include button-style(transparent, white);
+        border: 2px solid white;
+
+        &:hover {
+          background: white;
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Modal Styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  @include flex-center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  box-shadow: $shadow-heavy;
+
+  .modal-header {
+    padding: 30px;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: $dark-color;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: $text-muted;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      @include flex-center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: $light-color;
+        color: $dark-color;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 30px;
+
+    .modal-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 30px;
+    }
+
+    .modal-info {
+      .info-section {
+        margin-bottom: 30px;
+
+        h3 {
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: $dark-color;
+          margin-bottom: 15px;
+        }
+
+        p {
+          color: $text-muted;
+          line-height: 1.6;
+          margin-bottom: 15px;
+        }
+
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 15px;
+
+          .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: $light-color;
+            border-radius: 10px;
+
+            i {
+              color: $primary-color;
+              font-size: 1.1rem;
+            }
+
+            span {
+              color: $text-color;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .benefits-list {
+          list-style: none;
+          padding: 0;
+
+          li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            color: $text-color;
+
+            i {
+              color: $success-color;
+              font-size: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid $border-color;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+
+    .btn-primary {
+      @include button-style($primary-color);
+    }
+
+    .btn-secondary {
+      @include button-style(transparent, $primary-color);
+      border: 2px solid $primary-color;
+
+      &:hover {
+        background: $primary-color;
+        color: white;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animation Classes
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+
+  &.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.delay-200 {
+    transition-delay: 0.2s;
+  }
+
+  &.delay-400 {
+    transition-delay: 0.4s;
+  }
+
+  &.delay-600 {
+    transition-delay: 0.6s;
+  }
+}
+
+.activity-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: $shadow-light;
+  @include card-hover;
+  cursor: pointer;
+
+  .card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      @include flex-center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+
+      .overlay-content {
+        color: white;
+        text-align: center;
+
+        i {
+          font-size: 2rem;
+          margin-bottom: 10px;
+        }
+
+        span {
+          font-weight: 600;
+        }
+      }
+
+      &:hover {
+        img {
+          transform: scale(1.1);
+        }
+
+        .card-overlay {
+          opacity: 1;
+        }
+      }
+    }
+
+    .card-content {
+      padding: 25px;
+
+      .card-category {
+        display: inline-block;
+        background: $primary-color;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: $dark-color;
+      }
+
+      p {
+        color: $text-muted;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .card-meta {
+        display: flex;
+        gap: 20px;
+
+        .meta-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: $text-muted;
+          font-size: 0.9rem;
+
+          i {
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Giữ nguyên animation cho lần đầu load
+.animate-slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+  &.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-zoom-in {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.6s ease;
+
+  &.animate {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .hero-content {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-stats {
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+
+      .stat-card {
+        width: 200px;
+      }
+    }
+  }
+
+  .categories-filter {
+    .filter-btn {
+      font-size: 0.9rem;
+      padding: 10px 16px;
+    }
+  }
+
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cta-content {
+    h2 {
+      font-size: 2rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+
+      .btn-primary,
+      .btn-secondary {
+        width: 200px;
+      }
+    }
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .modal-header {
+    padding: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .modal-body {
+    padding: 20px;
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .modal-footer {
+    padding: 15px 20px;
+    flex-direction: column;
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  .section-title {
+    font-size: 2rem !important;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

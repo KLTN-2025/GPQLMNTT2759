@@ -1,0 +1,659 @@
+// Variables
+$primary-color: #4f46e5;
+$secondary-color: #06b6d4;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+$text-primary: #1f2937;
+$text-secondary: #6b7280;
+$background-light: #f8fafc;
+$white: #ffffff;
+$border-color: #e5e7eb;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card-style {
+  background: $white;
+  border-radius: 12px;
+  box-shadow: $shadow-md;
+  transition: all 0.3s ease;
+}
+
+.study-schedule-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 1rem;
+  font-family: "Inter", sans-serif;
+
+  // Hero Section
+  .hero-section {
+    margin-top: 100px;
+    @include card-style;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(
+      135deg,
+      $primary-color 0%,
+      $secondary-color 100%
+    );
+    color: $white;
+    position: relative;
+    overflow: hidden;
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+
+      .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+    }
+
+    .hero-decoration {
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      opacity: 0.1;
+
+      .floating-icon {
+        font-size: 8rem;
+        animation: float 6s ease-in-out infinite;
+      }
+    }
+  }
+
+  // Week Navigation
+  .week-info {
+    @include card-style;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+
+    .week-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+
+      .nav-btn {
+        @include flex-center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: $primary-color;
+        color: $white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: darken($primary-color, 10%);
+          transform: scale(1.1);
+        }
+
+        i {
+          font-size: 1.2rem;
+        }
+      }
+
+      .current-week {
+        text-align: center;
+
+        h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: $text-primary;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: $text-secondary;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  // Schedule Grid
+  .schedule-grid {
+    @include card-style;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 120px repeat(5, 1fr);
+    gap: 1px;
+    background: $border-color;
+    border-radius: 12px;
+    overflow: hidden;
+
+    .time-column {
+      .time-header {
+        @include flex-center;
+        background: $primary-color;
+        color: $white;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .time-slot {
+        @include flex-center;
+        background: $background-light;
+        padding: 1rem 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: $text-secondary;
+        min-height: 80px;
+      }
+    }
+
+    .day-column {
+      .day-header {
+        @include flex-center;
+        flex-direction: column;
+        background: $white;
+        padding: 1rem;
+        border-bottom: 2px solid $border-color;
+
+        &.today {
+          background: linear-gradient(
+            135deg,
+            $success-color,
+            mix(white, $success-color, 10%)
+          );
+          color: $white;
+
+          .day-name,
+          .day-date {
+            color: $white;
+          }
+        }
+
+        .day-name {
+          font-weight: 600;
+          font-size: 0.9rem;
+          color: $text-primary;
+        }
+
+        .day-date {
+          font-size: 0.8rem;
+          color: $text-secondary;
+          margin-top: 0.25rem;
+        }
+      }
+
+      .schedule-cell {
+        background: $white;
+        min-height: 80px;
+        padding: 0.5rem;
+        position: relative;
+
+        .subject-card {
+          width: 100%;
+          height: 100%;
+          border-radius: 8px;
+          padding: 0.75rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+
+          &.math {
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+            border-left: 4px solid #f59e0b;
+          }
+
+          &.language {
+            background: linear-gradient(135deg, #dbeafe, #60a5fa);
+            border-left: 4px solid #3b82f6;
+          }
+
+          &.english {
+            background: linear-gradient(135deg, #fce7f3, #f472b6);
+            border-left: 4px solid #ec4899;
+          }
+
+          &.science {
+            background: linear-gradient(135deg, #d1fae5, #34d399);
+            border-left: 4px solid #10b981;
+          }
+
+          &.art {
+            background: linear-gradient(135deg, #ede9fe, #a78bfa);
+            border-left: 4px solid #8b5cf6;
+          }
+
+          &.music {
+            background: linear-gradient(135deg, #fef7cd, #fcd34d);
+            border-left: 4px solid #f59e0b;
+          }
+
+          &.sports {
+            background: linear-gradient(135deg, #dcfdf4, #6ee7b7);
+            border-left: 4px solid #059669;
+          }
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: $shadow-lg;
+          }
+
+          .subject-name {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+          }
+
+          .subject-teacher {
+            font-size: 0.7rem;
+            color: $text-secondary;
+            margin-bottom: 0.25rem;
+          }
+
+          .subject-room {
+            font-size: 0.7rem;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+
+  // Today's Highlights
+  .today-highlights {
+    @include card-style;
+    padding: 2rem;
+    margin-bottom: 2rem;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+
+      .activity-card {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        background: $background-light;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: $shadow-md;
+          border-color: $primary-color;
+        }
+
+        .activity-icon {
+          @include flex-center;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background: $primary-color;
+          color: $white;
+          margin-right: 1rem;
+          font-size: 1.5rem;
+        }
+
+        .activity-info {
+          flex: 1;
+
+          h4 {
+            font-weight: 600;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+          }
+
+          p {
+            color: $text-secondary;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .activity-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+
+            &.completed {
+              background: #d1fae5;
+              color: #065f46;
+            }
+
+            &.current {
+              background: #fef3c7;
+              color: #92400e;
+            }
+
+            &.upcoming {
+              background: #dbeafe;
+              color: #1e40af;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Quick Stats
+  .quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .stat-card {
+      @include card-style;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: $shadow-lg;
+
+        .stat-icon {
+          background: linear-gradient(135deg, $primary-color, $secondary-color);
+        }
+      }
+
+      .stat-icon {
+        @include flex-center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: $background-light;
+        color: $primary-color;
+        margin-right: 1.5rem;
+        font-size: 1.8rem;
+        transition: all 0.3s ease;
+      }
+
+      .stat-info {
+        .stat-number {
+          font-size: 2rem;
+          font-weight: 700;
+          color: $text-primary;
+          line-height: 1;
+        }
+
+        .stat-label {
+          color: $text-secondary;
+          font-size: 0.9rem;
+          margin-top: 0.25rem;
+        }
+      }
+    }
+  }
+
+  // Modal
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    @include flex-center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+
+    .subject-modal {
+      @include card-style;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid $border-color;
+
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: $text-primary;
+        }
+
+        .close-btn {
+          @include flex-center;
+          width: 32px;
+          height: 32px;
+          border: none;
+          border-radius: 50%;
+          background: $background-light;
+          color: $text-secondary;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: $error-color;
+            color: $white;
+          }
+        }
+      }
+
+      .modal-content {
+        padding: 1.5rem;
+
+        .subject-details {
+          margin-bottom: 2rem;
+
+          .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: $background-light;
+            border-radius: 8px;
+
+            i {
+              color: $primary-color;
+              margin-right: 0.75rem;
+              font-size: 1.1rem;
+            }
+
+            span {
+              color: $text-primary;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .subject-materials {
+          h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin-bottom: 1rem;
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+              padding: 0.5rem 0;
+              border-bottom: 1px solid $border-color;
+              color: $text-secondary;
+
+              &:last-child {
+                border-bottom: none;
+              }
+
+              &:before {
+                content: "✓";
+                color: $success-color;
+                font-weight: bold;
+                margin-right: 0.5rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Animations
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  // Responsive Design
+  @media (max-width: 1024px) {
+    .schedule-grid {
+      grid-template-columns: 100px repeat(5, 1fr);
+
+      .time-column .time-slot {
+        font-size: 0.7rem;
+        padding: 0.75rem 0.25rem;
+      }
+
+      .day-column .schedule-cell .subject-card {
+        padding: 0.5rem;
+
+        .subject-name {
+          font-size: 0.7rem;
+        }
+
+        .subject-teacher,
+        .subject-room {
+          font-size: 0.6rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem 0.5rem;
+
+    .hero-section {
+      padding: 2rem 1rem;
+
+      .hero-content .hero-title {
+        font-size: 2rem;
+      }
+    }
+
+    .schedule-grid {
+      grid-template-columns: 80px repeat(5, 1fr);
+      gap: 0.5px;
+
+      .time-column {
+        .time-header {
+          padding: 0.75rem 0.25rem;
+          font-size: 0.8rem;
+        }
+
+        .time-slot {
+          padding: 0.5rem 0.25rem;
+          font-size: 0.6rem;
+          min-height: 60px;
+        }
+      }
+
+      .day-column {
+        .day-header {
+          padding: 0.75rem 0.25rem;
+
+          .day-name {
+            font-size: 0.8rem;
+          }
+
+          .day-date {
+            font-size: 0.7rem;
+          }
+        }
+
+        .schedule-cell {
+          min-height: 60px;
+          padding: 0.25rem;
+
+          .subject-card {
+            padding: 0.5rem 0.25rem;
+
+            .subject-name {
+              font-size: 0.6rem;
+            }
+
+            .subject-teacher,
+            .subject-room {
+              font-size: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+
+    .highlights-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .quick-stats {
+      grid-template-columns: 1fr;
+    }
+  }
+}
