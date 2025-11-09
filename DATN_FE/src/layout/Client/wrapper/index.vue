@@ -24,6 +24,10 @@ export default {
     TopClient,
     BotClient,
   },
+  mounted() {
+    // Đảm bảo scroll về đầu trang khi component được mount
+    window.scrollTo(0, 0);
+  }
 };
 </script>
 <style>

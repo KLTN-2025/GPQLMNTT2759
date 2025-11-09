@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\HocSinh;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,21 +24,36 @@ class DatabaseSeeder extends Seeder
             ChucNangSeeder::class,
 
             // Seeder dữ liệu chính
+            NhanVienSeeder::class,
+            GiaoVienSeeder::class,
             PhuHuynhSeeder::class,
             LopHocSeeder::class,
+            HocSinhSeeder::class,
 
             // Seeder dữ liệu bổ sung
+            BuaAnSeeder::class,
+            MonAnSeeder::class,
             ThucDonSeeder::class,
+            ChiTietThucDonSeeder::class,
 
             // Seeder quản lý
+            HocPhiSeeder::class,
+            HoaDonHocPhiSeeder::class,
+            ChiTietHocPhiSeeder::class,
             PhanQuyenSeeder::class,
 
             // Seeder nội dung
+            LoaiBaiVietSeeder::class,
             BaiVietSeeder::class,
+            ThongBaoSeeder::class,
+            ChiTietThongBaoSeeder::class,
+            BaoCaoSeeder::class,
 
             // Seeder theo dõi
             DiemDanhSeeder::class,
             SucKhoeSeeder::class,
+            NhanXetSeeder::class,
+            BinhLuanSeeder::class,
         ]);
     }
 }

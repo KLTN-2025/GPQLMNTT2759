@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SucKhoe extends Model
 {
@@ -11,9 +12,12 @@ class SucKhoe extends Model
     protected $fillable = [
         'id_hoc_sinh',
         'ngay_kham',
-        'tinh_trang',
         'chieu_cao',
         'can_nang',
+        'thi_luc',
+        'rang_mieng',
+        'tinh_trang_suc_khoe',
+        'loai_kham',
         'ghi_chu',
     ];
 }

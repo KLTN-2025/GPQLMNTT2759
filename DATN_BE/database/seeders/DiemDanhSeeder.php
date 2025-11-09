@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\DiemDanh;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

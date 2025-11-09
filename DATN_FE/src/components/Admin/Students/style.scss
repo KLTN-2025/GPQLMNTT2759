@@ -1,0 +1,104 @@
+// Students Management Styles
+@use "../shared-styles";
+
+// Student Info
+.student-info {
+  .student-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .student-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .student-details {
+      .student-name {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+      }
+
+      .student-age {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// Class Badge
+.class-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  i {
+    font-size: 0.8rem;
+  }
+}
+
+// Parent Info
+.parent-info {
+  .parent-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .parent-relationship {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Date Info
+.date-info {
+  .date {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .duration {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Responsive for student specific styles
+@media (max-width: 768px) {
+  .student-info {
+    .student-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+
+  .personal-info {
+    .info-group {
+      .info-item {
+        justify-content: center;
+      }
+    }
+  }
+}

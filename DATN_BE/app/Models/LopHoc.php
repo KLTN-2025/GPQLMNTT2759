@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LopHoc extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $table = 'lop_hocs';
 
@@ -18,4 +21,6 @@ class LopHoc extends Model
         'so_luong',
         'is_block',
     ];
+
+    
 }

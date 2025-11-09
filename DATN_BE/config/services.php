@@ -18,14 +18,14 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
-    'resend' => [
-        'key' => env('RESEND_KEY'),
-    ],
-
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
+    'resend' => [
+        'key' => env('RESEND_KEY'),
     ],
 
     'slack' => [
@@ -33,6 +33,16 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+    ],
+
+    'payos' => [
+        'client_id' => env('PAYOS_CLIENT_ID'),
+        'api_key' => env('PAYOS_API_KEY'),
+        'partner_code' => env('PAYOS_PARTNER_CODE'),
+        'checksum_key' => env('PAYOS_CHECKSUM_KEY'),
+        'base_url' => env('PAYOS_BASE_URL', 'https://api-merchant.payos.vn'),
+        'return_url' => env('PAYOS_RETURN_URL', 'http://127.0.0.1:8000/payment/success'),
+        'cancel_url' => env('PAYOS_CANCEL_URL', 'http://127.0.0.1:8000/payment/cancel'),
     ],
 
 ];
