@@ -46,7 +46,7 @@
           object-fit: cover;
           transition: transform 0.6s ease;
         }
-        
+
         // Hover effect cho images
         &:hover .img-recruitment {
           transform: scale(1.05);
@@ -292,7 +292,7 @@
             object-fit: cover;
             transition: transform 0.6s ease;
           }
-          
+
           &:hover .img-board {
             transform: scale(1.02);
           }
@@ -326,7 +326,7 @@
             object-fit: cover;
             transition: transform 0.6s ease;
           }
-          
+
           &:hover .img-board {
             transform: scale(1.02);
           }
@@ -509,27 +509,27 @@
 .scroll-animate {
   opacity: 0;
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  
+
   &[data-animation="fade-up"] {
     transform: translateY(60px);
   }
-  
+
   &[data-animation="fade-left"] {
     transform: translateX(-60px);
   }
-  
+
   &[data-animation="fade-right"] {
     transform: translateX(60px);
   }
-  
+
   &[data-animation="fade-in"] {
     transform: none;
   }
-  
+
   &[data-animation="scale-in"] {
     transform: scale(0.8);
   }
-  
+
   // Khi element được animate
   &.animate-in {
     opacity: 1;
@@ -542,10 +542,16 @@
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  
-  &:nth-child(1) { transition-delay: 0.1s; }
-  &:nth-child(2) { transition-delay: 0.2s; }
-  &:nth-child(3) { transition-delay: 0.3s; }
+
+  &:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  &:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    transition-delay: 0.3s;
+  }
 }
 
 .scroll-animate.animate-in .btn-quality {
@@ -600,7 +606,7 @@
           object-fit: cover;
           transition: transform 0.6s ease;
         }
-        
+
         // Hover effect cho images
         &:hover .img-recruitment {
           transform: scale(1.05);
@@ -841,7 +847,7 @@
             object-fit: cover;
             transition: transform 0.6s ease;
           }
-          
+
           &:hover .img-board {
             transform: scale(1.02);
           }
@@ -875,7 +881,7 @@
             object-fit: cover;
             transition: transform 0.6s ease;
           }
-          
+
           &:hover .img-board {
             transform: scale(1.02);
           }

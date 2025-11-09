@@ -83,78 +83,78 @@
 .scroll-animate {
   opacity: 0;
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  
+
   &.animate {
     opacity: 1;
   }
-  
+
   // Fade Up Animation
   &.fade-up {
     transform: translateY(50px);
-    
+
     &.animate {
       transform: translateY(0);
     }
   }
-  
+
   // Fade Down Animation
   &.fade-down {
     transform: translateY(-50px);
-    
+
     &.animate {
       transform: translateY(0);
     }
   }
-  
+
   // Fade Left Animation
   &.fade-left {
     transform: translateX(50px);
-    
+
     &.animate {
       transform: translateX(0);
     }
   }
-  
+
   // Fade Right Animation
   &.fade-right {
     transform: translateX(-50px);
-    
+
     &.animate {
       transform: translateX(0);
     }
   }
-  
+
   // Zoom In Animation
   &.zoom-in {
     transform: scale(0.8);
-    
+
     &.animate {
       transform: scale(1);
     }
   }
-  
+
   // Zoom Out Animation
   &.zoom-out {
     transform: scale(1.2);
-    
+
     &.animate {
       transform: scale(1);
     }
   }
-  
+
   // Rotate Animation
   &.rotate {
     transform: rotate(10deg);
-    
+
     &.animate {
       transform: rotate(0deg);
     }
   }
-  
+
   // Slide Up Animation
   &.slide-up {
     transform: translateY(100px);
-    
+
     &.animate {
       transform: translateY(0);
     }
@@ -164,14 +164,15 @@
 // Responsive adjustments
 @media (max-width: 768px) {
   .scroll-animate {
-    &.fade-up, &.slide-up {
+    &.fade-up,
+    &.slide-up {
       transform: translateY(30px);
     }
-    
+
     &.fade-left {
       transform: translateX(30px);
     }
-    
+
     &.fade-right {
       transform: translateX(-30px);
     }

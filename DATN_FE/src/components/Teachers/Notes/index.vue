@@ -1,50 +1,36 @@
 <template>
-    <div class="notes-page">
+    <div class="notebook-page">
         <div class="page-header mb-4">
             <h2 class="page-title">
-                <i class="bx bx-edit me-2"></i>Sổ Đầu Bài
+                <i class="bx bx-notebook me-2"></i>Sổ Liên Lạc
             </h2>
-            <p class="page-subtitle">Ghi chép nội dung giảng dạy hàng ngày</p>
+            <p class="page-subtitle">Trao đổi thông tin với phụ huynh</p>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Tạo ghi chú mới</h5>
-                    </div>
+        <div class="row">
+            <div class="col-md-4 mb-3" v-for="student in students" :key="student.id">
+                <div class="card student-notebook-card">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Ngày</label>
-                            <input type="date" class="form-control" v-model="newNote.date" />
+                        <div class="d-flex align-items-center mb-3">
+                            <img :src="student.avatar" class="student-avatar me-3" :alt="student.name" />
+                            <div>
+                                <h6 class="mb-0">{{ student.name }}</h6>
+                                <small class="text-muted">{{ student.parentName }}</small>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Môn học</label>
-                            <input type="text" class="form-control" v-model="newNote.subject"
-                                placeholder="VD: Toán, Tiếng Việt..." />
+                        <div class="notebook-stats">
+                            <div class="stat-item">
+                                <i class="bx bx-message text-primary"></i>
+                                <span>{{ student.messageCount }} tin nhắn</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="bx bx-time text-warning"></i>
+                                <span>{{ student.lastUpdate }}</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nội dung bài học</label>
-                            <textarea class="form-control" rows="5" v-model="newNote.content"
-                                placeholder="Ghi chú nội dung bài học..."></textarea>
-                        </div>
-                        <button class="btn btn-primary">
-                            <i class="bx bx-save me-2"></i>Lưu ghi chú
+                        <button class="btn btn-primary btn-sm w-100 mt-3">
+                            <i class="bx bx-edit me-2"></i>Viết nhận xét
                         </button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Ghi chú gần đây</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="note-item" v-for="note in recentNotes" :key="note.id">
-                            <div class="note-date">{{ note.date }}</div>
-                            <div class="note-subject">{{ note.subject }}</div>
-                            <p class="note-preview">{{ note.content.substring(0, 50) }}...</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -56,50 +42,53 @@
 import { ref } from 'vue';
 
 export default {
-    name: 'Notes',
+    name: 'Notebook',
     setup() {
-        const newNote = ref({
-            date: new Date().toISOString().split('T')[0],
-            subject: '',
-            content: ''
-        });
-
-        const recentNotes = ref([
-            { id: 1, date: '01/10/2024', subject: 'Toán', content: 'Học đếm số từ 1-10, nhận biết hình dạng cơ bản...' },
-            { id: 2, date: '30/09/2024', subject: 'Tiếng Việt', content: 'Học chữ cái A, B, C. Luyện phát âm và viết...' }
+        const students = ref([
+            { id: 1, name: 'Nguyễn Văn A', parentName: 'Nguyễn Văn X', messageCount: 5, lastUpdate: 'Hôm qua', avatar: '/src/assets/images/avatars/avatar-1.png' },
+            { id: 2, name: 'Trần Thị B', parentName: 'Trần Văn Y', messageCount: 3, lastUpdate: '2 ngày trước', avatar: '/src/assets/images/avatars/avatar-2.png' },
+            { id: 3, name: 'Lê Văn C', parentName: 'Lê Thị Z', messageCount: 8, lastUpdate: 'Hôm nay', avatar: '/src/assets/images/avatars/avatar-3.png' },
         ]);
 
-        return { newNote, recentNotes };
+        return { students };
     }
 };
 </script>
 
 <style scoped>
-.notes-page {
+.notebook-page {
     padding: 20px;
 }
 
-.note-item {
-    padding: 12px;
-    border-left: 3px solid #667eea;
-    background: #f8f9fa;
-    margin-bottom: 12px;
-    border-radius: 8px;
+.student-notebook-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
-.note-date {
-    font-size: 0.85rem;
-    color: #6c757d;
+.student-notebook-card:hover {
+    transform: translateY(-5px);
 }
 
-.note-subject {
-    font-weight: 600;
-    color: #2c3e50;
+.student-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-.note-preview {
+.notebook-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 0.9rem;
-    margin: 5px 0 0 0;
     color: #6c757d;
 }
 </style>

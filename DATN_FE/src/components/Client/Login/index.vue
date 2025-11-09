@@ -2,13 +2,22 @@
   <div class="login-wrapper d-flex align-items-center justify-content-center">
     <div class="login-box shadow bg-white p-4 rounded-4">
       <div class="text-center mb-4">
-        <div class="logo-icon-wrapper me-2">
-          <img src="../../../../assets/images/Home/logohoa.png" alt="Logo" class="logo-icon" />
-        </div>
-        <h3 class="fw-bold">Chào mừng đến với <br> <span class="school-name">Mầm Non Hoa Sen</span></h3>
+        <img src="../../../assets/images/logo-icon.png" alt="LauraSchool" class="logo mb-3" />
+        <h3 class="fw-bold">Chào mừng đến với <span class="text-primary">LauraSchool</span></h3>
       </div>
 
-      <div>
+      <div class="mb-3">
+        <button class="btn btn-light w-100 shadow-sm d-flex align-items-center justify-content-center">
+          <img src="../../../assets/images/icons/search.svg" alt="Google" width="18" class="me-2" />
+          Đăng nhập bằng Google
+        </button>
+      </div>
+
+      <div class="separator my-3">
+        <span class="text-muted">hoặc</span>
+      </div>
+
+      <form>
         <div class="form-group mb-3">
           <label class="form-label">Email</label>
           <div class="input-group">
@@ -34,7 +43,7 @@
         </div>
 
         <button type="submit" class="btn btn-gradient w-100">Đăng Nhập</button>
-      </div>
+      </form>
 
       <div class="text-center mt-4">
         <span>Chưa có tài khoản? <a href="#" class="text-primary fw-bold">Đăng ký ngay</a></span>
@@ -59,33 +68,10 @@ export default {};
   width: 100%;
 }
 
-.logo-icon-wrapper {
-  width: 100px;
-  height: 100px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .logo-icon {
-    width: 100%;
-    height: 100%;
-    color: white;
-  }
-}
 .logo {
   width: 60px;
 }
-.school-name {
-  font-size: 1.55rem;
-  font-weight: 700;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  background: linear-gradient(90deg, #ff66c4, #ffde59);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0;
-  line-height: 1.2;
-}
+
 .btn-gradient {
   background: linear-gradient(to right, #6a11cb, #2575fc);
   color: white;

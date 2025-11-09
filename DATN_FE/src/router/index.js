@@ -78,13 +78,13 @@ const routes = [
     meta: { layout: "client" },
   },
   {
-    path: "/notebook-detail",
-    component: () => import("../components/Client/NotebookDetail/index.vue"),
+    path: "/notebook",
+    component: () => import("../components/Client/Notebook/index.vue"),
     meta: { layout: "client" },
   },
   {
-    path: "/notebook",
-    component: () => import("../components/Client/Notebook/index.vue"),
+    path: "/notebook-detail",
+    component: () => import("../components/Client/NotebookDetail/index.vue"),
     meta: { layout: "client" },
   },
   {
@@ -119,7 +119,6 @@ const routes = [
     component: () => import("../components/Client/BigProgram/index.vue"),
     meta: { layout: "client" },
   },
-
   {
     path: "/paymentHistory",
     component: () => import("../components/Client/PaymentHistory/index.vue"),
@@ -141,7 +140,7 @@ const routes = [
     meta: { layout: "client" },
   },
 
-  // {
+  // {  
   //     path : '/register',
   //     component: ()=>import('../components/Client/Register/index.vue'),
   //     meta:{ layout : 'blank' },
