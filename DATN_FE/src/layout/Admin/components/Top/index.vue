@@ -77,7 +77,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   isSidebarOpen: {
@@ -127,12 +126,12 @@ function handleToggleSidebar() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  .logo-icon {
-    width: 100%;
-    height: 100%;
-    color: white;
-  }
+.logo-icon {
+  width: 100%;
+  height: 100%;
+  color: white;
 }
 
 .school-info {
@@ -145,6 +144,7 @@ function handleToggleSidebar() {
   font-weight: 700;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   background: linear-gradient(90deg, #ff66c4, #ffde59);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;

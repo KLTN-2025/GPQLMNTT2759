@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NamHoc extends Model
 {
@@ -13,4 +14,6 @@ class NamHoc extends Model
         'ngay_bat_dau',
         'ngay_ket_thuc',
     ];
+
+    
 }

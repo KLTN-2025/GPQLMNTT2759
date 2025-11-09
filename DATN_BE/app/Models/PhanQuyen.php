@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PhanQuyen extends Model
 {
@@ -12,4 +13,6 @@ class PhanQuyen extends Model
         'id_chuc_vu',
         'id_chuc_nang',
     ];
+
+    
 }

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\NhanVien;
+use App\Models\PhuHuynh;
+
 return [
 
     /*
@@ -40,6 +43,18 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
+        'giao_vien' => [
+            'driver' => 'session',
+            'provider' => 'giao_viens',
+        ],
     ],
 
     /*
@@ -65,10 +80,19 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\NhanVien::class,
+        ],
+
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\PhuHuynh::class,
+        ],
+        'giao_viens' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\GiaoVien::class,
+        ],
     ],
 
     /*
@@ -104,7 +128,7 @@ return [
     | Password Confirmation Timeout
     |--------------------------------------------------------------------------
     |
-    | Here you may define the number of seconds before a password confirmation
+    | Here you may define the amount of seconds before a password confirmation
     | window expires and users are asked to re-enter their password via the
     | confirmation screen. By default, the timeout lasts for three hours.
     |

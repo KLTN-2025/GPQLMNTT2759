@@ -19,5 +19,5 @@ class DongHocPhi extends Model
         'tinh_trang',
     ];
 
-
+    
 }
