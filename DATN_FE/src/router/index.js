@@ -12,8 +12,8 @@ const routes = [
   },
   {
     path: "/login",
-    component: () => import("../components/Client/Login/index.vue"),
-    meta: { layout: "blank" },
+    component: () => import("../components/Client/Auth/Login/index.vue"),
+    meta: { layout: "auth" },
   },
   {
     path: "/blog",
@@ -109,6 +109,16 @@ const routes = [
     path: "/study-schedule",
     component: () => import("../components/Client/StudySchedule/index.vue"),
     meta: { layout: "client" },
+  },
+  {
+    path: "/re-password",
+    component: () => import("../components/Client/Auth/RePassWord/index.vue"),
+    meta: { layout: "auth" },
+  },
+  {
+    path: "/new-password",
+    component: () => import("../components/Client/Auth/NewPassWord/index.vue"),
+    meta: { layout: "auth" },
   },
 ];
 
