@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import ClientLayout from './layout/Client/wrapper/index.vue'
 import BlankLayout from './layout/Blank/wrapper/index.vue'
+import AuthLayout from './layout/Auth/index.vue'
 
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -22,6 +23,7 @@ app.use(router)
 app.use(vuetify)
 app.component('client-layout', ClientLayout)
 app.component('blank-layout', BlankLayout)
+app.component('auth-layout', AuthLayout)
 app.component('default-layout', ClientLayout)
 
 app.mount('#app')
