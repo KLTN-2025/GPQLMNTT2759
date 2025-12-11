@@ -223,10 +223,13 @@
       </div>
     </div>
   </div>
+  <ChatAI />
 </template>
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import ChatAI from "../ChatAI/index.vue";
+
 const hover = ref(false);
 const hoverPost = ref(false);
 const hoverCV = ref(false);
