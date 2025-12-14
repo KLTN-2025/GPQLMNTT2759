@@ -16,5 +16,6 @@ class BaoCao extends Model
         'duong_dan',
         'ngay_tao',
         'ngay_ky',
+        'tinh_trang',
     ];
 }

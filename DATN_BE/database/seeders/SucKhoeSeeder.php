@@ -20,7 +20,7 @@ class SucKhoeSeeder extends Seeder
 
         // Chú thích giá trị:
         // thi_luc, rang_mieng: 1=Tốt, 2=Khá, 3=Trung bình, 4=Yếu
-        // tinh_trang_suc_khoe: 1=Tốt, 2=Cần theo dõi, 3=Cần can thiệp
+        // tinh_trang_suc_khoe: 0=Nguy hiểm, 1=Cần can thiệp, 2=Cần theo dõi, 3=Tốt
         // loai_kham: 1=Định kì, 0=Cấp cứu
 
         // Lấy tất cả học sinh từ database
@@ -55,27 +55,31 @@ class SucKhoeSeeder extends Seeder
                 $chieuCao = round($healthData['chieu_cao'] * $growthFactor + rand(-2, 2), 1);
                 $canNang = round($healthData['can_nang'] * $growthFactor + rand(-0.5, 0.5), 1);
 
-                // Đa dạng tình trạng sức khỏe (70% tốt, 25% cần theo dõi, 5% cần can thiệp)
+                // Đa dạng tình trạng sức khỏe (80% tốt, 13% cần theo dõi, 6% cần can thiệp, 1% nguy kịch)
                 $randHealth = rand(1, 100);
-                if ($randHealth <= 70) {
-                    $tinhTrangSucKhoe = 1; // Tốt
+                if ($randHealth <= 80) {
+                    $tinhTrangSucKhoe = 3; // Tốt
                     $thiLuc = rand(1, 2); // Tốt hoặc Khá
                     $rangMieng = rand(1, 2); // Tốt hoặc Khá
-                } elseif ($randHealth <= 95) {
+                } elseif ($randHealth <= 93) {
                     $tinhTrangSucKhoe = 2; // Cần theo dõi
                     $thiLuc = rand(2, 3); // Khá hoặc Trung bình
                     $rangMieng = rand(2, 3); // Khá hoặc Trung bình
-                } else {
-                    $tinhTrangSucKhoe = 3; // Cần can thiệp
+                } elseif ($randHealth <= 99) {
+                    $tinhTrangSucKhoe = 1; // Cần can thiệp
                     $thiLuc = rand(3, 4); // Trung bình hoặc Yếu
                     $rangMieng = rand(3, 4); // Trung bình hoặc Yếu
+                } else {
+                    $tinhTrangSucKhoe = 0; // Nguy kịch
+                    $thiLuc = 4; // Yếu
+                    $rangMieng = 4; // Yếu
                 }
 
                 // Cải thiện tình trạng ở lần khám sau
-                if ($i > 0 && $tinhTrangSucKhoe > 1) {
+                if ($i > 0 && $tinhTrangSucKhoe < 3) {
                     // 30% khả năng cải thiện
                     if (rand(1, 100) <= 30) {
-                        $tinhTrangSucKhoe = max(1, $tinhTrangSucKhoe - 1);
+                        $tinhTrangSucKhoe = min(3, $tinhTrangSucKhoe + 1);
                         $thiLuc = max(1, $thiLuc - 1);
                         $rangMieng = max(1, $rangMieng - 1);
                     }
@@ -164,7 +168,8 @@ class SucKhoeSeeder extends Seeder
         $ghichus = [];
 
         // Ghi chú chính về tình trạng sức khỏe (chọn ngẫu nhiên)
-        if ($tinhTrangSucKhoe == 1) {
+        if ($tinhTrangSucKhoe == 3) {
+            // Tốt
             $mainNotes = [
                 'Sức khỏe tốt, phát triển bình thường.',
                 'Đạt chuẩn phát triển theo độ tuổi.',
@@ -173,6 +178,7 @@ class SucKhoeSeeder extends Seeder
             ];
             $ghichus[] = $mainNotes[array_rand($mainNotes)];
         } elseif ($tinhTrangSucKhoe == 2) {
+            // Cần theo dõi
             $mainNotes = [
                 'Cần theo dõi thêm, tăng cường dinh dưỡng.',
                 'Cần chú ý chế độ ăn và vận động.',
@@ -180,12 +186,22 @@ class SucKhoeSeeder extends Seeder
                 'Cần điều chỉnh một số chỉ số sức khỏe.',
             ];
             $ghichus[] = $mainNotes[array_rand($mainNotes)];
-        } else {
+        } elseif ($tinhTrangSucKhoe == 1) {
+            // Cần can thiệp
             $mainNotes = [
                 'Cần can thiệp y tế, tư vấn chuyên khoa.',
                 'Cần điều chỉnh chế độ dinh dưỡng và vận động ngay.',
                 'Theo dõi sát sao và có biện pháp can thiệp kịp thời.',
                 'Cần có biện pháp can thiệp y tế sớm.',
+            ];
+            $ghichus[] = $mainNotes[array_rand($mainNotes)];
+        } else {
+            // Nguy hiểm
+            $mainNotes = [
+                'Tình trạng nguy hiểm, cần can thiệp y tế ngay lập tức.',
+                'Cần đưa đến bệnh viện để được chăm sóc đặc biệt.',
+                'Tình trạng nghiêm trọng, cần theo dõi và điều trị tích cực.',
+                'Cần can thiệp y tế khẩn cấp.',
             ];
             $ghichus[] = $mainNotes[array_rand($mainNotes)];
         }

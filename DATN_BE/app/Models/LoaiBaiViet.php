@@ -15,5 +15,5 @@ class LoaiBaiViet extends Model
         'tinh_trang',
     ];
 
-    
+
 }

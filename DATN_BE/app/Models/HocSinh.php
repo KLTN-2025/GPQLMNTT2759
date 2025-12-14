@@ -29,7 +29,10 @@ class HocSinh extends Model
     const TINH_TRANG = [
         0 => 'Không hoạt động',
         1 => 'Hoạt động',
-        2 => 'Vắng mặt',
+    ];
+    const IS_BLOCK = [
+        0 => 'Không khóa',
+        1 => 'Khóa',
     ];
 
 

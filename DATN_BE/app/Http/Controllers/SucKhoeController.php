@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SucKhoe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SucKhoeController extends Controller
@@ -195,6 +196,7 @@ class SucKhoeController extends Controller
                 'hoc_sinhs.dia_chi',
                 'hoc_sinhs.tinh_trang',
             )
+            ->orderBy('lop_hocs.ten_lop', 'asc')
             ->orderBy('suc_khoes.ngay_kham', 'desc')
             ->get();
         return response()->json([
@@ -256,12 +258,8 @@ class SucKhoeController extends Controller
 
     public function search(Request $request)
     {
-
-        $data = SucKhoe::join('hoc_sinhs', 'suc_khoes.id_hoc_sinh', 'hoc_sinhs.id')
-            ->join('lop_hocs', 'hoc_sinhs.id_lop_hoc', 'lop_hocs.id')
-            ->where('hoc_sinhs.ho_va_ten', 'like', "%$request->noi_dung%")
-            ->orWhere('suc_khoes.tinh_trang_suc_khoe', '=', "$request->tinh_trang_suc_khoe")
-            ->orWhere('lop_hocs.id', $request->id_lop)
+        $query = SucKhoe::join('hoc_sinhs', 'suc_khoes.id_hoc_sinh', '=', 'hoc_sinhs.id')
+            ->join('lop_hocs', 'hoc_sinhs.id_lop_hoc', '=', 'lop_hocs.id')
             ->select(
                 'lop_hocs.id as id_lop',
                 'lop_hocs.ten_lop',
@@ -280,12 +278,26 @@ class SucKhoeController extends Controller
                 'hoc_sinhs.avatar',
                 'hoc_sinhs.ngay_sinh',
                 'hoc_sinhs.dia_chi',
-                'hoc_sinhs.tinh_trang',
-            )
-            ->get();
+                'hoc_sinhs.tinh_trang'
+            );
+
+        if ($request->filled('noi_dung')) {
+            $query->where('hoc_sinhs.ho_va_ten', 'like', "%{$request->noi_dung}%");
+        }
+
+        if ($request->filled('tinh_trang_suc_khoe')) {
+            $query->where('suc_khoes.tinh_trang_suc_khoe', $request->tinh_trang_suc_khoe);
+        }
+
+        if ($request->filled('id_lop')) {
+            $query->where('lop_hocs.id', $request->id_lop);
+        }
+
+        $data = $query->get();
+
         return response()->json([
             'status' => true,
-            'message' => 'Danh sách hồ sơ sức khỏe học sinh',
+            'message' => 'Tìm kiếm hồ sơ sức khỏe thành công',
             'data' => $data
         ]);
     }
@@ -310,6 +322,69 @@ class SucKhoeController extends Controller
                 'by_status' => $byStatus,
                 'by_month' => $byMonth,
             ],
+        ]);
+    }
+
+    /**
+     * Lấy thông tin sức khỏe theo lớp học của giáo viên đăng nhập
+     */
+    public function getDataByLop(Request $request)
+    {
+        // Lấy giáo viên đăng nhập
+        $user = Auth::guard('sanctum')->user();
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Giáo viên không tồn tại trong hệ thống!',
+            ], 401);
+        }
+
+        // Tìm lớp học của giáo viên
+        $lopHoc = \App\Models\LopHoc::where('id_giao_vien', $user->id)->first();
+
+        if (!$lopHoc) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bạn chưa được phân công lớp học nào!',
+            ], 404);
+        }
+
+        // Lấy thông tin sức khỏe của học sinh trong lớp
+        $data = SucKhoe::join('hoc_sinhs', 'suc_khoes.id_hoc_sinh', 'hoc_sinhs.id')
+            ->join('lop_hocs', 'hoc_sinhs.id_lop_hoc', 'lop_hocs.id')
+            ->leftJoin('khoi_lops', 'lop_hocs.id_khoi_lop', 'khoi_lops.id')
+            ->leftJoin('giao_viens', 'lop_hocs.id_giao_vien', 'giao_viens.id')
+            ->where('lop_hocs.id', $lopHoc->id)
+            ->select(
+                'lop_hocs.id as id_lop_hoc',
+                'lop_hocs.ten_lop',
+                'khoi_lops.ten_khoi_lop',
+                'giao_viens.ho_va_ten as ten_giao_vien',
+                'suc_khoes.id',
+                'suc_khoes.id_hoc_sinh',
+                'suc_khoes.ngay_kham',
+                'suc_khoes.tinh_trang_suc_khoe',
+                'suc_khoes.can_nang',
+                'suc_khoes.chieu_cao',
+                'suc_khoes.thi_luc',
+                'suc_khoes.rang_mieng',
+                'suc_khoes.loai_kham',
+                'suc_khoes.ghi_chu',
+                'hoc_sinhs.ho_va_ten',
+                'hoc_sinhs.gioi_tinh',
+                'hoc_sinhs.avatar',
+                'hoc_sinhs.ngay_sinh',
+                'hoc_sinhs.dia_chi',
+                'hoc_sinhs.tinh_trang',
+            )
+            ->orderBy('hoc_sinhs.ho_va_ten', 'asc')
+            ->orderBy('suc_khoes.ngay_kham', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Danh sách thông tin sức khỏe theo lớp học',
+            'data' => $data
         ]);
     }
 }

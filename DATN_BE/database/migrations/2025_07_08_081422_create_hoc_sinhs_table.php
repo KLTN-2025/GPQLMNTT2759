@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->date('ngay_sinh');
             $table->string('dia_chi');
-            $table->boolean('tinh_trang')->default(1); // true: active, false: inactive
+            $table->boolean('tinh_trang')->default(1)->comment('1: Hoạt động, 0: Không hoạt động');
             $table->integer('id_lop_hoc')->nullable();
             $table->integer('id_phu_huynh')->nullable();
-            $table->boolean('is_block')->default(0); // false: not blocked, true: blocked
+            $table->boolean('is_block')->default(0)->comment('0: Không khóa, 1: Khóa');
             $table->timestamps();
         });
     }

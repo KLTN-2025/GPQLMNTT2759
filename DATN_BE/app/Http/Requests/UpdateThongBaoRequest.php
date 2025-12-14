@@ -22,9 +22,9 @@ class UpdateThongBaoRequest extends FormRequest
             'hinh_anh' => 'nullable|string',
             'tep_dinh_kem' => 'nullable|string',
             'thoi_gian_dang' => 'nullable|date',
-            'ngay_het_hieu_luc' => 'required|date',
+            'ngay_het_hieu_luc' => 'nullable|date',
             'loai_thong_bao' => 'required|integer',
-            'tinh_trang' => 'nullable|integer|in:0,1',
+            'tinh_trang' => 'nullable|integer|in:0,1,2',
             // Đối tượng nhận (recipients)
             'id_phu_huynh' => 'nullable|array',
             'id_phu_huynh.*' => 'nullable|integer|exists:phu_huynhs,id',

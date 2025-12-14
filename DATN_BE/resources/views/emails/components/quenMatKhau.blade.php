@@ -4,191 +4,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Mật Khẩu - Mầm Non Hoa Sen</title>
+    <title>OTP Reset Mật Khẩu - Mầm Non Hoa Sen</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body
-    style="margin: 0; padding: 0; background-color: #f8fafc; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #334155;">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%"
-        style="background-color: #f8fafc; min-height: 100vh;">
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: 'Inter', sans-serif; color: #334155;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f1f5f9; padding: 40px 0;">
         <tr>
-            <td align="center" style="padding: 40px 20px;">
-                <table cellpadding="0" cellspacing="0" border="0" width="600"
-                    style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); overflow: hidden;">
+            <td align="center">
+
+                <table width="600" cellpadding="0" cellspacing="0"
+                    style="background-color: #ffffff; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 28px rgba(0,0,0,0.08);">
+
+                    <!-- HEADER -->
                     <tr>
-                        <td
-                            style="background: linear-gradient(135deg, #1e293b 0%, #475569 100%); padding: 40px 30px; text-align: center;">
-                            <h1
-                                style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
-                                🏫 QLMN Hoa Sen
-                            </h1>
-                            <p
-                                style="margin: 8px 0 0 0; color: #e2e8f0; font-size: 16px; font-weight: 400; opacity: 0.9;">
-                                Hệ thống Quản Lý Mầm Non Hoa Sen
+                        <td style="background: linear-gradient(135deg, #1e293b, #334155); padding: 50px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #fff; font-size: 30px; font-weight: 700;">🏫 Mầm Non Hoa Sen</h1>
+                            <p style="margin-top: 8px; color: #cbd5e1; font-size: 15px;">
+                                Hệ thống Quản Lý Trường Mầm Non
                             </p>
                         </td>
                     </tr>
+
+                    <!-- BODY -->
                     <tr>
-                        <td style="padding: 50px 40px 40px 40px;">
-                            <div
-                                style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
-                                <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                                    <div
-                                        style="width: 20px; height: 20px; background: #f59e0b; border-radius: 50%; margin-right: 12px; display: flex; align-items: center; justify-content: center;">
-                                        <span style="color: #ffffff; font-size: 12px; font-weight: bold;">⚠</span>
-                                    </div>
-                                    <h3 style="margin: 0; color: #92400e; font-size: 16px; font-weight: 600;">
-                                        Yêu Cầu Reset Mật Khẩu
-                                    </h3>
-                                </div>
-                                <p style="margin: 0; color: #92400e; font-size: 14px; line-height: 1.5;">
-                                    Chúng tôi đã nhận được yêu cầu reset mật khẩu cho tài khoản của bạn.
+                        <td style="padding: 45px 40px;">
+
+                            <!-- Banner thông báo -->
+                            <div style="background: #fff7ed; border: 1px solid #fdba74; padding: 18px 20px;
+                                border-radius: 12px; margin-bottom: 25px;">
+                                <h3 style="margin: 0; color: #c2410c; font-size: 17px; font-weight: 600;">
+                                    📩 Yêu Cầu Tạo Mật Khẩu Mới
+                                </h3>
+                                <p style="margin: 6px 0 0; color: #c2410c; font-size: 14px;">
+                                    Chúng tôi đã nhận yêu cầu reset mật khẩu của bạn.
                                 </p>
                             </div>
-                            <h2
-                                style="margin: 0 0 20px 0; color: #1e293b; font-size: 24px; font-weight: 600; text-align: center;">
-                                Xin chào <span style="color: #f59e0b;">{{ $ho_va_ten }}</span>! 👋
+
+                            <!-- Chào -->
+                            <h2 style="margin: 0; margin-bottom: 10px; text-align: center; color: #1e293b; font-size: 23px;">
+                                Xin chào <span style="color: #f59e0b;">{{ $ho_va_ten }}</span> 👋
                             </h2>
-                            <p
-                                style="margin: 0 0 25px 0; color: #64748b; font-size: 16px; text-align: center; line-height: 1.6;">
-                                Bạn đã yêu cầu reset mật khẩu cho tài khoản Mầm Non Hoa Sen của mình.<br>
-                                Nhấn vào nút bên dưới để tạo mật khẩu mới.
+                            <p style="text-align: center; margin: 0 0 30px; color: #475569; font-size: 16px;">
+                                Dưới đây là mã OTP để đặt lại mật khẩu cho tài khoản của bạn.
                             </p>
-                            <div style="text-align: center; margin: 40px 0;">
-                                <a href="{{ $link }}"
-                                    style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden;">
-                                    <span style="position: relative; z-index: 1;">🔒 Reset Mật Khẩu</span>
-                                </a>
-                            </div>
-                            <div
-                                style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border: 1px solid #f87171; border-radius: 12px; padding: 20px; margin: 30px 0; text-align: center;">
-                                <div style="margin-bottom: 12px;">
-                                    <span style="font-size: 24px;">⏰</span>
+
+                            <!-- OTP -->
+                            <div style="text-align: center; margin: 35px 0;">
+                                <div style="
+                                    display: inline-block;
+                                    background: linear-gradient(135deg, #f59e0b, #d97706);
+                                    color: #ffffff;
+                                    padding: 22px 45px;
+                                    border-radius: 18px;
+                                    font-size: 34px;
+                                    font-weight: 700;
+                                    letter-spacing: 10px;
+                                    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+                                ">
+                                    {{ $otp }}
+                                    {{-- 123456 --}}
                                 </div>
-                                <h4 style="margin: 0 0 8px 0; color: #dc2626; font-size: 16px; font-weight: 600;">
-                                    Thời Gian Có Hiệu Lực
+                            </div>
+
+                            <!-- Hiệu lực -->
+                            <div style="background: #fee2e2; border: 1px solid #f87171;
+                                padding: 20px; border-radius: 14px; text-align: center;">
+                                <h4 style="margin: 0 0 8px; color: #b91c1c; font-size: 16px; font-weight: 600;">
+                                    ⏳ Thời gian hiệu lực
                                 </h4>
-                                <p style="margin: 0; color: #dc2626; font-size: 14px; line-height: 1.5;">
-                                    Link reset mật khẩu này sẽ hết hạn sau <strong>5 phút</strong> kể từ khi được
-                                    gửi.<br>
-                                    Vui lòng thực hiện reset trong thời gian này.
+                                <p style="margin: 0; color: #b91c1c; font-size: 14px;">
+                                    Mã OTP có hiệu lực trong <strong>5 phút</strong>.<br>
+                                    Hãy yêu cầu mã mới nếu OTP đã hết hạn.
                                 </p>
                             </div>
-                            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin: 30px 0;">
-                                <h4 style="margin: 0 0 12px 0; color: #475569; font-size: 14px; font-weight: 600;">
-                                    Nếu nút không hoạt động, copy link sau:
+
+                            <!-- Note -->
+                            <div style="background: #eff6ff; border: 1px solid #60a5fa; padding: 20px;
+                                border-radius: 14px; margin-top: 30px;">
+                                <h4 style="margin: 0 0 10px; color: #1d4ed8; font-size: 16px;">
+                                    🔒 Lưu ý bảo mật
                                 </h4>
-                                <div
-                                    style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; word-break: break-all;">
-                                    <a href="{{ $link }}"
-                                        style="color: #3b82f6; text-decoration: none; font-size: 14px; font-family: 'Courier New', monospace;">
-                                        {{ $link }}
-                                    </a>
-                                </div>
+                                <ul style="margin: 0; padding-left: 20px; color: #1d4ed8; font-size: 14px;">
+                                    <li>Không chia sẻ mã OTP cho bất kỳ ai.</li>
+                                    <li>Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email.</li>
+                                    <li>Liên hệ ngay với quản trị nếu nghi ngờ có truy cập bất thường.</li>
+                                </ul>
                             </div>
-                            <div
-                                style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px; margin: 30px 0;">
-                                <div style="display: flex; align-items: flex-start;">
-                                    <div
-                                        style="width: 20px; height: 20px; background: #3b82f6; border-radius: 50%; margin-right: 15px; margin-top: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <span style="color: #ffffff; font-size: 12px; font-weight: bold;">🛡</span>
-                                    </div>
-                                    <div>
-                                        <h4
-                                            style="margin: 0 0 8px 0; color: #1e40af; font-size: 16px; font-weight: 600;">
-                                            Lưu Ý Bảo Mật
-                                        </h4>
-                                        <ul
-                                            style="margin: 0; padding-left: 0; color: #1e40af; font-size: 14px; line-height: 1.6;">
-                                            <li style="margin-bottom: 6px;">• Nếu bạn không yêu cầu reset mật khẩu, vui
-                                                lòng bỏ qua email này</li>
-                                            <li style="margin-bottom: 6px;">• Không chia sẻ link reset với bất kỳ ai
-                                                khác</li>
-                                            <li style="margin-bottom: 0;">• Tài khoản của bạn vẫn an toàn cho đến khi
-                                                bạn tạo mật khẩu mới</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #e2e8f0;">
+
+                            <!-- Support -->
+                            <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #e2e8f0;">
                                 <p style="margin: 0; color: #64748b; font-size: 14px;">
-                                    Cần hỗ trợ? Liên hệ với chúng tôi tại:
-                                    <a href="mailto:support@qlmn.com"
-                                        style="color: #f59e0b; text-decoration: none; font-weight: 500;">
+                                    Cần hỗ trợ? Liên hệ:
+                                    <a href="mailto:support@qlmn.com" style="color: #f59e0b; font-weight: 600;">
                                         support@qlmn.com
                                     </a>
                                 </p>
                             </div>
+
                         </td>
                     </tr>
+
+                    <!-- FOOTER -->
                     <tr>
-                        <td
-                            style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 30px 40px; text-align: center; border-top: 1px solid #e2e8f0;">
-                            <div style="margin-bottom: 20px;">
-                                <h3 style="margin: 0 0 8px 0; color: #475569; font-size: 18px; font-weight: 600;">
-                                    � QLMN
-                                </h3>
-                                <p style="margin: 0; color: #64748b; font-size: 14px;">
-                                    Trải nghiệm giáo dục mầm non hiện đại
-                                </p>
-                            </div>
-                            <div style="margin-bottom: 20px;">
-                                <a href="#"
-                                    style="display: inline-block; margin: 0 8px; color: #64748b; text-decoration: none; font-size: 12px; padding: 8px 16px; background: #ffffff; border-radius: 6px; transition: all 0.3s ease;">Trang
-                                    Chủ</a>
-                                <a href="#"
-                                    style="display: inline-block; margin: 0 8px; color: #64748b; text-decoration: none; font-size: 12px; padding: 8px 16px; background: #ffffff; border-radius: 6px; transition: all 0.3s ease;">Liên
-                                    Hệ</a>
-                                <a href="#"
-                                    style="display: inline-block; margin: 0 8px; color: #64748b; text-decoration: none; font-size: 12px; padding: 8px 16px; background: #ffffff; border-radius: 6px; transition: all 0.3s ease;">Chính
-                                    Sách</a>
-                            </div>
-                            <div style="border-top: 1px solid #cbd5e1; padding-top: 20px;">
-                                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 12px;">
-                                    © 2025 QLMN HoaSen. Tất cả quyền được bảo lưu.
-                                </p>
-                                <p style="margin: 0; color: #94a3b8; font-size: 11px;">
-                                    Địa chỉ: 123 Đường Giáo Dục, Quận 1, TP.HCM | Hotline: 1900-QLMN
-                                </p>
-                            </div>
+                        <td style="background: #f8fafc; text-align: center; padding: 25px;">
+                            <p style="margin: 0; color: #64748b; font-size: 12px;">
+                                © 2025 Mầm Non Hoa Sen. Tất cả quyền được bảo lưu.
+                            </p>
+                            <p style="margin: 0; color: #94a3b8; font-size: 11px;">
+                                Địa chỉ: 123 Đường Giáo Dục, Quận 1, TP.HCM • Hotline: 1900-QLMN
+                            </p>
                         </td>
                     </tr>
+
                 </table>
+
             </td>
         </tr>
     </table>
-    <style>
-        @media only screen and (max-width: 600px) {
-            .email-container {
-                width: 100% !important;
-                margin: 0 !important;
-            }
-
-            .email-content {
-                padding: 20px !important;
-            }
-
-            .email-header {
-                padding: 30px 20px !important;
-            }
-
-            .email-header h1 {
-                font-size: 24px !important;
-            }
-
-            .reset-button {
-                padding: 14px 30px !important;
-                font-size: 14px !important;
-            }
-
-            .footer-links a {
-                display: block !important;
-                margin: 5px 0 !important;
-            }
-        }
-    </style>
 </body>
 
 </html>
