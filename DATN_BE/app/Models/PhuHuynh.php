@@ -29,5 +29,9 @@ class PhuHuynh extends Authenticatable
         'hash_reset',
     ];
 
-
+    const IS_BLOCK = [
+        0 => 'Không khóa',
+        1 => 'Khóa',
+    ];
+    
 }

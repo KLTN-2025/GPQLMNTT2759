@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('ten_chuc_vu')->unique();
             $table->string('slug_chuc_vu')->unique();
             $table->string('mo_ta')->nullable();
-            $table->string('loai_chuc_vu')->nullable();
-            $table->boolean('tinh_trang')->default(true)->comment('true: Hoạt động, false: Không hoạt động');
+            $table->integer('loai_chuc_vu')->nullable();
+            $table->integer('tinh_trang')->default(1)->comment('1: Hoạt động, 0: Không hoạt động');
             $table->timestamps();
         });
     }

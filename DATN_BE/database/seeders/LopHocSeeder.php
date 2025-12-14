@@ -14,7 +14,6 @@ class LopHocSeeder extends Seeder
     public function run(): void
     {
         DB::table('lop_hocs')->delete();
-        DB::table('lop_hocs')->truncate();
 
         DB::table('lop_hocs')->insert(
             [

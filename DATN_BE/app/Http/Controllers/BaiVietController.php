@@ -6,6 +6,7 @@ use App\Http\Requests\CreateBaiVietRequest;
 use App\Http\Requests\DeleteBaiVietRequest;
 use App\Http\Requests\UpdateBaiVietRequest;
 use App\Models\BaiViet;
+use App\Models\LoaiBaiViet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,7 @@ class BaiVietController extends Controller
                 'bai_viets.luot_xem',
                 'bai_viets.tinh_trang',
                 'bai_viets.id_loai_bai_viet',
+                'bai_viets.id_nhan_vien',
                 'nhan_viens.ho_va_ten as nguoi_dang',
                 'nhan_viens.avatar as avatar_nguoi_dang',
                 'loai_bai_viets.ten_loai as ten_loai_bai_viet'
@@ -210,21 +212,28 @@ class BaiVietController extends Controller
             );
 
         // Tìm kiếm theo tiêu đề hoặc nội dung
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $query->where(function ($q) use ($keyword) {
-                $q->where('bai_viets.tieu_de', 'like', '%' . $keyword . '%')
-                    ->orWhere('bai_viets.noi_dung', 'like', '%' . $keyword . '%');
+        // Hỗ trợ cả 'noi_dung' (từ Vue) và 'keyword' (tương thích ngược)
+        $searchText = $request->filled('noi_dung') ? $request->noi_dung : ($request->filled('keyword') ? $request->keyword : null);
+
+        if ($searchText) {
+            $query->where(function ($q) use ($searchText) {
+                $q->where('bai_viets.tieu_de', 'like', '%' . $searchText . '%')
+                    ->orWhere('bai_viets.noi_dung', 'like', '%' . $searchText . '%');
             });
         }
 
         // Tìm kiếm theo trạng thái
-        if ($request->filled('tinh_trang')) {
+        if ($request->filled('tinh_trang') && $request->tinh_trang !== '') {
             $query->where('bai_viets.tinh_trang', $request->tinh_trang);
         }
 
         // Tìm kiếm theo loại bài viết
-        if ($request->filled('id_loai_bai_viet')) {
+        // Hỗ trợ cả 'loai_bai_viet' (tên loại từ Vue) và 'id_loai_bai_viet' (ID - tương thích ngược)
+        if ($request->filled('loai_bai_viet') && $request->loai_bai_viet !== '') {
+            // Tìm theo tên loại bài viết
+            $query->where('loai_bai_viets.ten_loai', $request->loai_bai_viet);
+        } elseif ($request->filled('id_loai_bai_viet')) {
+            // Tìm theo ID loại bài viết (tương thích ngược)
             $query->where('bai_viets.id_loai_bai_viet', $request->id_loai_bai_viet);
         }
 
@@ -314,35 +323,15 @@ class BaiVietController extends Controller
     /**
      * Thay đổi trạng thái bài viết
      */
-    public function changeStatus(Request $request)
+
+    public function getLoaiBaiVietData()
     {
-        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
-            'id' => 'required|exists:bai_viets,id',
-            'tinh_trang' => 'required|boolean',
+        $data = LoaiBaiViet::all();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Load dữ liệu loại bài viết thành công',
+            'data' => $data,
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Dữ liệu không hợp lệ',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        try {
-            BaiViet::where('id', $request->id)->update([
-                'tinh_trang' => $request->tinh_trang,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Thay đổi trạng thái thành công',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Có lỗi xảy ra khi thay đổi trạng thái: ' . $e->getMessage(),
-            ], 500);
-        }
     }
 }

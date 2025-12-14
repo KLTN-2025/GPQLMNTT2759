@@ -36,11 +36,11 @@ class HoaDonHocPhiSeeder extends Seeder
         foreach ($hocSinhs as $hocSinh) {
             foreach ($months as $monthInfo) {
                 // Tính tổng tiền dựa trên các loại phí (sẽ được tính trong ChiTietHocPhi)
-                // Tạm tính: Học phí + Phí ăn trưa = 2.000.000
-                $tongTien = 2000000.00;
+                // Tạm tính: Học phí + Phí ăn trưa ≈ 1.200.000 (đã giảm giá)
+                $tongTien = 1200000.00;
 
-                // 70% đã thanh toán, 30% chưa thanh toán
-                $daThanhToan = (rand(1, 10) <= 7) ? $tongTien : rand(0, (int)($tongTien * 0.9));
+                // 85% đã thanh toán đầy đủ, 15% chưa thanh toán đủ (nhưng đã nạp 70-95%)
+                $daThanhToan = (rand(1, 100) <= 85) ? $tongTien : rand((int)($tongTien * 0.70), (int)($tongTien * 0.95));
                 $conNo = $tongTien - $daThanhToan;
 
                 $tinhTrang = ($conNo == 0) ? 1 : 0; // 1: Đã thanh toán, 0: Chưa thanh toán

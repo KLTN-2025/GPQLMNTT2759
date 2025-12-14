@@ -6,8 +6,13 @@ use App\Http\Requests\CreateHocPhiRequest;
 use App\Http\Requests\DeleteHocPhiRequest;
 use App\Http\Requests\UpdateHocPhiRequest;
 use App\Models\HocPhi;
+use App\Models\ChiTietHocPhi;
+use App\Models\HoaDonHocPhi;
+use App\Models\HocSinh;
+use App\Models\LopHoc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class HocPhiController extends Controller
 {
@@ -394,6 +399,221 @@ class HocPhiController extends Controller
                 'by_status' => $byStatus,
                 'top_fee_types' => $topFeeTypes,
             ],
+        ]);
+    }
+
+    public function getDataChiTietHocPhi(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:hoc_phis,id',
+        ]);
+
+        $id_hoc_phi = $request->id;
+
+        // Lấy thông tin loại phí
+        $hocPhi = HocPhi::where('id', $id_hoc_phi)->first();
+
+        if (!$hocPhi) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Loại phí không tồn tại!',
+            ], 404);
+        }
+
+        // Tính tổng số tiền và đã thu cho loại phí này
+        $tongTien = ChiTietHocPhi::where('id_hoc_phi', $id_hoc_phi)
+            ->sum('thanh_tien');
+
+        $daThu = ChiTietHocPhi::join('hoa_don_hoc_phis', 'chi_tiet_hoc_phis.id_hoa_don_hoc_phi', '=', 'hoa_don_hoc_phis.id')
+            ->where('chi_tiet_hoc_phis.id_hoc_phi', $id_hoc_phi)
+            ->where('hoa_don_hoc_phis.tinh_trang', 1)
+            ->sum('chi_tiet_hoc_phis.thanh_tien');
+
+        // Xác định loại phí từ tên loại phí
+        $loaiPhi = 'hoc_phi_co_ban';
+        if (stripos($hocPhi->ten_loai_phi, 'ăn') !== false || stripos($hocPhi->ten_loai_phi, 'uống') !== false) {
+            $loaiPhi = 'phi_an_uong';
+        } elseif (stripos($hocPhi->ten_loai_phi, 'hoạt động') !== false) {
+            $loaiPhi = 'phi_hoat_dong';
+        }
+
+        // Lấy danh sách học sinh liên quan đến loại phí này
+        $danhSachHocSinh = HocSinh::join('lop_hocs', 'hoc_sinhs.id_lop_hoc', 'lop_hocs.id')
+            ->join('hoa_don_hoc_phis', 'hoc_sinhs.id', 'hoa_don_hoc_phis.id_hoc_sinh')
+            ->join('chi_tiet_hoc_phis', 'hoa_don_hoc_phis.id', 'chi_tiet_hoc_phis.id_hoa_don_hoc_phi')
+            ->where('chi_tiet_hoc_phis.id_hoc_phi', $id_hoc_phi)
+            ->where('hoc_sinhs.is_block', 0)
+            ->select(
+                'hoc_sinhs.id',
+                'hoc_sinhs.ho_va_ten as ten_hoc_sinh',
+                DB::raw('CONCAT("HS", LPAD(hoc_sinhs.id, 6, "0")) as ma_hoc_sinh'),
+                'hoc_sinhs.avatar',
+                'lop_hocs.ten_lop as lop_hoc',
+                DB::raw('SUM(chi_tiet_hoc_phis.thanh_tien) as so_tien'),
+                DB::raw('SUM(CASE WHEN hoa_don_hoc_phis.tinh_trang = 1 THEN chi_tiet_hoc_phis.thanh_tien ELSE 0 END) as da_thanh_toan'),
+                DB::raw('SUM(chi_tiet_hoc_phis.thanh_tien) - SUM(CASE WHEN hoa_don_hoc_phis.tinh_trang = 1 THEN chi_tiet_hoc_phis.thanh_tien ELSE 0 END) as con_lai'),
+                DB::raw('MAX(hoa_don_hoc_phis.tinh_trang) as tinh_trang_hoa_don'),
+                DB::raw('MAX(hoa_don_hoc_phis.ngay_thanh_toan) as ngay_thanh_toan')
+            )
+            ->groupBy(
+                'hoc_sinhs.id',
+                'hoc_sinhs.ho_va_ten',
+                'hoc_sinhs.avatar',
+                'lop_hocs.ten_lop'
+            )
+            ->orderBy('hoc_sinhs.ho_va_ten', 'asc')
+            ->get()
+            ->map(function ($item) use ($hocPhi) {
+                // Xác định trạng thái thanh toán
+                $trangThai = 'pending';
+                if ($item->tinh_trang_hoa_don == 1) {
+                    $trangThai = 'paid';
+                } else {
+                    // Kiểm tra quá hạn dựa trên ngày kết thúc áp dụng
+                    $hanThanhToan = $hocPhi->ap_dung_den_ngay;
+                    if ($hanThanhToan && strtotime($hanThanhToan) < strtotime('now')) {
+                        $trangThai = 'overdue';
+                    }
+                }
+
+                // Hạn thanh toán là ngày kết thúc áp dụng của học phí
+                $hanThanhToan = $hocPhi->ap_dung_den_ngay;
+
+                return [
+                    'id' => $item->id,
+                    'ten_hoc_sinh' => $item->ten_hoc_sinh,
+                    'ma_hoc_sinh' => $item->ma_hoc_sinh,
+                    'avatar' => $item->avatar,
+                    'lop_hoc' => $item->lop_hoc,
+                    'so_tien' => (float) $item->so_tien,
+                    'da_thanh_toan' => (float) $item->da_thanh_toan,
+                    'con_lai' => (float) $item->con_lai,
+                    'trang_thai' => $trangThai,
+                    'han_thanh_toan' => $hanThanhToan,
+                ];
+            });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Lấy chi tiết học phí thành công',
+            'data' => [
+                'feeDetail' => [
+                    'id' => $hocPhi->id,
+                    'ten_loai_phi' => $hocPhi->ten_loai_phi,
+                    'mo_ta' => $hocPhi->mo_ta,
+                    'tong_tien' => (float) $tongTien,
+                    'da_thu' => (float) $daThu,
+                    'loai_phi' => $loaiPhi,
+                ],
+                'list_hoc_sinh' => $danhSachHocSinh
+            ],
+        ]);
+    }
+
+    public function getDataChiTietHocPhiHocSinh(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:hoc_phis,id',
+        ]);
+
+        $id_hoc_phi = $request->id;
+
+        // Lấy thông tin loại phí
+        $hocPhi = HocPhi::where('id', $id_hoc_phi)->first();
+
+        if (!$hocPhi) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Loại phí không tồn tại!',
+            ], 404);
+        }
+
+        // Query lấy danh sách học sinh
+        $query = HocSinh::join('lop_hocs', 'hoc_sinhs.id_lop_hoc', 'lop_hocs.id')
+            ->join('hoa_don_hoc_phis', 'hoc_sinhs.id', 'hoa_don_hoc_phis.id_hoc_sinh')
+            ->join('chi_tiet_hoc_phis', 'hoa_don_hoc_phis.id', 'chi_tiet_hoc_phis.id_hoa_don_hoc_phi')
+            ->join('hoc_phis', 'chi_tiet_hoc_phis.id_hoc_phi', 'hoc_phis.id')
+            ->where('chi_tiet_hoc_phis.id_hoc_phi', $id_hoc_phi)
+            ->where('hoc_sinhs.is_block', 0);
+
+        // Tìm kiếm theo tên học sinh
+        if ($request->filled('noi_dung')) {
+            $query->where('hoc_sinhs.ho_va_ten', 'like', '%' . $request->noi_dung . '%');
+        }
+
+        // Lọc theo lớp học
+        if ($request->filled('lop_hoc')) {
+            $query->where('lop_hocs.ten_lop', $request->lop_hoc);
+        }
+
+        // Lọc theo trạng thái thanh toán
+        if ($request->filled('trang_thai')) {
+            if ($request->trang_thai == 'paid') {
+                $query->where('hoa_don_hoc_phis.tinh_trang', 1);
+            } elseif ($request->trang_thai == 'pending') {
+                $query->where('hoa_don_hoc_phis.tinh_trang', '!=', 1)
+                    ->where('hoc_phis.ap_dung_den_ngay', '>=', now());
+            } elseif ($request->trang_thai == 'overdue') {
+                $query->where('hoa_don_hoc_phis.tinh_trang', '!=', 1)
+                    ->where('hoc_phis.ap_dung_den_ngay', '<', now());
+            }
+        }
+
+        $danhSachHocSinh = $query
+            ->select(
+                'hoc_sinhs.id',
+                'hoc_sinhs.ho_va_ten as ten_hoc_sinh',
+                DB::raw('CONCAT("HS", LPAD(hoc_sinhs.id, 6, "0")) as ma_hoc_sinh'),
+                'hoc_sinhs.avatar',
+                'lop_hocs.ten_lop as lop_hoc',
+                DB::raw('SUM(chi_tiet_hoc_phis.thanh_tien) as so_tien'),
+                DB::raw('SUM(CASE WHEN hoa_don_hoc_phis.tinh_trang = 1 THEN chi_tiet_hoc_phis.thanh_tien ELSE 0 END) as da_thanh_toan'),
+                DB::raw('SUM(chi_tiet_hoc_phis.thanh_tien) - SUM(CASE WHEN hoa_don_hoc_phis.tinh_trang = 1 THEN chi_tiet_hoc_phis.thanh_tien ELSE 0 END) as con_lai'),
+                DB::raw('MAX(hoa_don_hoc_phis.tinh_trang) as tinh_trang_hoa_don'),
+                DB::raw('MAX(hoa_don_hoc_phis.ngay_thanh_toan) as ngay_thanh_toan')
+            )
+            ->groupBy(
+                'hoc_sinhs.id',
+                'hoc_sinhs.ho_va_ten',
+                'hoc_sinhs.avatar',
+                'lop_hocs.ten_lop'
+            )
+            ->orderBy('hoc_sinhs.ho_va_ten', 'asc')
+            ->get()
+            ->map(function ($item) use ($hocPhi) {
+                // Xác định trạng thái thanh toán
+                $trangThai = 'pending';
+                if ($item->tinh_trang_hoa_don == 1) {
+                    $trangThai = 'paid';
+                } else {
+                    // Kiểm tra quá hạn dựa trên ngày kết thúc áp dụng
+                    $hanThanhToan = $hocPhi->ap_dung_den_ngay;
+                    if ($hanThanhToan && strtotime($hanThanhToan) < strtotime('now')) {
+                        $trangThai = 'overdue';
+                    }
+                }
+
+                // Hạn thanh toán là ngày kết thúc áp dụng của học phí
+                $hanThanhToan = $hocPhi->ap_dung_den_ngay;
+
+                return [
+                    'id' => $item->id,
+                    'ten_hoc_sinh' => $item->ten_hoc_sinh,
+                    'ma_hoc_sinh' => $item->ma_hoc_sinh,
+                    'avatar' => $item->avatar,
+                    'lop_hoc' => $item->lop_hoc,
+                    'so_tien' => (float) $item->so_tien,
+                    'da_thanh_toan' => (float) $item->da_thanh_toan,
+                    'con_lai' => (float) $item->con_lai,
+                    'trang_thai' => $trangThai,
+                    'han_thanh_toan' => $hanThanhToan,
+                ];
+            });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Lấy danh sách học sinh thành công',
+            'data' => $danhSachHocSinh,
         ]);
     }
 }

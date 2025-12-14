@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('ten_thuc_don');
             $table->date('ngay');
+            $table->integer('id_lop_hoc')->nullable();
             $table->string('mo_ta')->nullable();
             $table->timestamps();
         });

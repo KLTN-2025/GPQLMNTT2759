@@ -19,13 +19,14 @@ return new class extends Migration
             $table->string('quan_he');
             $table->string('avatar')->nullable();
             $table->string('password')->nullable();
-            $table->string('gioi_tinh');
+            $table->integer('gioi_tinh');
             $table->string('dia_chi');
             $table->string('nghe_nghiep');
             $table->date('ngay_sinh');
-            $table->boolean('is_block')->default(false)->comment('false: Không khóa, true: Khóa');
-            $table->boolean('is_active')->default(true)->comment('true: Hoạt động, false: Không hoạt động');
+            $table->integer('is_block')->default(0)->comment('0: Không khóa, 1: Khóa');
+            $table->integer('is_active')->default(1)->comment('1: Hoạt động, 0: Không hoạt động');
             $table->string('hash_reset')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
             $table->timestamps();
         });
     }

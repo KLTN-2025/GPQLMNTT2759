@@ -4,29 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\MonAn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MonAnController extends Controller
 {
     /**
-     * API: /mon-an
-     * Lấy toàn bộ dữ liệu món ăn
+     * Lấy danh sách món ăn
      */
-    public function getMonAn()
+    public function getData()
     {
-        $data = MonAn::all();
+        $data = MonAn::orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Lấy dữ liệu món ăn thành công',
+            'message' => 'Load dữ liệu món ăn thành công',
             'data' => $data,
         ]);
     }
 
     /**
-     * API: /mon-an/create
      * Thêm mới món ăn
      */
-    public function createMonAn(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'ten_mon' => 'required|string|max:255',
@@ -39,23 +38,33 @@ class MonAnController extends Controller
             'protein' => 'nullable|numeric|min:0',
             'carb' => 'nullable|numeric|min:0',
             'fat' => 'nullable|numeric|min:0',
-            'is_block' => 'boolean',
+            'is_block' => 'nullable|boolean',
         ]);
 
-        $monAn = MonAn::create($request->all());
+        $monAn = MonAn::create([
+            'ten_mon' => $request->ten_mon,
+            'mo_ta' => $request->mo_ta,
+            'ghi_chu' => $request->ghi_chu,
+            'hinh_anh' => $request->hinh_anh,
+            'loai_mon' => $request->loai_mon,
+            'nguon_goc' => $request->nguon_goc,
+            'calo' => $request->calo,
+            'protein' => $request->protein,
+            'carb' => $request->carb,
+            'fat' => $request->fat,
+            'is_block' => $request->is_block ?? 0,
+        ]);
 
         return response()->json([
             'status' => true,
-            'message' => 'Thêm món ăn "' . $monAn->ten_mon . '" thành công',
-            'data' => $monAn,
+            'message' => "Món ăn " . $request->ten_mon . " đã được thêm mới thành công",
         ]);
     }
 
     /**
-     * API: /mon-an/update
-     * Cập nhật thông tin món ăn
+     * Cập nhật món ăn
      */
-    public function updateMonAn(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:mon_ans,id',
@@ -69,24 +78,33 @@ class MonAnController extends Controller
             'protein' => 'nullable|numeric|min:0',
             'carb' => 'nullable|numeric|min:0',
             'fat' => 'nullable|numeric|min:0',
-            'is_block' => 'boolean',
+            'is_block' => 'nullable|boolean',
         ]);
 
-        $monAn = MonAn::find($request->id);
-        $monAn->update($request->all());
+        MonAn::where('id', $request->id)->update([
+            'ten_mon' => $request->ten_mon,
+            'mo_ta' => $request->mo_ta,
+            'ghi_chu' => $request->ghi_chu,
+            'hinh_anh' => $request->hinh_anh,
+            'loai_mon' => $request->loai_mon,
+            'nguon_goc' => $request->nguon_goc,
+            'calo' => $request->calo,
+            'protein' => $request->protein,
+            'carb' => $request->carb,
+            'fat' => $request->fat,
+            'is_block' => $request->is_block ?? 0,
+        ]);
 
         return response()->json([
             'status' => true,
-            'message' => 'Cập nhật món ăn "' . $monAn->ten_mon . '" thành công',
-            'data' => $monAn,
+            'message' => "Món ăn " . $request->ten_mon . " đã được cập nhật thành công",
         ]);
     }
 
     /**
-     * API: /mon-an/delete
      * Xóa món ăn
      */
-    public function deleteMonAn(Request $request)
+    public function destroy(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:mon_ans,id',
@@ -96,50 +114,129 @@ class MonAnController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Xóa món ăn thành công',
+            'message' => "Món ăn đã được xóa thành công",
         ]);
     }
 
     /**
-     * API: /mon-an/search
-     * Tìm kiếm món ăn theo tên hoặc loại
+     * Tìm kiếm món ăn
      */
-    public function searchMonAn(Request $request)
+    public function search(Request $request)
     {
-        $keyword = $request->keyword ?? '';
+        $query = MonAn::query();
 
-        $data = MonAn::where('ten_mon', 'like', "%{$keyword}%")
-            ->orWhere('loai_mon', 'like', "%{$keyword}%")
-            ->orWhere('nguon_goc', 'like', "%{$keyword}%")
-            ->get();
+        // Tìm kiếm theo nội dung (tên món, loại món, nguồn gốc)
+        if ($request->filled('noi_dung')) {
+            $noiDung = $request->noi_dung;
+            $query->where(function ($q) use ($noiDung) {
+                $q->where('ten_mon', 'like', '%' . $noiDung . '%')
+                    ->orWhere('loai_mon', 'like', '%' . $noiDung . '%')
+                    ->orWhere('nguon_goc', 'like', '%' . $noiDung . '%');
+            });
+        }
+
+        // Tìm kiếm theo loại món
+        if ($request->filled('loai_mon')) {
+            $query->where('loai_mon', $request->loai_mon);
+        }
+
+        // Tìm kiếm theo nguồn gốc
+        if ($request->filled('nguon_goc')) {
+            $query->where('nguon_goc', $request->nguon_goc);
+        }
+
+        // Tìm kiếm theo trạng thái
+        if ($request->filled('is_block')) {
+            $query->where('is_block', $request->is_block);
+        }
+
+        // Tìm kiếm theo calo (từ - đến)
+        if ($request->filled('calo_min')) {
+            $query->where('calo', '>=', $request->calo_min);
+        }
+        if ($request->filled('calo_max')) {
+            $query->where('calo', '<=', $request->calo_max);
+        }
+
+        $data = $query->orderBy('ten_mon', 'asc')->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Tìm kiếm món ăn thành công',
+            'message' => 'Load dữ liệu món ăn thành công',
             'data' => $data,
         ]);
     }
 
     /**
-     * API: /mon-an/changes
-     * Thay đổi nhanh thông tin (VD: chặn/mở món ăn, đổi tên,…)
+     * Thống kê món ăn
      */
-    public function changesMonAn(Request $request)
+    public function statistical()
     {
-        $request->validate([
-            'id' => 'required|exists:mon_ans,id',
-            'field' => 'required|string',
-            'value' => 'nullable',
-        ]);
+        $total = MonAn::count();
+        $totalActive = MonAn::where('is_block', 0)->count();
+        $totalBlocked = MonAn::where('is_block', 1)->count();
 
-        $monAn = MonAn::find($request->id);
-        $monAn->{$request->field} = $request->value;
-        $monAn->save();
+        // Thống kê theo loại món
+        $byLoaiMon = MonAn::select('loai_mon')
+            ->selectRaw('COUNT(*) as so_luong')
+            ->groupBy('loai_mon')
+            ->get();
+
+        // Thống kê theo nguồn gốc
+        $byNguonGoc = MonAn::select('nguon_goc')
+            ->selectRaw('COUNT(*) as so_luong')
+            ->groupBy('nguon_goc')
+            ->get();
+
+        // Trung bình calo
+        $avgCalo = MonAn::avg('calo');
+
+        // Top 10 món ăn có calo cao nhất
+        $topCalo = MonAn::orderBy('calo', 'desc')
+            ->limit(10)
+            ->select('id', 'ten_mon', 'calo', 'loai_mon')
+            ->get();
+
+        // Top 10 món ăn có calo thấp nhất
+        $lowCalo = MonAn::orderBy('calo', 'asc')
+            ->limit(10)
+            ->select('id', 'ten_mon', 'calo', 'loai_mon')
+            ->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Cập nhật thông tin món ăn thành công',
-            'data' => $monAn,
+            'message' => 'Thống kê món ăn',
+            'data' => [
+                'total_records' => $total,
+                'total_active' => $totalActive,
+                'total_blocked' => $totalBlocked,
+                'avg_calo' => round($avgCalo, 2),
+                'by_loai_mon' => $byLoaiMon,
+                'by_nguon_goc' => $byNguonGoc,
+                'top_calo' => $topCalo,
+                'low_calo' => $lowCalo,
+            ],
+        ]);
+    }
+
+    /**
+     * Đổi trạng thái món ăn
+     */
+    public function changeStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:mon_ans,id',
+            'is_block' => 'required|integer|in:0,1',
+        ]);
+
+        $new_is_block = !$request->is_block;
+        MonAn::find($request->id)->update([
+            'is_block' => $new_is_block,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Món ăn đã được cập nhật trạng thái thành công",
         ]);
     }
 }

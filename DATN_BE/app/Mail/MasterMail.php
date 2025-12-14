@@ -13,28 +13,29 @@ class MasterMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
+    public $tieu_de;
+    public $view;
+    public $noi_dung;
 
-    public function __construct($user)
+    public function __construct($tieu_de, $view, $noi_dung)
     {
-        $this->user = $user;
+        $this->tieu_de = $tieu_de;
+        $this->view = $view;
+        $this->noi_dung = $noi_dung;
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Master Mail',
+            subject: $this->tieu_de,
         );
     }
-
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.components.welcome',
-            with: [
-                'username' => $this->user->name,
-            ],
+            view: 'emails.components.' . $this->view,
+            with: $this->noi_dung,
         );
     }
 

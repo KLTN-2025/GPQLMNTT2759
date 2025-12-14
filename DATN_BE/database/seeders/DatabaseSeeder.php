@@ -2,58 +2,69 @@
 
 namespace Database\Seeders;
 
-use App\Models\HocSinh;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    use DisableForeignKeys;
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Tắt foreign key checks
+        $this->disableForeignKeys();
 
-        $this->call([
-            // Seeder cơ bản
-            ChucVuSeeder::class,
-            KhoiLopSeeder::class,
-            NamHocSeeder::class,
-            ChucNangSeeder::class,
+        try {
+            $this->call([
+                // Clean up chat tables first
+                ChatCleanupSeeder::class,
 
-            // Seeder dữ liệu chính
-            NhanVienSeeder::class,
-            GiaoVienSeeder::class,
-            PhuHuynhSeeder::class,
-            LopHocSeeder::class,
-            HocSinhSeeder::class,
+                // Seeder cơ bản
+                ChucVuSeeder::class,
+                KhoiLopSeeder::class,
+                NamHocSeeder::class,
+                ChucNangSeeder::class,
 
-            // Seeder dữ liệu bổ sung
-            BuaAnSeeder::class,
-            MonAnSeeder::class,
-            ThucDonSeeder::class,
-            ChiTietThucDonSeeder::class,
+                // Seeder dữ liệu chính
+                NhanVienSeeder::class,
+                GiaoVienSeeder::class,
+                PhuHuynhSeeder::class,
+                LopHocSeeder::class,
+                HocSinhSeeder::class,
 
-            // Seeder quản lý
-            HocPhiSeeder::class,
-            HoaDonHocPhiSeeder::class,
-            ChiTietHocPhiSeeder::class,
-            PhanQuyenSeeder::class,
+                // Seeder dữ liệu bổ sung
+                BuaAnSeeder::class,
+                MonAnSeeder::class,
+                MonAnBoSungSeeder::class, // Thêm món ăn đa dạng
+                ThucDonSeeder::class,
+                ChiTietThucDonSeeder::class,
+                MenuThang12Seeder::class, // Menu tháng 12
 
-            // Seeder nội dung
-            LoaiBaiVietSeeder::class,
-            BaiVietSeeder::class,
-            ThongBaoSeeder::class,
-            ChiTietThongBaoSeeder::class,
-            BaoCaoSeeder::class,
+                // Seeder quản lý
+                HocPhiSeeder::class,
+                HoaDonHocPhiSeeder::class,
+                ChiTietHocPhiSeeder::class,
+                PhanQuyenSeeder::class,
+                LichLamViecSeeder::class,
 
-            // Seeder theo dõi
-            DiemDanhSeeder::class,
-            SucKhoeSeeder::class,
-            NhanXetSeeder::class,
-            BinhLuanSeeder::class,
-        ]);
+                // Seeder nội dung
+                LoaiBaiVietSeeder::class,
+                BaiVietSeeder::class,
+                ThongBaoSeeder::class,
+                ChiTietThongBaoSeeder::class,
+                BaoCaoSeeder::class,
+
+                // Seeder theo dõi
+                DiemDanhSeeder::class,
+                SucKhoeSeeder::class,
+                NhanXetSeeder::class,
+                BinhLuanSeeder::class,
+            ]);
+        } finally {
+            // Bật lại foreign key checks
+            $this->enableForeignKeys();
+        }
     }
 }

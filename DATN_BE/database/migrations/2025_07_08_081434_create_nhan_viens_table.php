@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('is_block')->default(0)->comment('0: Không khóa, 1: Khóa');
             $table->boolean('tinh_trang')->default(1)->comment('1: Hoạt động, 0: Không hoạt động');
             $table->string('hash_reset')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
             $table->timestamps();
         });
     }

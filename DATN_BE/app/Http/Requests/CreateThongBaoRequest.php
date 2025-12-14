@@ -23,7 +23,7 @@ class CreateThongBaoRequest extends FormRequest
             'thoi_gian_dang' => 'nullable|date',
             'ngay_het_hieu_luc' => 'required|date',
             'loai_thong_bao' => 'required|integer',
-            'tinh_trang' => 'nullable|integer|in:0,1',
+            'tinh_trang' => 'nullable|integer|in:0,1,2',
             // Đối tượng nhận (recipients)
             'id_phu_huynh' => 'nullable|array',
             'id_phu_huynh.*' => 'nullable|integer|exists:phu_huynhs,id',
