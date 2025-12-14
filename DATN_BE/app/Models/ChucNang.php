@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ChucNang extends Model
 {
@@ -12,4 +13,6 @@ class ChucNang extends Model
         'ten_chuc_nang',
         'mo_ta',
     ];
+
+    
 }

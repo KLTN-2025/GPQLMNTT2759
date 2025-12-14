@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class KhoiLop extends Model
 {
@@ -14,4 +15,5 @@ class KhoiLop extends Model
         'mo_ta',
         'so_luong_lop',
     ];
+
 }

@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class HocSinh extends Model
 {
+    use HasFactory;
+
     protected $table = 'hoc_sinhs';
 
     protected $fillable = [
@@ -23,6 +29,11 @@ class HocSinh extends Model
     const TINH_TRANG = [
         0 => 'Không hoạt động',
         1 => 'Hoạt động',
-        2 => 'Vắng mặt',
     ];
+    const IS_BLOCK = [
+        0 => 'Không khóa',
+        1 => 'Khóa',
+    ];
+
+
 }

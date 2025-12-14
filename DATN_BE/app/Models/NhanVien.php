@@ -29,4 +29,30 @@ class NhanVien extends Authenticatable
         'tinh_trang',
         'hash_reset',
     ];
+
+
+    public function chucVu(): BelongsTo
+    {
+        return $this->belongsTo(ChucVu::class, 'id_chuc_vu');
+    }
+
+    public function lopHoc(): HasMany
+    {
+        return $this->hasMany(LopHoc::class, 'id_giao_vien');
+    }
+
+    public function nhanXet(): HasMany
+    {
+        return $this->hasMany(NhanXet::class, 'id_giao_vien');
+    }
+
+    public function baiViet(): HasMany
+    {
+        return $this->hasMany(BaiViet::class, 'id_nhan_vien');
+    }
+
+    public function thongBao(): HasMany
+    {
+        return $this->hasMany(ThongBao::class, 'id_nhan_vien');
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BaiViet extends Model
 {
@@ -19,4 +21,8 @@ class BaiViet extends Model
         'id_nhan_vien',
         'id_loai_bai_viet',
     ];
+
+    
+
+
 }

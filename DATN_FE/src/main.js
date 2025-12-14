@@ -1,29 +1,39 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import ClientLayout from './layout/Client/wrapper/index.vue'
-import BlankLayout from './layout/Blank/wrapper/index.vue'
-import AuthLayout from './layout/Auth/index.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import Default from "./layout/Admin/wrapper/index.vue";
+import Client from "./layout/Client/wrapper/index.vue";
+import Blank from "./layout/Blank/wrapper/index.vue";
+import Teacher from "./layout/Teachers/wrapper/index.vue";
+import Toaster from "@meforma/vue-toaster";
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import { aliases, mdi } from "vuetify/iconsets/mdi";
 
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import '@mdi/font/css/materialdesignicons.css'
-
+// Tạo Vuetify instance
 const vuetify = createVuetify({
   components,
   directives,
-  icons: { defaultSet: 'mdi' }
-})
+  icons: {
+    defaultSet: "mdi",
+    aliases,
+    sets: { mdi },
+  },
+});
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(router)
-app.use(vuetify)
-app.component('client-layout', ClientLayout)
-app.component('blank-layout', BlankLayout)
-app.component('auth-layout', AuthLayout)
-app.component('default-layout', ClientLayout)
+app.use(router);
+app.use(Toaster, {
+  position: "top-right",
+});
+app.use(vuetify);
+app.component("default-layout", Default);
+app.component("client-layout", Client);
+app.component("blank-layout", Blank);
+app.component("teacher-layout", Teacher);
 
-app.mount('#app')
+app.mount("#app");
+
