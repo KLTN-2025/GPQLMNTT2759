@@ -1,0 +1,265 @@
+// Classes Management Styles
+@use "../admin-styles.scss";
+
+// Class Info
+.class-info {
+  .class-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .class-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .class-details {
+      .class-name {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+      }
+
+      .class-code {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// Class Details Info
+.class-details-info {
+  .info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #6c757d;
+
+      i {
+        width: 16px;
+        text-align: center;
+        color: #667eea;
+      }
+    }
+  }
+}
+
+// Teacher Info
+.teacher-info {
+  .teacher-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .teacher-role {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Student Count
+.student-count {
+  .count-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .count-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Progress Bar
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+}
+
+// Fee Info
+.fee-info {
+  .fee-amount {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .fee-period {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Class Detail Modal Styles
+.class-detail-section {
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: #667eea;
+    }
+  }
+
+  .info-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid #667eea;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+
+      i {
+        width: 20px;
+        color: #667eea;
+      }
+    }
+
+    .info-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+  }
+}
+
+.students-detail-section {
+  margin-top: 2rem;
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: #667eea;
+    }
+  }
+
+  .table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+  }
+
+  .student-name {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .parent-name {
+    display: flex;
+    align-items: center;
+    color: #495057;
+  }
+
+  .phone-number {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: #28a745;
+      font-weight: 500;
+
+      &:hover {
+        color: #20c997;
+        text-decoration: underline !important;
+      }
+    }
+  }
+
+  .address {
+    display: flex;
+    align-items: flex-start;
+    color: #495057;
+    max-width: 300px;
+
+    span {
+      word-break: break-word;
+    }
+  }
+}
+
+// Responsive for class specific styles
+@media (max-width: 768px) {
+  .class-info {
+    .class-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+
+  .class-details-info {
+    .info-group {
+      .info-item {
+        justify-content: center;
+      }
+    }
+  }
+
+  .students-detail-section {
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .address {
+      max-width: 200px;
+    }
+  }
+}

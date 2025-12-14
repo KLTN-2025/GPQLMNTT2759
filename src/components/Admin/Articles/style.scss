@@ -1,0 +1,204 @@
+// Articles Management Styles
+@use "../admin-styles.scss";
+
+// Article Info
+.article-info {
+  .article-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .article-details {
+      flex: 1;
+
+      .article-title {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .article-excerpt {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Article Image
+.article-image {
+  .image-thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// Type Badge
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+
+  &.type-news {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+  }
+
+  &.type-notice {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+  }
+
+  &.type-activity {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+  }
+
+  &.type-other {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+  }
+
+  i {
+    font-size: 0.9rem;
+  }
+}
+
+// Author Info
+.author-info {
+  .author-name {
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+}
+
+// Date Info
+.date-info {
+  .date {
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .time {
+    display: block;
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+}
+
+// Views Info
+.views-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  border-radius: 20px;
+  font-weight: 500;
+  color: #6c757d;
+  font-size: 0.9rem;
+
+  i {
+    color: #667eea;
+  }
+}
+
+// Modal specific styles for Articles
+.modal-content {
+  .modal-body {
+    .form-label {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-control,
+    .form-select {
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+
+      &:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+      }
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
+    }
+  }
+}
+
+// Responsive adjustments for Articles
+@media (max-width: 768px) {
+  .article-info {
+    .article-container {
+      flex-direction: column;
+    }
+  }
+
+  .article-image {
+    .image-thumbnail {
+      width: 100%;
+      height: auto;
+      max-height: 150px;
+    }
+  }
+
+  .type-badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .views-info {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .article-info {
+    .article-details {
+      .article-title {
+        font-size: 0.9rem;
+      }
+
+      .article-excerpt {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .date-info {
+    .date {
+      font-size: 0.85rem;
+    }
+
+    .time {
+      font-size: 0.75rem;
+    }
+  }
+}

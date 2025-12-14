@@ -1,0 +1,133 @@
+// Parents Management Styles
+@use "../admin-styles.scss";
+
+.employee-info {
+  .employee-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .employee-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid #e5e7eb;
+  }
+
+  .employee-avatar .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+  }
+
+  .employee-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .employee-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .employee-email {
+    color: #6c757d;
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+}
+
+
+// Parent Info
+.parent-info {
+  .parent-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .parent-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .parent-details {
+      .parent-name {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+      }
+
+      .parent-relationship {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// Children Info
+.children-info {
+  .children-count {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .children-list {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Student Item
+.contact-info {
+  .student-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    color: #2c3e50;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    i {
+      color: #6c757d;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Responsive for parent specific styles
+@media (max-width: 768px) {
+  .parent-info {
+    .parent-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+}
