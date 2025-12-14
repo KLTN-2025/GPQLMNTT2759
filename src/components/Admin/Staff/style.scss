@@ -1,0 +1,88 @@
+// Staff Management Styles
+@use "../admin-styles" as admin;
+
+.employee-info {
+  padding: 10px 0;
+
+  .employee-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .employee-avatar {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid admin.$admin-gray-200;
+    box-shadow: admin.$admin-shadow-soft;
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .employee-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .employee-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: admin.$admin-gray-900;
+  }
+
+  .employee-email {
+    font-size: 0.9rem;
+    color: admin.$admin-gray-500;
+  }
+}
+
+.contact-info {
+  .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: admin.$admin-gray-500;
+
+    i {
+      color: admin.$admin-primary;
+    }
+  }
+}
+
+.personal-info {
+  .info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      color: admin.$admin-gray-500;
+
+      i {
+        width: 16px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.position-badge {
+  @include admin.pill-badge(admin.$admin-primary, admin.$admin-secondary);
+
+  i {
+    font-size: 0.85rem;
+  }
+}
