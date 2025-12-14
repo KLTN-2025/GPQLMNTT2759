@@ -1,187 +1,585 @@
-# 🌟 Laura School – Digital Kindergarten Platform
+# 🎨 DATN Frontend - Hệ Thống Quản Lý Mầm Non
 
-> Một hệ sinh thái Vue 3 giúp số hóa toàn bộ hoạt động của trường mầm non, kết nối chặt chẽ giữa **Ban giám hiệu – Giáo viên – Phụ huynh**.
+Frontend application cho hệ thống quản lý trường mầm non, được xây dựng với Vue 3 + Vuetify 3.
 
----
+## 📋 Mục lục
 
-## 🧭 Tổng quan
+- [Tính năng](#-tính-năng)
+- [Công nghệ](#️-công-nghệ)
+- [Yêu cầu hệ thống](#-yêu-cầu-hệ-thống)
+- [Cài đặt](#-cài-đặt)
+- [Cấu hình](#️-cấu-hình)
+- [Cấu trúc dự án](#-cấu-trúc-dự-án)
+- [Deployment](#-deployment)
 
-Laura School tách giao diện theo 3 miền chức năng:
+## ✨ Tính năng
 
-| Không gian  | Đường dẫn chính  | Mô tả                                                                  |
-| ----------- | ---------------- | ---------------------------------------------------------------------- |
-| **Client**  | `/`, `/login`, … | Website/phụ huynh: giới thiệu, blog, sự kiện, hồ sơ, học phí, mailbox  |
-| **Admin**   | `/admin/**`      | Ban giám hiệu: dashboard, nhân sự, lớp học, học phí, thực đơn, báo cáo |
-| **Teacher** | `/teacher/**`    | Giáo viên: điểm danh, bài giảng, nhật ký, sức khỏe, thực đơn, báo cáo  |
+### 🌐 3 Portal chính
 
-Mỗi miền có màn hình **Login / Forgot Password / Reset Password** và gọi API thông qua client riêng (baseRequestClient/Admin/Teacher).
+#### **1. 👨‍💼 Admin Portal** (`/admin/*`)
 
----
+- 📊 Dashboard với biểu đồ thống kê
+- 👥 Quản lý người dùng (nhân viên, giáo viên, phụ huynh, học sinh)
+- 🏫 Quản lý lớp học và năm học
+- 🔐 Phân quyền chi tiết
+- 💰 Quản lý học phí và tài chính
+- 🍽️ Quản lý thực đơn và món ăn
+- 💊 Theo dõi sức khỏe học sinh
+- 📢 Gửi thông báo
+- 📰 Quản lý bài viết/tin tức
+- 📅 Lịch làm việc nhân viên
 
-## ✨ Tính năng chính
+#### **2. 👨‍🏫 Teacher Portal** (`/teacher/*`)
 
-### Client (Phụ huynh)
+- 📚 Quản lý lớp học của mình
+- ✅ Điểm danh học sinh hàng ngày
+- 💬 Chat với phụ huynh
+  - Chat 1-1 riêng tư
+  - Group chat theo lớp
+- 📝 Tạo và quản lý báo cáo
+- 💊 Theo dõi sức khỏe học sinh
+- 🗓️ Xem lịch làm việc
+- 📊 Xem báo cáo tiến độ
+- 👤 Quản lý profile cá nhân
 
-- Landing page, chương trình học, blog/sự kiện.
-- Quản lý hồ sơ phụ huynh & con, lịch học, sổ liên lạc.
-- Theo dõi học phí, lịch sử thanh toán, hướng dẫn nộp tiền.
-- Mailbox/notification kết nối với giáo viên & nhà trường.
+#### **3. 👨‍👩‍👧‍👦 Parent/Client Portal** (`/` và `/client/*`)
 
-### Admin
+- 🏠 Trang chủ với thông tin trường
+- 📰 Xem tin tức và bài viết
+- 👶 Thông tin con em
+- 🍽️ Xem thực đơn hàng ngày/tuần
+- 💰 Tra cứu và thanh toán học phí
+- 💬 Chat với giáo viên
+- 📢 Nhận thông báo
+- 📖 Sổ liên lạc điện tử
+- 👤 Quản lý profile
 
-- Dashboard tổng quan, thống kê học phí – sĩ số – sức khỏe.
-- Quản lý nhân sự, phân quyền, lịch làm việc.
-- Quản lý học sinh, lớp học, điểm danh, thực đơn, sức khỏe.
-- Quản lý thông báo, bài viết, hoạt động ngoại khóa.
+### 🎨 UI/UX Features
 
-### Teacher
+- 🎨 Material Design với Vuetify 3
+- 📱 Responsive design (mobile, tablet, desktop)
+- 🌙 Dark mode support (tùy chọn)
+- 🔔 Real-time notifications
+- 💬 Real-time chat với Pusher
+- 📊 Interactive charts với ECharts
+- 🎭 Smooth animations và transitions
+- 🖼️ Image galleries
+- 📄 PDF export (jsPDF)
+- 📊 Excel export (xlsx)
 
-- Dashboard lớp phụ trách, lịch dạy.
-- Ghi nhật ký lớp, gửi thông báo, đánh giá học sinh.
-- Quản lý bài giảng, kế hoạch bài học, thực đơn trong ngày.
+### 🤖 AI Features
 
----
+- 💬 Chatbot tư vấn tự động
+- 🧠 Powered by Groq SDK
+- 📚 Tra cứu thông tin trường học
+- 🍽️ Hỏi đáp về thực đơn
 
-## 🗂 Cấu trúc chính
+## 🛠️ Công nghệ
+
+### Core Framework
+
+- **Vue**: 3.3.4
+- **Vite**: 6.3.5 - Build tool
+- **Vue Router**: 4.0.13 - Routing
+- **Vuetify**: 3.9.0 - Material Design Components
+
+### UI & Styling
+
+- **@mdi/font**: 7.4.47 - Material Design Icons
+- **@mui/icons-material**: 7.2.0 - MUI Icons
+- **Sass**: 1.89.2 - CSS preprocessor
+
+### Communication
+
+- **Axios**: 1.10.0 - HTTP client
+- **laravel-echo**: 2.2.6 - WebSocket client
+- **pusher-js**: 8.4.0 - Real-time messaging
+
+### Charts & Visualization
+
+- **chart.js**: 4.5.0 - Charts
+- **echarts**: 5.5.1 - Advanced charts
+- **vue-echarts**: 7.0.3 - Vue ECharts wrapper
+
+### AI & Utilities
+
+- **groq-sdk**: 0.37.0 - AI chatbot
+- **@meforma/vue-toaster**: 1.3.0 - Toast notifications
+- **jspdf**: 3.0.3 - PDF generation
+- **jspdf-autotable**: 5.0.2 - PDF tables
+- **xlsx**: 0.18.5 - Excel export/import
+- **swiper**: 11.2.10 - Image slider
+- **page-flip**: 2.0.7 - Book flip effect
+
+### Development Tools
+
+- **ESLint**: 8.57.0 - Code linting
+- **eslint-plugin-vue**: 9.23.0 - Vue linting
+
+## 📦 Yêu cầu hệ thống
 
 ```
-src/
-├─ assets/                # Logo, hình ảnh, icon
-├─ components/
-│  ├─ Client/             # Module giao diện phụ huynh
-│  ├─ Admin/              # Module quản trị
-│  └─ Teachers/          # Module giáo viên
-├─ core/
-│  ├─ baseRequestClient.ts
-│  ├─ baseRequestAdmin.ts
-│  └─ baseRequestTeacher.ts
-├─ layout/                # Layout & menu dùng chung
-├─ router/
-│  ├─ index.js            # Khai báo route
-│  ├─ checkAdmin.js       # route guard
-│  └─ checkTeacher.js
-└─ store/, utils/, ...
+- Node.js >= 18.x
+- NPM >= 9.x hoặc Yarn >= 1.22
+- Modern browser (Chrome, Firefox, Safari, Edge)
 ```
 
----
+## 🚀 Cài đặt
 
-## 🛠 Tech stack
-
-- **Vue 3** + **Vite**
-- **Vue Router**
-- **Pinia** (nếu dùng store tập trung)
-- **Axios** (request layer riêng cho từng vai trò)
-- **SCSS / CSS Modules**
-- **Font Awesome / Boxicons**
-- **ESLint & Prettier**
-
----
-
-## ⚙️ Cài đặt & chạy
+### 1. Clone repository
 
 ```bash
-# 1. Cài dependencies
-npm install
+git clone https://github.com/KLTN-2025/GPQLMNTT2759.git
+cd GPQLMNTT2759/DATN_FE
+```
 
-# 2. Chạy môi trường phát triển
+### 2. Cài đặt dependencies
+
+```bash
+npm install
+# hoặc
+yarn install
+```
+
+### 3. Cấu hình môi trường
+
+```bash
+# Copy file .env.example
+cp .env.example .env
+```
+
+Cập nhật file `.env`:
+
+```env
+# API Backend URL
+VITE_API_URL=http://localhost:8000/api
+
+# Pusher Configuration
+VITE_PUSHER_APP_KEY=your_pusher_key
+VITE_PUSHER_APP_CLUSTER=ap1
+
+# Groq AI
+VITE_GROQ_API_KEY=your_groq_api_key
+```
+
+### 4. Khởi động development server
+
+```bash
+npm run dev
+# hoặc
+yarn dev
+```
+
+Application sẽ chạy tại: `http://localhost:5173`
+
+## ⚙️ Cấu hình
+
+### API Configuration
+
+File `src/main.js` chứa cấu hình axios:
+
+```javascript
+axios.defaults.baseURL =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+```
+
+### Router Configuration
+
+File `src/router/index.js` định nghĩa routes với 3 layout chính:
+
+- **blank**: Trang login, forgot password
+- **client**: Portal phụ huynh
+- **teacher**: Portal giáo viên
+- **admin**: Portal quản trị (default layout)
+
+### Pusher/Echo Configuration
+
+Real-time chat được cấu hình trong các component chat:
+
+```javascript
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+
+window.Pusher = Pusher;
+window.Echo = new Echo({
+  broadcaster: "pusher",
+  key: import.meta.env.VITE_PUSHER_APP_KEY,
+  cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+  forceTLS: true,
+});
+```
+
+## 📁 Cấu trúc dự án
+
+```
+DATN_FE/
+├── public/                      # Static assets
+│   └── favicon.ico
+├── src/
+│   ├── components/             # Vue components
+│   │   ├── Admin/             # Admin portal components
+│   │   │   ├── Dashboard/
+│   │   │   ├── Students/
+│   │   │   ├── Teachers/
+│   │   │   ├── Parents/
+│   │   │   ├── Classes/
+│   │   │   ├── Tuition/
+│   │   │   ├── Menu/
+│   │   │   ├── Health/
+│   │   │   ├── Notifications/
+│   │   │   ├── Articles/
+│   │   │   └── ...
+│   │   ├── Teachers/          # Teacher portal components
+│   │   │   ├── Dashboard/
+│   │   │   ├── MyClass/
+│   │   │   ├── Attendance/
+│   │   │   ├── Messages/
+│   │   │   ├── Health/
+│   │   │   ├── Reports/
+│   │   │   └── ...
+│   │   └── Client/            # Parent/Client portal components
+│   │       ├── HomePage/
+│   │       ├── Blog/
+│   │       ├── Contact/
+│   │       ├── Messages/
+│   │       ├── Tuition/
+│   │       ├── Meal/
+│   │       ├── Profile/
+│   │       └── ...
+│   ├── router/                # Vue Router configuration
+│   │   ├── index.js          # Main routes
+│   │   ├── checkAdmin.js     # Admin auth guard
+│   │   ├── checkTeacher.js   # Teacher auth guard
+│   │   └── checkClient.js    # Client auth guard
+│   ├── assets/               # Images, styles
+│   ├── layouts/              # Layout components (nếu có)
+│   ├── App.vue               # Root component
+│   └── main.js               # Application entry point
+├── .env.example              # Environment template
+├── .eslintrc.js             # ESLint configuration
+├── index.html               # HTML template
+├── package.json             # NPM dependencies & scripts
+├── vite.config.js           # Vite configuration
+└── README.md                # This file
+```
+
+### Component Structure
+
+#### Admin Components (`/src/components/Admin/`)
+
+```
+Admin/
+├── Dashboard/               # Trang chủ admin
+├── Students/               # Quản lý học sinh
+├── Teachers/               # Quản lý giáo viên
+├── Parents/                # Quản lý phụ huynh
+├── Staff/                  # Quản lý nhân viên
+├── Classes/                # Quản lý lớp học
+├── Permissions/            # Phân quyền
+├── Tuition/                # Quản lý học phí
+├── Menu/                   # Quản lý thực đơn
+├── Health/                 # Quản lý sức khỏe
+├── Notifications/          # Quản lý thông báo
+├── Articles/               # Quản lý bài viết
+├── Schedule/               # Lịch làm việc
+└── Profile/                # Profile admin
+```
+
+#### Teacher Components (`/src/components/Teachers/`)
+
+```
+Teachers/
+├── Dashboard/              # Trang chủ giáo viên
+├── MyClass/                # Lớp học của tôi
+├── Attendance/             # Điểm danh
+├── Messages/               # Tin nhắn
+├── Health/                 # Sức khỏe học sinh
+├── Reports/                # Báo cáo
+├── Progress/               # Tiến độ học tập
+├── Schedule/               # Lịch làm việc
+└── Profile/                # Profile giáo viên
+```
+
+#### Client Components (`/src/components/Client/`)
+
+```
+Client/
+├── HomePage/               # Trang chủ
+├── Blog/                   # Tin tức
+├── Contact/                # Liên hệ
+├── Messages/               # Tin nhắn với giáo viên
+├── Tuition/                # Học phí
+├── Meal/                   # Thực đơn
+├── Notebook/               # Sổ liên lạc
+├── Profile/                # Thông tin cá nhân
+├── Auth/                   # Đăng nhập/đăng ký
+└── ...
+```
+
+## 🔧 Commands hữu ích
+
+### Development
+
+```bash
+# Start dev server
 npm run dev
 
-# 3. Build production
+# Build for production
 npm run build
 
-# 4. Preview production build
+# Preview production build
 npm run preview
 
-# 5. Lint code (nếu đã setup ESLint)
+# Run linter
 npm run lint
 
-# 6. Type check (nếu dùng TypeScript)
+# Type check (nếu dùng TypeScript)
 npm run type-check
 ```
 
-> Cấu hình endpoint/tokens trong `.env`. Ví dụ: `VITE_API_URL`, `VITE_ADMIN_TOKEN_KEY`, …
-
----
-
-## 🚀 CI/CD Pipeline
-
-Dự án đã được cấu hình với **GitHub Actions** để tự động build, test và deploy.
-
-### Workflows có sẵn:
-
-- **CI Pipeline**: Build và test tự động khi push/PR
-- **Deploy to Vercel**: Deploy tự động lên Vercel
-- **Deploy to Netlify**: Deploy tự động lên Netlify
-- **Deploy to FTP**: Deploy tự động lên FTP server
-- **Docker Build**: Build và push Docker image
-- **Code Quality**: Kiểm tra code quality
-- **Security Scan**: Quét lỗ hổng bảo mật
-
-### Setup CI/CD:
-
-Xem chi tiết trong file [`CI_CD_SETUP.md`](./CI_CD_SETUP.md)
-
-**Quick Start:**
-1. Push code lên GitHub
-2. Vào **Settings → Secrets and variables → Actions**
-3. Thêm secrets cần thiết (Vercel/Netlify/FTP tokens)
-4. Workflows sẽ tự động chạy khi push code
-
-### Docker Deployment:
+### Build & Deployment
 
 ```bash
-# Build Docker image
-docker build -t laura-school .
+# Build for production
+npm run build:prod
 
-# Run container
-docker run -p 80:80 laura-school
+# Build output sẽ ở thư mục dist/
 ```
 
+## 📱 Responsive Breakpoints
+
+Application được tối ưu cho các breakpoints sau (Vuetify):
+
+```
+xs: 0-600px      # Mobile
+sm: 600-960px    # Tablet portrait
+md: 960-1264px   # Tablet landscape
+lg: 1264-1904px  # Desktop
+xl: 1904px+      # Large desktop
+```
+
+## 🎨 Theming
+
+### Vuetify Theme
+
+Cấu hình trong `src/main.js`:
+
+```javascript
+const vuetify = createVuetify({
+  theme: {
+    defaultTheme: "light",
+    themes: {
+      light: {
+        colors: {
+          primary: "#1976D2",
+          secondary: "#424242",
+          accent: "#82B1FF",
+          error: "#FF5252",
+          info: "#2196F3",
+          success: "#4CAF50",
+          warning: "#FFC107",
+        },
+      },
+    },
+  },
+});
+```
+
+## 🔒 Authentication & Guards
+
+### Route Guards
+
+3 loại guard được sử dụng:
+
+**Admin Guard** (`/src/router/checkAdmin.js`)
+
+```javascript
+// Kiểm tra admin token và role
+if (!token || role !== "admin") {
+  return "/admin/login";
+}
+```
+
+**Teacher Guard** (`/src/router/checkTeacher.js`)
+
+```javascript
+// Kiểm tra teacher token
+if (!token) {
+  return "/teacher/login";
+}
+```
+
+**Client Guard** (`/src/router/checkClient.js`)
+
+```javascript
+// Kiểm tra client/parent token
+if (!token) {
+  return "/login";
+}
+```
+
+### Token Storage
+
+Token được lưu trong localStorage:
+
+```javascript
+// Lưu token
+localStorage.setItem("admin_token", token);
+localStorage.setItem("teacher_token", token);
+localStorage.setItem("parent_token", token);
+
+// Axios interceptor tự động gửi token
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("admin_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+```
+
+## 🚀 Deployment
+
+### Build cho Production
+
+```bash
+npm run build
+```
+
+Thư mục `dist/` sẽ chứa files đã build.
+
+### Deployment Options
+
+#### 1. **Netlify** (Recommended)
+
+File `netlify.toml` đã được cấu hình:
+
+```toml
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+Deploy:
+
+```bash
+# Connect to Netlify
+netlify init
+
+# Deploy
+netlify deploy --prod
+```
+
+#### 2. **Vercel**
+
+File `vercel.json` đã được cấu hình:
+
+```bash
+vercel --prod
+```
+
+#### 3. **Docker**
+
+File `Dockerfile` đã sẵn sàng:
+
+```bash
+docker build -t datn-fe .
+docker run -p 80:80 datn-fe
+```
+
+#### 4. **Static Hosting**
+
+Upload thư mục `dist/` lên:
+
+- GitHub Pages
+- Firebase Hosting
+- AWS S3 + CloudFront
+- Azure Static Web Apps
+
+### Environment Variables for Production
+
+Đảm bảo cập nhật `.env.production`:
+
+```env
+VITE_API_URL=https://your-api-domain.com/api
+VITE_PUSHER_APP_KEY=your_production_pusher_key
+VITE_PUSHER_APP_CLUSTER=ap1
+```
+
+## 🐛 Debugging
+
+### Vue DevTools
+
+Cài đặt Vue DevTools extension để debug:
+
+- [Chrome Extension](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+- [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
+
+### Console Logs
+
+Trong development mode, bật console logs:
+
+```javascript
+if (import.meta.env.DEV) {
+  console.log("Debug info:", data);
+}
+```
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**1. "Cannot connect to API"**
+
+```bash
+# Kiểm tra VITE_API_URL trong .env
+# Đảm bảo backend đang chạy
+```
+
+**2. "Module not found"**
+
+```bash
+# Xóa node_modules và reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**3. "Chat không hoạt động"**
+
+```bash
+# Kiểm tra Pusher credentials
+# Đảm bảo Laravel Echo đã được cấu hình đúng
+```
+
+**4. "Build failed"**
+
+```bash
+# Clear cache và rebuild
+npm run clean
+npm run build
+```
+
+## 📚 Documentation Links
+
+- [Vue 3 Docs](https://vuejs.org/)
+- [Vuetify 3 Docs](https://vuetifyjs.com/)
+- [Vite Docs](https://vitejs.dev/)
+- [Vue Router Docs](https://router.vuejs.org/)
+- [ECharts Docs](https://echarts.apache.org/)
+
+## 📝 License
+
+[MIT License](LICENSE)
+
+## 👥 Team
+
+Dự án tốt nghiệp - KLTN 2025
+
 ---
 
-## 🔐 Định tuyến & phân quyền
-
-- Client: `/login`, `/forgot-password`, `/reset-password`.
-- Teacher: `/teacher/login`, `/teacher/forgot-password`, `/teacher/reset-password`.
-- Admin: `/admin/login`, `/admin/forgot-password`, `/admin/reset-password`.
-- Route `/admin/**` được bảo vệ bởi `checkAdmin`, `/teacher/**` bởi `checkTeacher`. Hai guard này kiểm tra token từ localStorage và chuyển hướng nếu chưa xác thực.
-
----
-
-## 🌈 Quy ước UI
-
-- Client dùng tông sáng, nhấn mạnh hình ảnh marketing (HomePage, Blog, Events…).
-- Admin & Teacher dùng theme gradient tím–xanh, card bo tròn, đổ bóng nhẹ.
-- Form tĩnh (ví dụ `Client/Profile`) đã có data mẫu để dễ dàng thay bằng dữ liệu API.
-- Khi thêm component mới, tạo file SCSS riêng trong cùng thư mục để tránh xung đột.
-
----
-
-## 🧪 Tài liệu phát triển
-
-- Ưu tiên viết logic hiển thị ngay trong template bằng `v-if`, computed thay cho getter rời rạc.
-- Với các request, sử dụng đúng client (`baseRequestClient`, `baseRequestAdmin`, `baseRequestTeacher`) để tự động gắn baseURL & token.
-- Khi mở rộng router, thêm meta `layout` (`client`, `blank`, `admin`, …) để layout wrapper biết cách render.
-
----
-
-## 🤝 Đóng góp
-
-1. Fork & tạo nhánh mới.
-2. Commit theo chuẩn rõ ràng.
-3. Tạo Pull Request mô tả thay đổi & ảnh minh họa (nếu có).
-
----
-
-## 📮 Liên hệ
-
-- Website: [https://lauraschool.edu.vn](https://lauraschool.edu.vn)
-- Email: info.contact@lauraschool.edu.vn
-- Facebook: [fb.com/lauraschool](https://facebook.com/lauraschool)
-- Youtube · Zalo · TikTok: đang cập nhật
-
-> **Slogan**: “Laura School – Quản lý thông minh, kết nối yêu thương.”
-
----
-
-🎉 Cảm ơn bạn đã đồng hành cùng dự án!
+**Happy Coding! 🎨✨**
