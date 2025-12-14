@@ -33,55 +33,154 @@
         </div>
     </div>
 
-    <!-- Dashboard Section -->
-    <div class="row mb-4">
+    <!-- Premium Payment Dashboard -->
+    <div class="row g-4 mb-4">
+        <!-- Payment Completion Rate - Enhanced -->
         <div class="col-xl-3 col-md-6">
-            <div class="stats-card stats-primary">
-                <div class="stats-icon">
-                    <i class="fas fa-money-bill-wave"></i>
+            <div class="premium-stat-card card-gradient-blue">
+                <div class="card-glow blue-glow"></div>
+                <div class="card-pattern">
+                    <div class="pattern-dots"></div>
                 </div>
-                <div class="stats-content">
-                    <h3 class="stats-number">{{ formatCurrency(getTotalRevenue()) }}</h3>
-                    <p class="stats-label">Tổng Thu Tháng</p>
+                <div class="card-content-wrapper">
+                    <div class="stat-header">
+                        <div class="stat-icon-box gradient-blue">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="icon-shine"></div>
+                        </div>
+                        <div class="stat-badge badge-blue">
+                            <i class="fas fa-trending-up"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-title">
+                            <i class="fas fa-percentage me-2"></i>
+                            Tỷ Lệ Hoàn Thành
+                        </div>
+                        <div class="stat-number gradient-text-blue">
+                            {{ paymentCompletionRate }}<span class="unit">%</span>
+                        </div>
+                        <div class="stat-progress-elegant">
+                            <div class="progress-track">
+                                <div class="progress-bar-fill gradient-blue-bar"
+                                    :style="{ width: paymentCompletionRate + '%' }">
+                                    <div class="progress-shine"></div>
+                                </div>
+                            </div>
+                            <div class="progress-text">
+                                <i class="fas fa-users me-1"></i>
+                                {{ studentsFullyPaid }}/{{ totalStudents }} học sinh
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Students Fully Paid - Enhanced -->
         <div class="col-xl-3 col-md-6">
-            <div class="stats-card stats-success">
-                <div class="stats-icon">
-                    <i class="fas fa-check-circle"></i>
+            <div class="premium-stat-card card-gradient-green">
+                <div class="card-glow green-glow"></div>
+                <div class="card-pattern">
+                    <div class="pattern-dots"></div>
                 </div>
-                <div class="stats-content">
-                    <h3 class="stats-number">
-                        {{ getPaymentStatusCount('paid') }}
-                    </h3>
-                    <p class="stats-label">Đã Thanh Toán</p>
+                <div class="card-content-wrapper">
+                    <div class="stat-header">
+                        <div class="stat-icon-box gradient-green">
+                            <i class="fas fa-check-double"></i>
+                            <div class="icon-shine"></div>
+                        </div>
+                        <div class="stat-badge badge-green">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-title">
+                            <i class="fas fa-user-check me-2"></i>
+                            Đã Đóng Đủ
+                        </div>
+                        <div class="stat-number gradient-text-green">
+                            {{ studentsFullyPaid }}<span class="unit">HS</span>
+                        </div>
+                        <div class="stat-footer success">
+                            <div class="footer-icon">
+                                <i class="fas fa-circle-check"></i>
+                            </div>
+                            <span>Hoàn thành thanh toán</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Students Partial Payment - Enhanced -->
         <div class="col-xl-3 col-md-6">
-            <div class="stats-card stats-warning">
-                <div class="stats-icon">
-                    <i class="fas fa-clock"></i>
+            <div class="premium-stat-card card-gradient-orange">
+                <div class="card-glow orange-glow"></div>
+                <div class="card-pattern">
+                    <div class="pattern-dots"></div>
                 </div>
-                <div class="stats-content">
-                    <h3 class="stats-number">
-                        {{ getPaymentStatusCount('pending') }}
-                    </h3>
-                    <p class="stats-label">Chưa Thanh Toán</p>
+                <div class="card-content-wrapper">
+                    <div class="stat-header">
+                        <div class="stat-icon-box gradient-orange">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <div class="icon-shine"></div>
+                        </div>
+                        <div class="stat-badge badge-orange">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-title">
+                            <i class="fas fa-hourglass-half me-2"></i>
+                            Nợ Một Phần
+                        </div>
+                        <div class="stat-number gradient-text-orange">
+                            {{ studentsPartialPaid }}<span class="unit">HS</span>
+                        </div>
+                        <div class="stat-footer warning">
+                            <div class="footer-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <span>Cần theo dõi</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Students Not Paid - Enhanced -->
         <div class="col-xl-3 col-md-6">
-            <div class="stats-card stats-danger">
-                <div class="stats-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
+            <div class="premium-stat-card card-gradient-red">
+                <div class="card-glow red-glow"></div>
+                <div class="card-pattern">
+                    <div class="pattern-dots"></div>
                 </div>
-                <div class="stats-content">
-                    <h3 class="stats-number">
-                        {{ getPaymentStatusCount('overdue') }}
-                    </h3>
-                    <p class="stats-label">Quá Hạn</p>
+                <div class="card-content-wrapper">
+                    <div class="stat-header">
+                        <div class="stat-icon-box gradient-red">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="icon-shine"></div>
+                        </div>
+                        <div class="stat-badge badge-red pulse">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-title">
+                            <i class="fas fa-user-times me-2"></i>
+                            Chưa Đóng Phí
+                        </div>
+                        <div class="stat-number gradient-text-red">
+                            {{ studentsNotPaid }}<span class="unit">HS</span>
+                        </div>
+                        <div class="stat-footer danger">
+                            <div class="footer-icon">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <span>Cần nhắc nhở ngay</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,40 +196,47 @@
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <div class="header-text">
-                            <h5 class="card-title">Tình Hình Thu Học Phí Theo Lớp</h5>
-                            <p class="card-subtitle">Phân tích thu học phí theo từng lớp</p>
+                            <h5 class="card-title">Tình Hình Thu Học Phí Theo Loại</h5>
+                            <p class="card-subtitle">Phân tích thu học phí theo từng loại phí</p>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="tuition-chart-container">
-                        <div v-for="(classData, index) in getClassTuitionData()" :key="index"
+                        <div v-for="(feeType, index) in list_loai_phi.slice(0, 3)" :key="index"
                             class="tuition-chart-item">
                             <div class="chart-header">
                                 <div class="class-info">
-                                    <span class="class-name">{{ classData.className }}</span>
-                                    <span class="student-count">{{ classData.totalStudents }} học sinh</span>
+                                    <span class="class-name">{{ feeType.ten_loai_phi }}</span>
+                                    <span class="student-count">{{ feeType.so_hoc_sinh || 0 }} học sinh</span>
                                 </div>
                                 <div class="payment-percentage">
-                                    <span class="percentage">{{ classData.paymentPercentage }}%</span>
+                                    <span class="percentage">{{ calculatePercentage(feeType.da_thu,
+                                        feeType.tong_so_tien) }}%</span>
                                     <small>đã thu</small>
                                 </div>
                             </div>
                             <div class="progress-container">
                                 <div class="progress-bar">
-                                    <div class="progress-fill paid" :style="{ width: classData.paidPercentage + '%' }">
+                                    <div class="progress-fill paid"
+                                        :style="{ width: calculatePercentage(feeType.da_thu, feeType.tong_so_tien) + '%' }">
                                     </div>
                                     <div class="progress-fill pending"
-                                        :style="{ width: classData.pendingPercentage + '%' }"></div>
-                                    <div class="progress-fill overdue"
-                                        :style="{ width: classData.overduePercentage + '%' }"></div>
+                                        :style="{ width: calculatePercentage(feeType.con_lai, feeType.tong_so_tien) + '%' }">
+                                    </div>
                                 </div>
                                 <div class="progress-labels">
-                                    <span class="label paid">{{ classData.paidCount }} đã thu</span>
-                                    <span class="label pending">{{ classData.pendingCount }} chưa thu</span>
-                                    <span class="label overdue">{{ classData.overdueCount }} quá hạn</span>
+                                    <span class="label paid">{{ formatCurrency(feeType.da_thu || 0) }} đã thu</span>
+                                    <span class="label pending">{{ formatCurrency(feeType.con_lai || 0) }} chưa
+                                        thu</span>
                                 </div>
                             </div>
+                        </div>
+                        <div v-if="list_loai_phi.length === 0" class="text-center py-5">
+                            <i class="fas fa-money-bill-wave text-muted mb-3"
+                                style="font-size: 3rem; opacity: 0.3;"></i>
+                            <h6 class="text-muted">Chưa có loại phí nào</h6>
+                            <p class="text-muted small">Thêm loại phí để bắt đầu quản lý</p>
                         </div>
                     </div>
                 </div>
@@ -151,38 +257,28 @@
                 </div>
                 <div class="card-body">
                     <div class="tuition-stats">
-                        <div class="stat-item">
+                        <div v-for="(feeType, index) in list_loai_phi.slice(0, 3)" :key="index" class="stat-item">
                             <div class="stat-icon">
-                                <i class="fas fa-graduation-cap"></i>
+                                <i :class="getFeeIcon(feeType.loai_phi)"></i>
                             </div>
                             <div class="stat-content">
-                                <div class="stat-title">Học phí cơ bản</div>
-                                <div class="stat-value">{{ formatCurrency(getBasicTuitionRevenue()) }}/{{
-                                    formatCurrency(getTotalBasicTuition()) }}</div>
-                                <div class="stat-status completed">Đã thu</div>
+                                <div class="stat-title">{{ feeType.ten_loai_phi }}</div>
+                                <div class="stat-value">
+                                    {{ formatCurrency(feeType.da_thu || 0) }}/{{ formatCurrency(feeType.tong_so_tien ||
+                                        0) }}
+                                </div>
+                                <div class="stat-status" :class="{
+                                    'completed': calculatePercentage(feeType.da_thu, feeType.tong_so_tien) >= 100,
+                                    'in-progress': calculatePercentage(feeType.da_thu, feeType.tong_so_tien) < 100
+                                }">
+                                    {{ calculatePercentage(feeType.da_thu, feeType.tong_so_tien) >= 100 ? 'Hoàn thành' :
+                                        'Đang thu' }}
+                                </div>
                             </div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-title">Phí ăn uống</div>
-                                <div class="stat-value">{{ formatCurrency(getMealFeeRevenue()) }}/{{
-                                    formatCurrency(getTotalMealFee()) }}</div>
-                                <div class="stat-status completed">Đã thu</div>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">
-                                <i class="fas fa-running"></i>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-title">Phí hoạt động</div>
-                                <div class="stat-value">{{ formatCurrency(getActivityFeeRevenue()) }}/{{
-                                    formatCurrency(getTotalActivityFee()) }}</div>
-                                <div class="stat-status in-progress">Đang thu</div>
-                            </div>
+                        <div v-if="list_loai_phi.length === 0" class="text-center py-4">
+                            <i class="fas fa-info-circle text-muted mb-2" style="font-size: 2rem;"></i>
+                            <p class="text-muted small mb-0">Chưa có dữ liệu thống kê</p>
                         </div>
                     </div>
                 </div>
@@ -260,19 +356,33 @@
                                         </td>
                                         <td class="fee-info">
                                             <div class="fee-container">
-                                                <div class="fee-icon" :class="getFeeTypeClass(value.loai_phi)">
-                                                    <i :class="getFeeTypeIcon(value.loai_phi)"></i>
+                                                <div class="fee-icon" :class="{
+                                                    'fee-basic': value.loai_phi === 'hoc_phi_co_ban',
+                                                    'fee-meal': value.loai_phi === 'phi_an_uong',
+                                                    'fee-activity': value.loai_phi === 'phi_hoat_dong'
+                                                }">
+                                                    <i :class="value.loai_phi === 'hoc_phi_co_ban' ? 'fas fa-graduation-cap' :
+                                                        value.loai_phi === 'phi_an_uong' ? 'fas fa-utensils' :
+                                                            value.loai_phi === 'phi_hoat_dong' ? 'fas fa-running' :
+                                                                'fas fa-money-bill-wave'"></i>
                                                 </div>
                                                 <div class="fee-details">
                                                     <span class="fee-name">{{ value.ten_loai_phi }}</span>
-                                                    <small class="fee-type">{{ getFeeTypeLabel(value.loai_phi)
-                                                        }}</small>
+                                                    <small class="fee-type">
+                                                        <template v-if="value.loai_phi === 'hoc_phi_co_ban'">Học phí cơ
+                                                            bản</template>
+                                                        <template v-else-if="value.loai_phi === 'phi_an_uong'">Phí ăn
+                                                            uống</template>
+                                                        <template v-else-if="value.loai_phi === 'phi_hoat_dong'">Phí
+                                                            hoạt động</template>
+                                                        <template v-else>{{ value.loai_phi }}</template>
+                                                    </small>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="">
                                             <span class="fee-description">{{ value.mo_ta || 'Chưa có mô tả'
-                                                }}</span>
+                                            }}</span>
                                         </td>
                                         <td class="text-center">
                                             <div class="student-count-badge">
@@ -291,7 +401,7 @@
                                                 <div class="paid-amount-line">
                                                     <span class="payment-label">Đã thu:</span>
                                                     <span class="payment-value">{{ formatCurrency(value.da_thu)
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="remaining-amount-line"
                                                     :class="value.con_lai > 0 ? 'has-remaining' : 'fully-paid'">
@@ -304,10 +414,17 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <span class="status-badge" :class="getStatusBadgeClass(value.tinh_trang)">
-                                                <i :class="getStatusIcon(value.tinh_trang)"></i>
-                                                {{ getStatusLabel(value.tinh_trang) }}
-                                                {{ value.tinh_trang }}
+                                            <span class="status-badge" :class="{
+                                                'status-active': value.tinh_trang === 'active',
+                                                'status-inactive': value.tinh_trang === 'inactive'
+                                            }">
+                                                <i :class="value.tinh_trang === 1 ? 'fas fa-check-circle' :
+                                                    value.tinh_trang === 0 ? 'fas fa-times-circle' :
+                                                        'fas fa-question'"></i>
+                                                <template v-if="value.tinh_trang === 1">Đang áp dụng</template>
+                                                <template v-else-if="value.tinh_trang === 0">Không áp
+                                                    dụng</template>
+                                                <template v-else>Chưa rõ</template>
                                             </span>
                                         </td>
                                         <td class="text-center">
@@ -351,38 +468,72 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="row">
+                        <div class="row g-3">
+
+                            <!-- Tên Loại Phí -->
                             <div class="col-md-6">
-                                <label for="tenLoaiPhi" class="form-label">Tên Loại Phí *</label>
-                                <input type="text" class="form-control" id="tenLoaiPhi"
-                                    v-model="create_loai_phi.ten_loai_phi" required />
+                                <label class="form-label">Tên Loại Phí *</label>
+                                <input type="text" class="form-control" v-model="create_loai_phi.ten_loai_phi"
+                                    placeholder="Nhập tên loại phí" required>
                             </div>
+
+                            <!-- Loại Phí -->
                             <div class="col-md-6">
-                                <label for="loaiPhi" class="form-label">Loại Phí *</label>
-                                <select class="form-select" id="loaiPhi" v-model="create_loai_phi.loai_phi" required>
+                                <label class="form-label">Loại Phí *</label>
+                                <select class="form-select" v-model="create_loai_phi.loai_phi" required>
                                     <option value="">Chọn loại phí</option>
                                     <option value="hoc_phi_co_ban">Học phí cơ bản</option>
                                     <option value="phi_an_uong">Phí ăn uống</option>
                                     <option value="phi_hoat_dong">Phí hoạt động</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="moTa" class="form-label">Mô Tả</label>
-                                <textarea class="form-control" id="moTa" v-model="create_loai_phi.mo_ta" rows="3"
-                                    placeholder="Mô tả về loại phí..."></textarea>
+
+                            <!-- Mô Tả -->
+                            <div class="col-12">
+                                <label class="form-label">Mô Tả</label>
+                                <textarea class="form-control" v-model="create_loai_phi.mo_ta" rows="3"
+                                    placeholder="Nhập mô tả..."></textarea>
                             </div>
+
+                            <!-- Ngày Áp Dụng -->
                             <div class="col-md-6">
-                                <label for="trangThai" class="form-label">Trạng Thái</label>
-                                <select v-model="create_loai_phi.trang_thai" class="form-select">
+                                <label class="form-label">Ngày Áp Dụng</label>
+                                <input type="date" class="form-control" v-model="create_loai_phi.ap_dung_tu_ngay">
+                            </div>
+
+                            <!-- Ngày Kết Thúc -->
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày Kết Thúc</label>
+                                <input type="date" class="form-control" v-model="create_loai_phi.ap_dung_den_ngay">
+                            </div>
+
+                            <!-- Đơn Vị Tính -->
+                            <div class="col-md-6">
+                                <label class="form-label">Đơn Vị Tính</label>
+                                <input type="text" class="form-control" v-model="create_loai_phi.don_vi_tinh"
+                                    placeholder="Tháng">
+                            </div>
+
+                            <!-- Đơn Giá -->
+                            <div class="col-md-6">
+                                <label class="form-label">Đơn Giá (VNĐ)</label>
+                                <input type="number" class="form-control" v-model="create_loai_phi.don_gia"
+                                    placeholder="Nhập đơn giá">
+                            </div>
+
+                            <!-- Trạng Thái -->
+                            <div class="col-12">
+                                <label class="form-label">Trạng Thái</label>
+                                <select class="form-select" v-model="create_loai_phi.trang_thai">
                                     <option value="active">Đang áp dụng</option>
                                     <option value="inactive">Không áp dụng</option>
                                 </select>
                             </div>
+
                         </div>
                     </form>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i>
@@ -411,44 +562,68 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="row">
+                        <div class="row g-3">
+
+                            <!-- Tên Loại Phí -->
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateTenLoaiPhi" class="form-label">Tên Loại Phí *</label>
-                                    <input type="text" class="form-control" id="updateTenLoaiPhi"
-                                        v-model="update_loai_phi.ten_loai_phi" required />
-                                </div>
+                                <label class="form-label">Tên Loại Phí *</label>
+                                <input type="text" class="form-control" v-model="update_loai_phi.ten_loai_phi"
+                                    placeholder="Nhập tên loại phí" required>
                             </div>
+
+                            <!-- Loại Phí -->
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateLoaiPhi" class="form-label">Loại Phí *</label>
-                                    <select class="form-select" id="updateLoaiPhi" v-model="update_loai_phi.loai_phi"
-                                        required>
-                                        <option value="">Chọn loại phí</option>
-                                        <option value="hoc_phi_co_ban">Học phí cơ bản</option>
-                                        <option value="phi_an_uong">Phí ăn uống</option>
-                                        <option value="phi_hoat_dong">Phí hoạt động</option>
-                                    </select>
-                                </div>
+                                <label class="form-label">Loại Phí *</label>
+                                <select class="form-select" v-model="update_loai_phi.loai_phi" required>
+                                    <option value="">Chọn loại phí</option>
+                                    <option value="hoc_phi_co_ban">Học phí cơ bản</option>
+                                    <option value="phi_an_uong">Phí ăn uống</option>
+                                    <option value="phi_hoat_dong">Phí hoạt động</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="row">
+
+                            <!-- Mô Tả -->
+                            <div class="col-12">
+                                <label class="form-label">Mô Tả</label>
+                                <textarea class="form-control" v-model="update_loai_phi.mo_ta" rows="3"
+                                    placeholder="Nhập mô tả..."></textarea>
+                            </div>
+
+                            <!-- Ngày Áp Dụng -->
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateMoTa" class="form-label">Mô Tả</label>
-                                    <textarea class="form-control" id="updateMoTa" v-model="update_loai_phi.mo_ta"
-                                        rows="3" placeholder="Mô tả về loại phí..."></textarea>
-                                </div>
+                                <label class="form-label">Ngày Áp Dụng</label>
+                                <input type="date" class="form-control" v-model="update_loai_phi.ap_dung_tu_ngay">
                             </div>
+
+                            <!-- Ngày Kết Thúc -->
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateTrangThai" class="form-label">Trạng Thái</label>
-                                    <select v-model="update_loai_phi.trang_thai" class="form-select">
-                                        <option value="active">Đang áp dụng</option>
-                                        <option value="inactive">Không áp dụng</option>
-                                    </select>
-                                </div>
+                                <label class="form-label">Ngày Kết Thúc</label>
+                                <input type="date" class="form-control" v-model="update_loai_phi.ap_dung_den_ngay">
                             </div>
+
+                            <!-- Đơn Vị Tính -->
+                            <div class="col-md-6">
+                                <label class="form-label">Đơn Vị Tính</label>
+                                <input type="text" class="form-control" v-model="update_loai_phi.don_vi_tinh"
+                                    placeholder="Tháng">
+                            </div>
+
+                            <!-- Đơn Giá -->
+                            <div class="col-md-6">
+                                <label class="form-label">Đơn Giá (VNĐ)</label>
+                                <input type="number" class="form-control" v-model="update_loai_phi.don_gia"
+                                    placeholder="Nhập đơn giá">
+                            </div>
+
+                            <!-- Trạng Thái -->
+                            <div class="col-12">
+                                <label class="form-label">Trạng Thái</label>
+                                <select class="form-select" v-model="update_loai_phi.trang_thai">
+                                    <option value="active">Đang áp dụng</option>
+                                    <option value="inactive">Không áp dụng</option>
+                                </select>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -487,7 +662,11 @@
                         <div class="alert alert-warning" role="alert">
                             <strong>Thông tin loại phí:</strong><br>
                             <strong>Tên:</strong> {{ delete_loai_phi.ten_loai_phi }}<br>
-                            <strong>Loại:</strong> {{ getFeeTypeLabel(delete_loai_phi.loai_phi) }}
+                            <strong>Loại:</strong>
+                            <template v-if="delete_loai_phi.loai_phi === 'hoc_phi_co_ban'">Học phí cơ bản</template>
+                            <template v-else-if="delete_loai_phi.loai_phi === 'phi_an_uong'">Phí ăn uống</template>
+                            <template v-else-if="delete_loai_phi.loai_phi === 'phi_hoat_dong'">Phí hoạt động</template>
+                            <template v-else>{{ delete_loai_phi.loai_phi }}</template>
                         </div>
                         <p class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
@@ -520,10 +699,15 @@ export default {
         return {
             list_loai_phi: [],
             list_hoc_phi: [],
+            list_hoc_sinh: [],
             create_loai_phi: {
                 ten_loai_phi: "",
                 loai_phi: "",
                 mo_ta: "",
+                ap_dung_tu_ngay: "",
+                ap_dung_den_ngay: "",
+                don_gia: "",
+                don_vi_tinh: "",
                 trang_thai: "active",
             },
             update_loai_phi: {
@@ -531,6 +715,10 @@ export default {
                 ten_loai_phi: "",
                 loai_phi: "",
                 mo_ta: "",
+                ap_dung_tu_ngay: "",
+                ap_dung_den_ngay: "",
+                don_gia: "",
+                don_vi_tinh: "",
                 trang_thai: "",
             },
             delete_loai_phi: {
@@ -548,9 +736,55 @@ export default {
         };
     },
 
+    computed: {
+        totalRevenue() {
+            // Tính tổng thu theo tháng hiện tại
+            const currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            return this.list_loai_phi.reduce((total, item) => {
+                // Giả sử da_thu là tổng đã thu trong tháng
+                return total + (item.da_thu || 0);
+            }, 0);
+        },
+        totalRemaining() {
+            // Tính tổng còn phải thu = Tổng tiền - Đã thu
+            const totalAmount = this.list_loai_phi.reduce((sum, item) => sum + (item.tong_so_tien || 0), 0);
+            return totalAmount - this.totalRevenue;
+        },
+        totalStudents() {
+            // Lấy số học sinh thực tế từ danh sách học sinh của trường
+            return this.list_hoc_sinh.length;
+        },
+        // Số học sinh đã đóng đủ học phí
+        studentsFullyPaid() {
+            // Giả sử mỗi học sinh cần đóng tất cả các loại phí
+            const requiredTotal = this.list_loai_phi.reduce((sum, item) => sum + (item.don_gia || 0), 0);
+            return this.list_hoc_sinh.filter(student => {
+                // Logic này cần được điều chỉnh dựa trên cấu trúc dữ liệu thực tế
+                // Hiện tại tạm tính số học sinh có payment records đầy đủ
+                return student.da_dong_day_du === 1 || student.trang_thai_thanh_toan === 'paid';
+            }).length;
+        },
+        // Số học sinh đang nợ một phần
+        studentsPartialPaid() {
+            return this.list_hoc_sinh.filter(student => {
+                return student.trang_thai_thanh_toan === 'partial' || (student.da_dong && !student.da_dong_day_du);
+            }).length;
+        },
+        // Số học sinh chưa đóng phí
+        studentsNotPaid() {
+            return this.totalStudents - this.studentsFullyPaid - this.studentsPartialPaid;
+        },
+        // Tỷ lệ hoàn thành thanh toán
+        paymentCompletionRate() {
+            if (this.totalStudents === 0) return 0;
+            return Math.round((this.studentsFullyPaid / this.totalStudents) * 100);
+        }
+    },
+
     mounted() {
-        this.loadData();
         this.loadFeeData();
+        this.loadStudents();
     },
 
     methods: {
@@ -568,138 +802,30 @@ export default {
             return date.toLocaleDateString("vi-VN");
         },
 
-        getTotalRevenue() {
-            return this.list_loai_phi.reduce((total, item) => total + (item.da_thu || 0), 0);
+        calculatePercentage(part, total) {
+            if (!total || total === 0) return 0;
+            return Math.round((part / total) * 100);
         },
 
-        getPaymentStatusCount(status) {
-            // Tính từ danh sách học phí liên quan đến các loại phí
-            return this.list_hoc_phi.filter(item => item.trang_thai === status).length;
-        },
-
-        getClassTuitionData() {
-            const classes = ['Lớp Mầm', 'Lớp Chồi', 'Lớp Lá'];
-            return classes.map(className => {
-                const classStudents = this.list_hoc_phi.filter(item => item.lop_hoc === className);
-                const totalStudents = classStudents.length;
-                const paidCount = classStudents.filter(item => item.trang_thai === 'paid').length;
-                const pendingCount = classStudents.filter(item => item.trang_thai === 'pending').length;
-                const overdueCount = classStudents.filter(item => item.trang_thai === 'overdue').length;
-
-                return {
-                    className,
-                    totalStudents,
-                    paidCount,
-                    pendingCount,
-                    overdueCount,
-                    paidPercentage: totalStudents > 0 ? Math.round((paidCount / totalStudents) * 100) : 0,
-                    pendingPercentage: totalStudents > 0 ? Math.round((pendingCount / totalStudents) * 100) : 0,
-                    overduePercentage: totalStudents > 0 ? Math.round((overdueCount / totalStudents) * 100) : 0,
-                    paymentPercentage: totalStudents > 0 ? Math.round((paidCount / totalStudents) * 100) : 0,
-                };
-            });
-        },
-
-        getBasicTuitionRevenue() {
-            const basicFee = this.list_loai_phi.find(item => item.loai_phi === 'hoc_phi_co_ban');
-            return basicFee ? (basicFee.da_thu || 0) : 0;
-        },
-
-        getTotalBasicTuition() {
-            const basicFee = this.list_loai_phi.find(item => item.loai_phi === 'hoc_phi_co_ban');
-            return basicFee ? (basicFee.tong_tien || 0) : 0;
-        },
-
-        getMealFeeRevenue() {
-            const mealFee = this.list_loai_phi.find(item => item.loai_phi === 'phi_an_uong');
-            return mealFee ? (mealFee.da_thu || 0) : 0;
-        },
-
-        getTotalMealFee() {
-            const mealFee = this.list_loai_phi.find(item => item.loai_phi === 'phi_an_uong');
-            return mealFee ? (mealFee.tong_tien || 0) : 0;
-        },
-
-        getActivityFeeRevenue() {
-            const activityFee = this.list_loai_phi.find(item => item.loai_phi === 'phi_hoat_dong');
-            return activityFee ? (activityFee.da_thu || 0) : 0;
-        },
-
-        getTotalActivityFee() {
-            const activityFee = this.list_loai_phi.find(item => item.loai_phi === 'phi_hoat_dong');
-            return activityFee ? (activityFee.tong_tien || 0) : 0;
-        },
-
-        getFeeTypeLabel(type) {
-            const labels = {
-                'hoc_phi_co_ban': 'Học phí cơ bản',
-                'phi_an_uong': 'Phí ăn uống',
-                'phi_hoat_dong': 'Phí hoạt động'
+        getFeeIcon(feeType) {
+            const icons = {
+                'hoc_phi_co_ban': 'fas fa-graduation-cap',
+                'phi_an_uong': 'fas fa-utensils',
+                'phi_hoat_dong': 'fas fa-running'
             };
-            return labels[type] || type;
+            return icons[feeType] || 'fas fa-money-bill-wave';
         },
 
-        getFeeTypeIcon(type) {
-            switch (type) {
-                case 'hoc_phi_co_ban':
-                    return 'fas fa-graduation-cap';
-                case 'phi_an_uong':
-                    return 'fas fa-utensils';
-                case 'phi_hoat_dong':
-                    return 'fas fa-running';
-                default:
-                    return 'fas fa-money-bill-wave';
-            }
-        },
-
-        getFeeTypeClass(type) {
-            return {
-                'fee-basic': type === 'hoc_phi_co_ban',
-                'fee-meal': type === 'phi_an_uong',
-                'fee-activity': type === 'phi_hoat_dong',
-            };
-        },
-
-        getStatusLabel(status) {
-            switch (status) {
-                case 'active':
-                    return 'Đang áp dụng';
-                case 'inactive':
-                    return 'Không áp dụng';
-                default:
-                    return 'Chưa rõ';
-            }
-        },
-
-        getStatusBadgeClass(status) {
-            return {
-                'status-active': status === 'active',
-                'status-inactive': status === 'inactive',
-            };
-        },
-
-        getStatusIcon(status) {
-            switch (status) {
-                case 'active':
-                    return 'fas fa-check-circle';
-                case 'inactive':
-                    return 'fas fa-times-circle';
-                default:
-                    return 'fas fa-question';
-            }
-        },
-
-        loadData() {
-            // Load danh sách học phí để tính toán thống kê
+        loadStudents() {
             baseRequestAdmin
-                .get("admin/hoc-phi/data")
+                .get("admin/hoc-sinh/data")
                 .then((res) => {
                     if (res.data.status) {
-                        this.list_hoc_phi = res.data.data;
+                        this.list_hoc_sinh = res.data.data;
                     }
                 })
                 .catch((err) => {
-                    console.log("Không thể tải danh sách học phí");
+                    console.error("Không thể tải danh sách học sinh", err);
                 });
         },
 
@@ -708,7 +834,9 @@ export default {
                 .get("admin/hoc-phi/data")
                 .then((res) => {
                     if (res.data.status) {
+                        // Gán vào cả 2 biến vì cùng dữ liệu
                         this.list_loai_phi = res.data.data;
+                        this.list_hoc_phi = res.data.data;
                         this.$toast.success(res.data.message);
                     } else {
                         this.$toast.error(res.data.message);

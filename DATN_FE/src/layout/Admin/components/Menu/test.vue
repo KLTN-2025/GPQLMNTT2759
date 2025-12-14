@@ -44,6 +44,10 @@
           <i class="bx bx-chalkboard"></i>
           <span>Giáo Viên</span>
         </div>
+        <div class="sub-item" @click="goToLichLamViec">
+          <i class="bx bx-calendar-check"></i>
+          <span>Lịch Làm Việc</span>
+        </div>
       </div>
 
       <div class="sidebar-item" @click="toggleSubMenu('hocSinh')" :title="isCollapsed ? 'Học Sinh & PH' : ''">
@@ -79,14 +83,38 @@
         <i class="bx bx-money"></i>
         <span v-show="!isCollapsed || isHovered">Học Phí</span>
       </div>
-      <div class="sidebar-item" @click="goToThucDon" :title="isCollapsed ? 'Thực Đơn' : ''">
+      <div class="sidebar-item" @click="toggleSubMenu('thucDon')" :title="isCollapsed ? 'Thực Đơn' : ''">
         <i class="bx bx-restaurant"></i>
         <span v-show="!isCollapsed || isHovered">Thực Đơn</span>
+        <i v-show="!isCollapsed || isHovered" class="bx"
+          :class="activeSubMenu === 'thucDon' ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+      </div>
+      <div v-show="activeSubMenu === 'thucDon' && (!isCollapsed || isHovered)" class="sidebar-sub">
+        <div class="sub-item" @click="goToThucDon">
+          <i class="bx bx-restaurant"></i>
+          <span>Thực Đơn</span>
+        </div>
+        <div class="sub-item" @click="goToMonAn">
+          <i class="bx bx-hamburger"></i>
+          <span>Món Ăn</span>
+        </div>
       </div>
 
-      <div class="sidebar-item" @click="goToThongBao" :title="isCollapsed ? 'Thông Báo' : ''">
-        <i class="fas fa-bell"></i>
-        <span v-show="!isCollapsed || isHovered">Thông Báo</span>
+      <div class="sidebar-item" @click="toggleSubMenu('noiDung')" :title="isCollapsed ? 'Nội Dung' : ''">
+        <i class="fas fa-file-alt"></i>
+        <span v-show="!isCollapsed || isHovered">Nội Dung</span>
+        <i v-show="!isCollapsed || isHovered" class="bx"
+          :class="activeSubMenu === 'noiDung' ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+      </div>
+      <div v-show="activeSubMenu === 'noiDung' && (!isCollapsed || isHovered)" class="sidebar-sub">
+        <div class="sub-item" @click="goToThongBao">
+          <i class="fas fa-bell"></i>
+          <span>Thông Báo</span>
+        </div>
+        <div class="sub-item" @click="goToBaiViet">
+          <i class="fas fa-newspaper"></i>
+          <span>Bài Viết</span>
+        </div>
       </div>
 
       <div class="sidebar-item" @click="toggleSubMenu('baoCao')" :title="isCollapsed ? 'Báo cáo & TK' : ''">
@@ -236,7 +264,7 @@ onUnmounted(() => {
 
 // Navigation functions
 function goToDashboard() {
-  router.push("/admin/dashboard");
+  router.push("/admin");
 }
 function goToPhanQuyen() {
   router.push("/admin/phan-quyen");
@@ -268,8 +296,17 @@ function goToHocPhi() {
 function goToThucDon() {
   router.push("/admin/thuc-don");
 }
+function goToMonAn() {
+  router.push("/admin/mon-an");
+}
 function goToThongBao() {
   router.push("/admin/thong-bao");
+}
+function goToBaiViet() {
+  router.push("/admin/bai-viet");
+}
+function goToLichLamViec() {
+  router.push("/admin/lich-lam-viec");
 }
 function goToTaiChinh() {
   router.push("/admin/tai-chinh");

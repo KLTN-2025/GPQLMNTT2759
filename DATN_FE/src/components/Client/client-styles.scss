@@ -1,0 +1,276 @@
+@use "sass:color";
+
+// Client Design Tokens & Mixins
+// =============================
+
+// Palette
+$client-primary: #667eea;
+$client-secondary: #764ba2;
+$client-accent: #f093fb;
+$client-success: #10b981;
+$client-warning: #f59e0b;
+$client-danger: #ef4444;
+$client-info: #2196f3;
+
+// Gradients
+$client-gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$client-gradient-auth: linear-gradient(to right, #6a11cb, #2575fc);
+$client-gradient-text: linear-gradient(90deg, #ff66c4, #ffde59);
+$client-gradient-light: linear-gradient(to right, #eef2f3, #f9f9f9);
+$client-gradient-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+// Text Colors
+$client-text-dark: #2d3748;
+$client-text-light: #718096;
+$client-text-muted: #666;
+$client-text-primary: #1f2937;
+$client-text-secondary: #6b7280;
+
+// Background Colors
+$client-bg-white: #ffffff;
+$client-bg-light: #f8fafc;
+$client-bg-gray: #f9f9f9;
+
+// Border & Shadow
+$client-border-color: #e2e8f0;
+$client-border-light: #e5e7eb;
+$client-border-input: #ddd;
+$client-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$client-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$client-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$client-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+$client-shadow-auth: 0 4px 12px rgba(106, 17, 203, 0.3);
+
+// Border Radius
+$client-radius-sm: 8px;
+$client-radius-md: 12px;
+$client-radius-lg: 15px;
+$client-radius-xl: 20px;
+$client-radius-pill: 50px;
+
+// Spacing
+$client-spacing-xs: 0.5rem;
+$client-spacing-sm: 1rem;
+$client-spacing-md: 1.5rem;
+$client-spacing-lg: 2rem;
+$client-spacing-xl: 3rem;
+
+// Typography
+$client-font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+$client-font-serif: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+
+// Mixins
+// ======
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin gradient-bg($from: $client-primary, $to: $client-secondary) {
+  background: linear-gradient(135deg, $from, $to);
+}
+
+@mixin gradient-text($from: #ff66c4, $to: #ffde59) {
+  background: linear-gradient(90deg, $from, $to);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin card-base($padding: $client-spacing-md, $radius: $client-radius-md, $shadow: $client-shadow-md) {
+  background: $client-bg-white;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  padding: $padding;
+  transition: all 0.3s ease;
+}
+
+@mixin card-hover($shadow: $client-shadow-xl) {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow;
+  }
+}
+
+@mixin button-gradient($from: #6a11cb, $to: #2575fc) {
+  background: linear-gradient(to right, $from, $to);
+  color: white;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 10px 0;
+  border-radius: $client-radius-sm;
+
+  &:hover {
+    opacity: 0.95;
+    transform: translateY(-2px);
+    box-shadow: $client-shadow-auth;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+@mixin button-link($color: $client-primary) {
+  background: transparent;
+  border: none;
+  color: $color;
+  font-weight: 500;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  &:hover {
+    color: $client-info;
+    text-decoration: underline;
+  }
+}
+
+@mixin button-back($color: $client-primary) {
+  background: transparent;
+  border: none;
+  color: $color;
+  font-weight: 600;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: $client-font-serif;
+  font-size: 1rem;
+
+  &:hover {
+    color: $client-info;
+    transform: translateX(-3px);
+  }
+
+  i {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover i {
+    transform: translateX(-3px);
+  }
+}
+
+@mixin input-group {
+  .input-group-text {
+    background-color: $client-bg-white;
+    border-right: none;
+    color: #555;
+  }
+
+  .form-control {
+    border-left: none;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.15);
+      border-color: #6a11cb;
+    }
+  }
+}
+
+@mixin focus-ring($color: $client-primary) {
+  border-color: $color;
+  box-shadow: 0 0 0 0.2rem rgba($color, 0.15);
+  outline: none;
+}
+
+@mixin separator {
+  text-align: center;
+  position: relative;
+
+  span {
+    background: $client-bg-white;
+    padding: 0 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: $client-border-input;
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+}
+
+@mixin logo-wrapper($size: 100px, $radius: $client-radius-lg) {
+  width: $size;
+  height: $size;
+  border-radius: $radius;
+  @include flex-center;
+
+  .logo-icon {
+    width: 100%;
+    height: 100%;
+    color: white;
+  }
+}
+
+@mixin school-name {
+  font-size: 1.55rem;
+  font-weight: 700;
+  font-family: $client-font-serif;
+  @include gradient-text;
+  margin: 0;
+  line-height: 1.2;
+}
+
+@mixin hero-section($min-height: 100vh) {
+  position: relative;
+  min-height: $min-height;
+  @include flex-center;
+  @include gradient-bg;
+  color: white;
+  overflow: hidden;
+}
+
+@mixin container($max-width: 1200px) {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// Shared Component Styles
+// =======================
+
+// Auth Wrapper
+.auth-wrapper {
+  min-height: 100vh;
+  background: $client-gradient-light;
+  padding: 40px 20px;
+}
+
+.auth-box {
+  max-width: 420px;
+  width: 100%;
+}
+
+// Form Label
+.form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-family: $client-font-serif;
+}
+
+// Cursor Pointer
+.cursor-pointer {
+  cursor: pointer;
+
+  &:hover {
+    color: $client-primary;
+  }
+}
+

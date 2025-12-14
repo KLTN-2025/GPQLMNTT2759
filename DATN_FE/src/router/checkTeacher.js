@@ -12,6 +12,9 @@ export default function (to, from, next) {
         .then((res) => {
             if (res.data.status) {
                 localStorage.setItem("ho_ten_giao_vien", res.data.ho_va_ten);
+                localStorage.setItem("avatar_giao_vien", res.data.avatar);
+                localStorage.setItem("chuc_vu_giao_vien", res.data.chuc_vu);
+                localStorage.setItem("email_giao_vien", res.data.email);
                 next();
             } else {
                 next("/teacher/login");

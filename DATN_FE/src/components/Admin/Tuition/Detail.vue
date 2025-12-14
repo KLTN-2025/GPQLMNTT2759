@@ -44,8 +44,15 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center">
-                            <div class="fee-icon-large" :class="getFeeTypeClass(feeDetail?.loai_phi)">
-                                <i :class="getFeeTypeIcon(feeDetail?.loai_phi)" style="font-size: 3rem;"></i>
+                            <div class="fee-icon-large" :class="{
+                                'fee-basic': feeDetail?.loai_phi === 'hoc_phi_co_ban',
+                                'fee-meal': feeDetail?.loai_phi === 'phi_an_uong',
+                                'fee-activity': feeDetail?.loai_phi === 'phi_hoat_dong'
+                            }">
+                                <i :class="feeDetail?.loai_phi === 'hoc_phi_co_ban' ? 'fas fa-graduation-cap' :
+                                    feeDetail?.loai_phi === 'phi_an_uong' ? 'fas fa-utensils' :
+                                        feeDetail?.loai_phi === 'phi_hoat_dong' ? 'fas fa-running' :
+                                            'fas fa-money-bill-wave'" style="font-size: 3rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-9">
@@ -144,75 +151,122 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="(value, index) in list_hoc_sinh" :key="index">
-                                    <tr class="table-row-hover">
-                                        <td class="text-center table-index">
-                                            {{ index + 1 }}
-                                        </td>
-                                        <td class="student-info">
-                                            <div class="student-container">
-                                                <div class="student-avatar"
-                                                    :class="getPaymentStatusClass(value.trang_thai)">
-                                                    <img :src="value.avatar || '/default-avatar.jpg'"
-                                                        :alt="value.ten_hoc_sinh" class="avatar-img" />
-                                                </div>
-                                                <div class="student-details">
-                                                    <span class="student-name">{{ value.ten_hoc_sinh }}</span>
-                                                    <small class="student-id">Mã: {{ value.ma_hoc_sinh }}</small>
-                                                </div>
+                                <tr v-if="list_hoc_sinh.length === 0">
+                                    <td colspan="9" class="text-center py-4">
+                                        <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                                        <p class="text-muted mb-0">Chưa có dữ liệu học sinh</p>
+                                    </td>
+                                </tr>
+                                <tr v-for="(value, index) in list_hoc_sinh" :key="value.id || index"
+                                    class="table-row-hover">
+                                    <td class="text-center table-index">
+                                        {{ index + 1 }}
+                                    </td>
+                                    <td class="student-info">
+                                        <div class="student-container">
+                                            <div class="student-avatar" :class="{
+                                                'payment-paid': value.trang_thai === 'paid',
+                                                'payment-pending': value.trang_thai === 'pending',
+                                                'payment-overdue': value.trang_thai === 'overdue'
+                                            }">
+                                                <img :src="value.avatar || '/default-avatar.jpg'"
+                                                    :alt="value.ten_hoc_sinh" class="avatar-img" />
                                             </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="class-badge">{{ value.lop_hoc }}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="amount-info">
-                                                <div class="total-amount">{{ formatCurrency(value.so_tien) }}</div>
+                                            <div class="student-details">
+                                                <span class="student-name">{{ value.ten_hoc_sinh }}</span>
+                                                <small class="student-id">Mã: {{ value.ma_hoc_sinh }}</small>
                                             </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="payment-info">
-                                                <div class="paid-amount">{{ formatCurrency(value.da_thanh_toan) }}
-                                                </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="class-badge">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            {{ value.lop_hoc }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="amount-info">
+                                            <div class="total-amount">{{ formatCurrency(value.so_tien) }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="payment-info">
+                                            <div class="paid-amount">{{ formatCurrency(value.da_thanh_toan) }}
                                             </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="remaining-amount"
-                                                :class="value.con_lai > 0 ? 'text-warning' : 'text-success'">
-                                                {{ formatCurrency(value.con_lai) }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="remaining-amount"
+                                            :class="value.con_lai > 0 ? 'text-warning' : 'text-success'">
+                                            {{ formatCurrency(value.con_lai) }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="payment-status-badge" :class="{
+                                            'status-paid': value.trang_thai === 'paid',
+                                            'status-pending': value.trang_thai === 'pending',
+                                            'status-overdue': value.trang_thai === 'overdue'
+                                        }">
+                                            <i :class="value.trang_thai === 'paid' ? 'fas fa-check-circle' :
+                                                value.trang_thai === 'pending' ? 'fas fa-clock' :
+                                                    value.trang_thai === 'overdue' ? 'fas fa-exclamation-triangle' :
+                                                        'fas fa-question'"></i>
+                                            <template v-if="value.trang_thai === 'paid'">Đã thanh toán</template>
+                                            <template v-else-if="value.trang_thai === 'pending'">Chưa thanh
+                                                toán</template>
+                                            <template v-else-if="value.trang_thai === 'overdue'">Quá hạn</template>
+                                            <template v-else>Chưa rõ</template>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="due-date">
+                                            <div class="due-date-text" :class="!value.han_thanh_toan ? 'text-muted' :
+                                                (() => {
+                                                    const today = new Date();
+                                                    const due = new Date(value.han_thanh_toan);
+                                                    today.setHours(0, 0, 0, 0);
+                                                    due.setHours(0, 0, 0, 0);
+                                                    if (due < today) return 'text-danger';
+                                                    if (due.getTime() - today.getTime() < 7 * 24 * 60 * 60 * 1000) return 'text-warning';
+                                                    return 'text-success';
+                                                })()">
+                                                {{ formatDate(value.han_thanh_toan) }}
                                             </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="payment-status-badge"
-                                                :class="getPaymentStatusBadgeClass(value.trang_thai)">
-                                                <i :class="getPaymentStatusIcon(value.trang_thai)"></i>
-                                                {{ getPaymentStatusText(value.trang_thai) }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="due-date">
-                                                <div class="due-date-text"
-                                                    :class="getDueDateClass(value.han_thanh_toan)">
-                                                    {{ formatDate(value.han_thanh_toan) }}
-                                                </div>
-                                                <small class="due-date-status">{{
-                                                    getDueDateStatus(value.han_thanh_toan) }}</small>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="action-buttons">
-                                                <button class="btn-action btn-payment" @click="processPayment(value)"
-                                                    title="Thanh toán" v-if="value.con_lai > 0">
-                                                    <i class="fas fa-credit-card"></i>
-                                                </button>
-                                                <button class="btn-action btn-view" @click="viewStudentDetails(value)"
-                                                    title="Xem chi tiết">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </template>
+                                            <small class="due-date-status">
+                                                <template v-if="!value.han_thanh_toan"></template>
+                                                <template v-else>
+                                                    <template v-if="(() => {
+                                                        const today = new Date();
+                                                        const due = new Date(value.han_thanh_toan);
+                                                        today.setHours(0, 0, 0, 0);
+                                                        due.setHours(0, 0, 0, 0);
+                                                        return due < today;
+                                                    })()">Quá hạn</template>
+                                                    <template v-else-if="(() => {
+                                                        const today = new Date();
+                                                        const due = new Date(value.han_thanh_toan);
+                                                        today.setHours(0, 0, 0, 0);
+                                                        due.setHours(0, 0, 0, 0);
+                                                        return due.getTime() - today.getTime() < 7 * 24 * 60 * 60 * 1000;
+                                                    })()">Sắp đến hạn</template>
+                                                    <template v-else>Còn thời gian</template>
+                                                </template>
+                                            </small>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="action-buttons">
+                                            <button class="btn-action btn-payment" @click="processPayment(value)"
+                                                title="Thanh toán" v-if="value.con_lai > 0">
+                                                <i class="fas fa-credit-card"></i>
+                                            </button>
+                                            <button class="btn-action btn-view" @click="viewStudentDetails(value)"
+                                                title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -241,11 +295,9 @@ export default {
     },
 
     mounted() {
-        const feeId = this.$route.query.id;
-        const feeType = this.$route.query.loai_phi;
-        if (feeId) {
-            this.loadFeeDetail(feeId);
-            this.loadStudentList(feeId, feeType);
+        const classId = this.$route.query.id; // id lớp học
+        if (classId) {
+            this.loadClassDetail(classId);
         } else {
             this.$router.push('/admin/hoc-phi');
         }
@@ -266,125 +318,31 @@ export default {
             return date.toLocaleDateString("vi-VN");
         },
 
-        getFeeTypeLabel(type) {
-            const labels = {
-                'hoc_phi_co_ban': 'Học phí cơ bản',
-                'phi_an_uong': 'Phí ăn uống',
-                'phi_hoat_dong': 'Phí hoạt động'
-            };
-            return labels[type] || type;
-        },
-
-        getFeeTypeIcon(type) {
-            switch (type) {
-                case 'hoc_phi_co_ban':
-                    return 'fas fa-graduation-cap';
-                case 'phi_an_uong':
-                    return 'fas fa-utensils';
-                case 'phi_hoat_dong':
-                    return 'fas fa-running';
-                default:
-                    return 'fas fa-money-bill-wave';
+        loadClassDetail(classId) {
+            if (!classId) {
+                this.$toast.error("Không tìm thấy ID lớp học");
+                return;
             }
-        },
 
-        getFeeTypeClass(type) {
-            return {
-                'fee-basic': type === 'hoc_phi_co_ban',
-                'fee-meal': type === 'phi_an_uong',
-                'fee-activity': type === 'phi_hoat_dong',
-            };
-        },
-
-        getPaymentStatusClass(status) {
-            return {
-                'payment-paid': status === 'paid',
-                'payment-pending': status === 'pending',
-                'payment-overdue': status === 'overdue',
-            };
-        },
-
-        getPaymentStatusBadgeClass(status) {
-            return {
-                'status-paid': status === 'paid',
-                'status-pending': status === 'pending',
-                'status-overdue': status === 'overdue',
-            };
-        },
-
-        getPaymentStatusIcon(status) {
-            switch (status) {
-                case 'paid':
-                    return 'fas fa-check-circle';
-                case 'pending':
-                    return 'fas fa-clock';
-                case 'overdue':
-                    return 'fas fa-exclamation-triangle';
-                default:
-                    return 'fas fa-question';
-            }
-        },
-
-        getPaymentStatusText(status) {
-            switch (status) {
-                case 'paid':
-                    return 'Đã thanh toán';
-                case 'pending':
-                    return 'Chưa thanh toán';
-                case 'overdue':
-                    return 'Quá hạn';
-                default:
-                    return 'Chưa rõ';
-            }
-        },
-
-        getDueDateClass(dueDate) {
-            if (!dueDate) return 'text-muted';
-            const today = new Date();
-            const due = new Date(dueDate);
-            today.setHours(0, 0, 0, 0);
-            due.setHours(0, 0, 0, 0);
-            if (due < today) {
-                return 'text-danger';
-            } else if (due.getTime() - today.getTime() < 7 * 24 * 60 * 60 * 1000) {
-                return 'text-warning';
-            }
-            return 'text-success';
-        },
-
-        getDueDateStatus(dueDate) {
-            if (!dueDate) return '';
-            const today = new Date();
-            const due = new Date(dueDate);
-            today.setHours(0, 0, 0, 0);
-            due.setHours(0, 0, 0, 0);
-            if (due < today) {
-                return 'Quá hạn';
-            } else if (due.getTime() - today.getTime() < 7 * 24 * 60 * 60 * 1000) {
-                return 'Sắp đến hạn';
-            }
-            return 'Còn thời gian';
-        },
-
-        loadFeeDetail(feeId) {
+            this.loading = true;
             baseRequestAdmin
-                .get(`admin/loai-phi/${feeId}`)
+                .get(`admin/hoc-phi/chi-tiet-hoc-phi/data?id=${classId}`)
                 .then((res) => {
                     if (res.data.status) {
-                        this.feeDetail = res.data.data;
-                    }
-                })
-                .catch((err) => {
-                    console.log("Không thể tải chi tiết loại phí");
-                });
-        },
+                        // Lấy dữ liệu từ response - cấu trúc: data.feeDetail và data.list_hoc_sinh
+                        const feeDetailData = res.data.data.feeDetail || {};
+                        const listHocSinhData = res.data.data.list_hoc_sinh || [];
 
-        loadStudentList(feeId, feeType) {
-            baseRequestAdmin
-                .get(`admin/loai-phi/${feeId}/hoc-sinh`, { params: { loai_phi: feeType } })
-                .then((res) => {
-                    if (res.data.status) {
-                        this.list_hoc_sinh = res.data.data;
+                        // Gán thông tin loại phí
+                        this.feeDetail = {
+                            ...feeDetailData
+                        };
+
+                        // Gán danh sách học sinh - dữ liệu đã đầy đủ từ backend
+                        this.list_hoc_sinh = Array.isArray(listHocSinhData) ? listHocSinhData : [];
+
+                        console.log('Loaded feeDetail:', this.feeDetail);
+                        console.log('Loaded students:', this.list_hoc_sinh.length, this.list_hoc_sinh);
                     } else {
                         this.$toast.error(res.data.message);
                     }
@@ -396,21 +354,57 @@ export default {
                             this.$toast.error(error[0]);
                         });
                     } else {
-                        this.$toast.error("Có lỗi xảy ra khi tải danh sách học sinh");
+                        this.$toast.error("Có lỗi xảy ra khi tải chi tiết lớp học");
                     }
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
         },
 
         TiemKiem() {
-            const feeId = this.$route.query.id;
-            const feeType = this.$route.query.loai_phi;
-            const searchData = { ...this.search, loai_phi_id: feeId };
+            // Tìm kiếm local trong danh sách học sinh đã load
+            const classId = this.$route.query.id;
+            if (!classId) {
+                this.$toast.error("Không tìm thấy ID lớp học");
+                return;
+            }
+
+            // Reload lại dữ liệu với filter
+            this.loading = true;
             baseRequestAdmin
-                .post("admin/loai-phi/search-students", searchData)
+                .get(`admin/hoc-phi/chi-tiet-hoc-phi/data?id=${classId}`)
                 .then((res) => {
                     if (res.data.status) {
-                        this.$toast.success(res.data.message);
-                        this.list_hoc_sinh = res.data.data;
+                        const feeDetailData = res.data.data.feeDetail || {};
+                        let listHocSinhData = res.data.data.list_hoc_sinh || [];
+
+                        // Filter theo tên học sinh
+                        if (this.search.noi_dung && this.search.noi_dung.trim()) {
+                            const searchTerm = this.search.noi_dung.trim().toLowerCase();
+                            listHocSinhData = listHocSinhData.filter(hs =>
+                                (hs.ten_hoc_sinh || '').toLowerCase().includes(searchTerm)
+                            );
+                        }
+
+                        // Filter theo lớp học (nếu có)
+                        if (this.search.lop_hoc && this.search.lop_hoc.trim()) {
+                            listHocSinhData = listHocSinhData.filter(hs =>
+                                (hs.lop_hoc || '').includes(this.search.lop_hoc)
+                            );
+                        }
+
+                        // Filter theo trạng thái (nếu có)
+                        if (this.search.trang_thai && this.search.trang_thai.trim()) {
+                            listHocSinhData = listHocSinhData.filter(hs =>
+                                hs.trang_thai === this.search.trang_thai
+                            );
+                        }
+
+                        // Gán danh sách học sinh đã filter
+                        this.list_hoc_sinh = Array.isArray(listHocSinhData) ? listHocSinhData : [];
+
+                        this.$toast.success("Tìm kiếm thành công");
                     } else {
                         this.$toast.error(res.data.message);
                     }
@@ -424,6 +418,9 @@ export default {
                     } else {
                         this.$toast.error("Có lỗi xảy ra khi tìm kiếm");
                     }
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
         },
 
@@ -441,7 +438,7 @@ export default {
 </script>
 
 <style lang="scss">
-@use "../shared-styles";
+@use "../admin-styles.scss";
 @use "./style.scss";
 
 .fee-icon-large {
@@ -487,11 +484,23 @@ export default {
 }
 
 .class-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-    font-weight: 500;
-    font-size: 0.85rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.25);
+    min-width: 140px;
+
+    i {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
 }
 </style>

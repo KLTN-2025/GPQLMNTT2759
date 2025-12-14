@@ -52,7 +52,7 @@
         </div>
         <div class="stats-content">
           <h3 class="stats-number">
-            {{list_phu_huynh.filter((ph) => ph.tinh_trang == 1).length}}
+            {{list_phu_huynh.filter((ph) => ph.is_block == 0).length}}
           </h3>
           <p class="stats-label">Đang Hoạt Động</p>
         </div>
@@ -65,7 +65,7 @@
         </div>
         <div class="stats-content">
           <h3 class="stats-number">
-            {{list_phu_huynh.filter((ph) => ph.tinh_trang == 0).length}}
+            {{list_phu_huynh.filter((ph) => ph.is_block == 1).length}}
           </h3>
           <p class="stats-label">Tạm Ngừng</p>
         </div>
@@ -97,10 +97,15 @@
               <p class="card-subtitle">Quản lý thông tin phụ huynh hệ thống</p>
             </div>
           </div>
-          <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
-            <i class="fas fa-user-plus"></i>
-            Thêm Phụ Huynh
-          </button>
+          <div class="header-actions">
+            <button class="btn btn-outline-success btn-sm me-2" @click="exportParentsExcel">
+              <i class="fas fa-file-excel"></i> Xuất Excel
+            </button>
+            <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
+              <i class="fas fa-user-plus"></i>
+              Thêm Phụ Huynh
+            </button>
+          </div>
         </div>
 
         <div class="card-body">
@@ -116,14 +121,14 @@
               </div>
 
               <div class="search-filters">
-                <select v-on:change="TiemKiem()" class="filter-select" v-model="search.tinh_trang">
+                <select v-on:change="TiemKiem()" class="filter-select" v-model="search.is_block">
                   <option value="">Tất cả trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="0">Tạm ngừng</option>
+                  <option value="0">Hoạt động</option>
+                  <option value="1">Tạm ngừng</option>
                 </select>
                 <select v-on:change="TiemKiem()" class="filter-select" v-model="search.quan_he">
                   <option value="">Tất cả quan hệ</option>
-                  <option value="Cha">Cha</option>
+                  <option value="Bố">Cha</option>
                   <option value="Mẹ">Mẹ</option>
                   <option value="Ông">Ông</option>
                   <option value="Bà">Bà</option>
@@ -139,12 +144,13 @@
           <div class="table-container">
             <table class="table table-modern">
               <thead>
-                <tr>
+                <tr class="text-nowrap">
                   <th class="text-center">#</th>
                   <th>Phụ Huynh</th>
+                  <th class="text-center">Quan Hệ</th>
+                  <th class="text-center">Học Sinh</th>
                   <th class="text-center">Liên Hệ</th>
                   <th class="text-center">Thông Tin</th>
-                  <th class="text-center">Quan Hệ</th>
                   <th class="text-center">Nghề Nghiệp</th>
                   <th class="text-center">Trạng Thái</th>
                   <th class="text-center">Thao Tác</th>
@@ -162,9 +168,26 @@
                           <img :src="value.avatar || '/default-avatar.jpg'" :alt="value.ho_va_ten" class="avatar-img" />
                         </div>
                         <div class="employee-details">
-                          <span class="employee-name">{{ value.ho_va_ten }}</span>
-                          <small class="employee-email">{{ value.email }}</small>
+                          <div class="employee-name">{{ value.ho_va_ten }}</div>
+                          <div class="employee-email">{{ value.email }}</div>
                         </div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span class="relationship-badge">
+                        <i class="fas fa-heart"></i>
+                        {{ value.quan_he }}
+                      </span>
+                    </td>
+                    <td class=" contact-info">
+                      <div class="contact-item">
+                        <template v-if="value.hoc_sinhs && value.hoc_sinhs.length > 0">
+                          <div v-for="hs in value.hoc_sinhs" :key="hs.id" class="student-item">
+                            <i class="fas fa-child me-1"></i>
+                            <span>{{ hs.ho_va_ten }}</span>
+                          </div>
+                        </template>
+                        <span v-else class="text-muted">Chưa có học sinh</span>
                       </div>
                     </td>
                     <td class="text-center contact-info">
@@ -191,19 +214,12 @@
                       </div>
                     </td>
                     <td class="text-center">
-                      <span class="relationship-badge">
-                        <i class="fas fa-heart"></i>
-                        {{ value.quan_he }}
-                      </span>
-                    </td>
-                    <td class="text-center">
                       <div class="job-info">
                         <div class="job-title">{{ value.nghe_nghiep || 'Chưa cập nhật' }}</div>
-                        <small class="company-name">{{ value.cong_ty || '' }}</small>
                       </div>
                     </td>
-                    <td class="text-center">
-                      <button v-on:click="DoiTrangThai(value)" v-if="value.tinh_trang == 1"
+                    <td class="text-center text-nowrap">
+                      <button v-on:click="DoiTrangThai(value)" v-if="value.is_block == 0"
                         class="btn status-badge status-active">
                         <i class="fas fa-check-circle"></i>
                         Hoạt Động
@@ -215,8 +231,8 @@
                     </td>
                     <td class="text-center">
                       <div class="action-buttons">
-                        <button class="btn-action btn-edit" @click="Object.assign(update_phu_huynh, value)"
-                          data-bs-toggle="modal" data-bs-target="#capNhatModal" title="Chỉnh sửa">
+                        <button class="btn-action btn-edit" @click="OpenUpdateModal(value)" data-bs-toggle="modal"
+                          data-bs-target="#capNhatModal" title="Chỉnh sửa">
                           <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn-action btn-delete" @click="Object.assign(delete_phu_huynh, value)"
@@ -316,27 +332,20 @@
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label for="updateCongTy" class="form-label">Công Ty</label>
-                  <input type="text" class="form-control" id="updateCongTy" v-model="update_phu_huynh.cong_ty"
-                    placeholder="Tên công ty làm việc" />
+                  <label for="updateTinhTrang" class="form-label">Tình Trạng</label>
+                  <select v-model="update_phu_huynh.is_block" class="form-select">
+                    <option value="0">Hoạt Động</option>
+                    <option value="1">Tạm Ngừng</option>
+                  </select>
                 </div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="mb-3">
                   <label for="updateAvatar" class="form-label">Avatar URL</label>
                   <input type="url" class="form-control" id="updateAvatar" v-model="update_phu_huynh.avatar"
                     placeholder="https://example.com/avatar.jpg" />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="updateTinhTrang" class="form-label">Tình Trạng</label>
-                  <select v-model="update_phu_huynh.tinh_trang" class="form-select">
-                    <option value="1">Hoạt Động</option>
-                    <option value="0">Tạm Ngừng</option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -470,23 +479,18 @@
                   placeholder="VD: Giáo viên, Bác sĩ..." />
               </div>
               <div class="col-md-6">
-                <label for="congTy" class="form-label">Công Ty</label>
-                <input type="text" class="form-control" id="congTy" v-model="create_phu_huynh.cong_ty"
-                  placeholder="Tên công ty làm việc" />
+                <label for="tinhTrang" class="form-label">Tình Trạng</label>
+                <select v-model="create_phu_huynh.is_block" class="form-select">
+                  <option value="0">Hoạt Động</option>
+                  <option value="1">Tạm Ngừng</option>
+                </select>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <label for="avatar" class="form-label">Avatar URL</label>
                 <input type="url" class="form-control" id="avatar" v-model="create_phu_huynh.avatar"
                   placeholder="https://example.com/avatar.jpg" />
-              </div>
-              <div class="col-md-6">
-                <label for="tinhTrang" class="form-label">Tình Trạng</label>
-                <select v-model="create_phu_huynh.tinh_trang" class="form-select">
-                  <option value="1">Hoạt Động</option>
-                  <option value="0">Tạm Ngừng</option>
-                </select>
               </div>
             </div>
             <label for="diaChi" class="form-label">Địa Chỉ *</label>
@@ -512,8 +516,10 @@
 <script>
 import axios from "axios";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
+import { ExcelExportMixin } from '../../../mixins/ExcelExportMixin';
 
 export default {
+  mixins: [ExcelExportMixin],
   data() {
     return {
       list_phu_huynh: [],
@@ -525,10 +531,9 @@ export default {
         ngay_sinh: "",
         quan_he: "",
         nghe_nghiep: "",
-        cong_ty: "",
         dia_chi: "",
         avatar: "",
-        tinh_trang: "1",
+        is_block: "1",
       },
       update_phu_huynh: {
         id: "",
@@ -539,9 +544,8 @@ export default {
         ngay_sinh: "",
         quan_he: "",
         nghe_nghiep: "",
-        cong_ty: "",
         dia_chi: "",
-        tinh_trang: "",
+        is_block: "",
         avatar: "",
       },
       delete_phu_huynh: {
@@ -552,7 +556,7 @@ export default {
       },
       search: {
         noi_dung: "",
-        tinh_trang: "",
+        is_block: "",
         quan_he: "",
       },
       loading: false,
@@ -564,6 +568,21 @@ export default {
   },
 
   methods: {
+    exportParentsExcel() {
+      const columns = [
+        { header: 'Họ và Tên', value: 'ho_va_ten', width: 25 },
+        { header: 'Số Điện Thoại', value: 'so_dien_thoai', width: 15 },
+        { header: 'Email', value: 'email', width: 30 },
+        { header: 'Quan Hệ', value: 'quan_he', width: 15 },
+        { header: 'Nghề Nghiệp', value: 'nghe_nghiep', width: 25 },
+        { header: 'Địa Chỉ', value: 'dia_chi', width: 40 },
+        { header: 'Số Học Sinh', value: (item) => item.hoc_sinhs ? item.hoc_sinhs.length : 0, width: 15 },
+        { header: 'Trạng Thái', value: (item) => item.is_block == 0 ? 'Hoạt động' : 'Khóa', width: 15 }
+      ];
+      
+      this.exportToExcel(this.list_phu_huynh, columns, 'danh-sach-phu-huynh');
+    },
+
     formatDate(dateString) {
       if (!dateString) return "";
       const date = new Date(dateString);
@@ -571,11 +590,10 @@ export default {
     },
 
     getTotalChildren() {
-      // Mock data - trong thực tế sẽ lấy từ API
       const children = [];
       this.list_phu_huynh.forEach(ph => {
-        if (ph.con_em) {
-          ph.con_em.forEach(child => {
+        if (ph.hoc_sinhs && Array.isArray(ph.hoc_sinhs)) {
+          ph.hoc_sinhs.forEach(child => {
             children.push(child);
           });
         }
@@ -746,10 +764,25 @@ export default {
         ngay_sinh: "",
         quan_he: "",
         nghe_nghiep: "",
-        cong_ty: "",
         dia_chi: "",
         avatar: "",
-        tinh_trang: "1",
+        is_block: "1",
+      };
+    },
+
+    OpenUpdateModal(value) {
+      this.update_phu_huynh = {
+        id: value.id || "",
+        ho_va_ten: value.ho_va_ten || "",
+        email: value.email || "",
+        so_dien_thoai: value.so_dien_thoai || "",
+        gioi_tinh: value.gioi_tinh !== undefined && value.gioi_tinh !== null ? String(value.gioi_tinh) : "",
+        ngay_sinh: value.ngay_sinh || "",
+        quan_he: value.quan_he || "",
+        nghe_nghiep: value.nghe_nghiep || "",
+        dia_chi: value.dia_chi || "",
+        avatar: value.avatar || "",
+        is_block: value.is_block !== undefined && value.is_block !== null ? String(value.is_block) : "1",
       };
     },
   },

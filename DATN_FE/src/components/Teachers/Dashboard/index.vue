@@ -1,84 +1,88 @@
 <template>
-    <div class="container-fluid teacher-dashboard">
-        <!-- Welcome Section -->
-        <div class="welcome-section text-center mb-4">
-            <div class="school-banner">
-                <h2 class="welcome-title">CHÀO MỪNG GIÁO VIÊN</h2>
-                <p class="welcome-subtitle">Nơi chia sẻ tri thức - Vì sự phát triển của học sinh</p>
-                <div class="welcome-info">
-                    <span class="badge bg-primary me-2">
-                        <i class="bx bx-calendar me-1"></i>{{ currentDate }}
-                    </span>
-                    <span class="badge bg-success me-2">
-                        <i class="bx bx-time me-1"></i>{{ currentTime }}
-                    </span>
-                    <span class="badge bg-info">
-                        <i class="bx bx-user me-1"></i>Xin chào, {{ teacherName }}
-                    </span>
+    <div class="dashboard-page">
+        <!-- Header Section -->
+        <div class="page-header education-theme">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="page-header-content">
+                            <div class="page-icon">
+                                <i class="bx bx-home"></i>
+                            </div>
+                            <div class="page-info">
+                                <h1 class="page-title">Bảng Điều Khiển</h1>
+                                <p class="page-subtitle">Chào mừng, {{ teacherName }} - {{ currentDate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="time-display">
+                            <i class="bx bx-time"></i>
+                            <span>{{ currentTime }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row mb-4">
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card stat-card stat-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon"><i class="bx bx-group"></i></div>
-                            <div class="stat-content">
-                                <h3 class="stat-number">{{ totalStudents }}</h3>
-                                <p class="stat-label">Tổng học sinh</p>
-                                <div class="stat-change">
-                                    <small class="text-muted">{{ className }}</small>
+        <div class="stats-section">
+            <div class="container-fluid">
+                <div class="row g-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-primary">
+                            <div class="stats-content-wrapper">
+                                <div class="stats-icon">
+                                    <i class="bx bx-group"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <div class="stats-number">{{ totalStudents }}</div>
+                                    <div class="stats-label">Tổng học sinh</div>
+                                    <div class="stats-subtitle">{{ className }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card stat-card stat-success">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon"><i class="bx bx-check-circle"></i></div>
-                            <div class="stat-content">
-                                <h3 class="stat-number">{{ attendanceRate }}%</h3>
-                                <p class="stat-label">Tỷ lệ điểm danh hôm nay</p>
-                                <div class="stat-change positive">
-                                    <i class="bx bx-up-arrow-alt"></i> +2.5%
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-success">
+                            <div class="stats-content-wrapper">
+                                <div class="stats-icon">
+                                    <i class="bx bx-check-circle"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <div class="stats-number">{{ attendanceRate }}%</div>
+                                    <div class="stats-label">Điểm danh hôm nay</div>
+                                    <div class="stats-change positive">
+                                        <i class="bx bx-up-arrow-alt"></i> +2.5%
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card stat-card stat-warning">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon"><i class="bx bx-file"></i></div>
-                            <div class="stat-content">
-                                <h3 class="stat-number">{{ pendingTasks }}</h3>
-                                <p class="stat-label">Công việc cần xử lý</p>
-                                <div class="stat-change">
-                                    <small class="text-muted">Hạn trong tuần</small>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-warning">
+                            <div class="stats-content-wrapper">
+                                <div class="stats-icon">
+                                    <i class="bx bx-file"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <div class="stats-number">{{ pendingTasks }}</div>
+                                    <div class="stats-label">Công việc cần xử lý</div>
+                                    <div class="stats-subtitle">Hạn trong tuần</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card stat-card stat-info">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon"><i class="bx bx-message-dots"></i></div>
-                            <div class="stat-content">
-                                <h3 class="stat-number">{{ unreadMessages }}</h3>
-                                <p class="stat-label">Tin nhắn chưa đọc</p>
-                                <div class="stat-change">
-                                    <small class="text-muted">Từ phụ huynh</small>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card stats-info">
+                            <div class="stats-content-wrapper">
+                                <div class="stats-icon">
+                                    <i class="bx bx-message-dots"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <div class="stats-number">{{ unreadMessages }}</div>
+                                    <div class="stats-label">Tin nhắn chưa đọc</div>
+                                    <div class="stats-subtitle">Từ phụ huynh</div>
                                 </div>
                             </div>
                         </div>
@@ -88,232 +92,272 @@
         </div>
 
         <!-- Main Content Row -->
-        <div class="row mb-4">
-            <!-- Today's Schedule -->
-            <div class="col-xl-4 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-calendar me-2"></i>Lịch dạy hôm nay
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="schedule-list">
-                            <div v-for="(schedule, index) in todaySchedule" :key="index" class="schedule-item"
-                                :class="{ active: schedule.isNow }">
-                                <div class="schedule-time">
-                                    <i class="bx bx-time-five"></i>
-                                    {{ schedule.time }}
-                                </div>
-                                <div class="schedule-info">
-                                    <h6>{{ schedule.className }}</h6>
-                                    <p>{{ schedule.subject }}</p>
-                                    <span class="badge" :class="'bg-' + schedule.status">{{ schedule.statusText
-                                    }}</span>
+        <div class="content-section">
+            <div class="container-fluid">
+                <div class="row g-4 mb-4">
+                    <!-- Today's Schedule -->
+                    <div class="col-xl-4">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-calendar"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Lịch dạy hôm nay</h5>
+                                    </div>
                                 </div>
                             </div>
-                            <div v-if="todaySchedule.length === 0" class="text-center text-muted py-4">
-                                <i class="bx bx-calendar-x" style="font-size: 3rem;"></i>
-                                <p class="mt-2">Không có lịch dạy hôm nay</p>
+                            <div class="card-body">
+                                <div class="schedule-list">
+                                    <div v-for="(schedule, index) in todaySchedule" :key="index" class="schedule-item"
+                                        :class="{ active: schedule.isNow }">
+                                        <div class="schedule-time">
+                                            <i class="bx bx-time-five"></i>
+                                            {{ schedule.time }}
+                                        </div>
+                                        <div class="schedule-info">
+                                            <h6>{{ schedule.className }}</h6>
+                                            <p>{{ schedule.subject }}</p>
+                                            <span class="badge" :class="'bg-' + schedule.status">
+                                                {{ schedule.statusText }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="todaySchedule.length === 0" class="empty-state">
+                                        <i class="bx bx-calendar-x"></i>
+                                        <p>Không có lịch dạy hôm nay</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Student Attendance Overview -->
-            <div class="col-xl-8 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-line-chart me-2"></i>Tình hình điểm danh trong tuần
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-container" style="height: 300px">
-                            <v-chart class="chart" :option="attendanceChartOption" autoresize />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Second Row -->
-        <div class="row mb-4">
-            <div class="col-xl-6 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-trending-up me-2"></i>Tỷ lệ hoàn thành các hoạt động (%)
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-container" style="height: 300px">
-                            <v-chart class="chart" :option="performanceChartOption" autoresize />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-6 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-pie-chart-alt-2 me-2"></i>Phân bố giới tính lớp học
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-container" style="height: 300px">
-                            <v-chart class="chart" :option="classDistributionOption" autoresize />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Third Row -->
-        <div class="row mb-4">
-            <div class="col-xl-4 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-bell me-2"></i>Thông báo & Nhắc nhở
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="notifications-list">
-                            <div v-for="(notification, index) in notifications" :key="index"
-                                class="notification-item alert" :class="'alert-' + notification.type">
-                                <div class="notification-icon">
-                                    <i :class="'bx ' + notification.icon"></i>
+                    <!-- Attendance Chart -->
+                    <div class="col-xl-8">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-line-chart"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Tình hình điểm danh trong tuần</h5>
+                                    </div>
                                 </div>
-                                <div class="notification-content">
-                                    <h6>{{ notification.title }}</h6>
-                                    <p>{{ notification.message }}</p>
-                                    <small class="text-muted">{{ notification.time }}</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <v-chart class="chart" :option="attendanceChartOption" autoresize />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-4 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-user-check me-2"></i>Học sinh cần chú ý
-                        </h5>
+
+                <!-- Second Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-6">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-trending-up"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Tỷ lệ hoàn thành các hoạt động (%)</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <v-chart class="chart" :option="performanceChartOption" autoresize />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="student-list">
-                            <div v-for="(student, index) in attentionStudents" :key="index" class="student-item">
-                                <div class="student-avatar">
-                                    <img :src="student.avatar" :alt="student.name" />
+                    <div class="col-xl-6">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-pie-chart-alt-2"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Phân bố giới tính lớp học</h5>
+                                    </div>
                                 </div>
-                                <div class="student-info">
-                                    <h6>{{ student.name }}</h6>
-                                    <p class="text-muted">{{ student.className }}</p>
-                                </div>
-                                <div class="student-status">
-                                    <span class="badge" :class="'bg-' + student.statusColor">{{ student.status }}</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <v-chart class="chart" :option="classDistributionOption" autoresize />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-4 mb-3">
-                <div class="card dashboard-card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-bolt me-2"></i>Thao tác nhanh
-                        </h5>
+
+                <!-- Third Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-4">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-bell"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Thông báo & Nhắc nhở</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="notifications-list">
+                                    <div v-for="(notification, index) in notifications" :key="index"
+                                        class="notification-item" :class="'alert-' + notification.type">
+                                        <div class="notification-icon">
+                                            <i :class="'bx ' + notification.icon"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <h6>{{ notification.title }}</h6>
+                                            <p>{{ notification.message }}</p>
+                                            <small>{{ notification.time }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <div class="quick-actions flex-grow-1 d-flex flex-column justify-content-center">
-                            <button class="btn btn-outline-primary btn-lg w-100 mb-3" @click="takeAttendance">
-                                <i class="bx bx-check-double me-2"></i>Điểm danh
-                            </button>
-                            <button class="btn btn-outline-secondary btn-lg w-100 mb-3" @click="createAssignment">
-                                <i class="bx bx-book-add me-2"></i>Tạo bài tập
-                            </button>
-                            <button class="btn btn-outline-secondary btn-lg w-100 mb-3" @click="viewSchedule">
-                                <i class="bx bx-calendar-event me-2"></i>Xem lịch dạy
-                            </button>
-                            <button class="btn btn-outline-secondary btn-lg w-100" @click="messageParents">
-                                <i class="bx bx-message-square-dots me-2"></i>Nhắn phụ huynh
-                            </button>
+                    <div class="col-xl-4">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-user-check"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Học sinh cần chú ý</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="student-list">
+                                    <div v-for="(student, index) in attentionStudents" :key="index"
+                                        class="student-item">
+                                        <div class="student-avatar">
+                                            <img :src="student.avatar" :alt="student.name" />
+                                        </div>
+                                        <div class="student-info">
+                                            <h6>{{ student.name }}</h6>
+                                            <p>{{ student.className }}</p>
+                                        </div>
+                                        <div class="student-status">
+                                            <span class="badge" :class="'bg-' + student.statusColor">
+                                                {{ student.status }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-bolt"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Thao tác nhanh</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="quick-actions">
+                                    <button class="btn btn-quick-action" @click="takeAttendance">
+                                        <i class="bx bx-check-double"></i>
+                                        <span>Điểm danh</span>
+                                    </button>
+                                    <button class="btn btn-quick-action" @click="createAssignment">
+                                        <i class="bx bx-book-add"></i>
+                                        <span>Tạo bài tập</span>
+                                    </button>
+                                    <button class="btn btn-quick-action" @click="viewSchedule">
+                                        <i class="bx bx-calendar-event"></i>
+                                        <span>Xem lịch dạy</span>
+                                    </button>
+                                    <button class="btn btn-quick-action" @click="messageParents">
+                                        <i class="bx bx-message-square-dots"></i>
+                                        <span>Nhắn phụ huynh</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Tasks Table -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card dashboard-card">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bx bx-task me-2"></i>Công việc cần hoàn thành
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Công việc</th>
-                                        <th>Lớp</th>
-                                        <th>Hạn chót</th>
-                                        <th>Trạng thái</th>
-                                        <th>Ưu tiên</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(task, index) in tasks" :key="index">
-                                        <td>
-                                            <i :class="'bx ' + task.icon + ' me-2'"></i>
-                                            {{ task.name }}
-                                        </td>
-                                        <td>{{ task.class }}</td>
-                                        <td>{{ task.deadline }}</td>
-                                        <td>
-                                            <span class="badge" :class="'bg-' + task.statusColor">{{ task.status
-                                            }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge" :class="'bg-' + task.priorityColor">{{ task.priority
-                                            }}</span>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary me-1">
-                                                <i class="bx bx-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-success">
-                                                <i class="bx bx-check"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <!-- Tasks Table -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <div class="header-content">
+                                    <div class="header-icon">
+                                        <i class="bx bx-task"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5 class="card-title">Công việc cần hoàn thành</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="table table-modern">
+                                        <thead>
+                                            <tr>
+                                                <th>Công việc</th>
+                                                <th>Lớp</th>
+                                                <th>Hạn chót</th>
+                                                <th>Trạng thái</th>
+                                                <th>Ưu tiên</th>
+                                                <th>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(task, index) in tasks" :key="index">
+                                                <td>
+                                                    <i :class="'bx ' + task.icon + ' me-2'"></i>
+                                                    {{ task.name }}
+                                                </td>
+                                                <td>{{ task.class }}</td>
+                                                <td>{{ task.deadline }}</td>
+                                                <td>
+                                                    <span class="badge" :class="'bg-' + task.statusColor">
+                                                        {{ task.status }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" :class="'bg-' + task.priorityColor">
+                                                        {{ task.priority }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="btn-action btn-edit" title="Chỉnh sửa">
+                                                            <i class="bx bx-edit"></i>
+                                                        </button>
+                                                        <button class="btn-action btn-view" title="Hoàn thành">
+                                                            <i class="bx bx-check"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quote -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card motto-card">
-                    <div class="card-body text-center">
-                        <h3 class="motto-title">
-                            <i class="bx bx-quote-left me-2"></i>
-                            "Giáo dục không phải là việc đổ đầy một cái thùng, mà là thắp sáng ngọn lửa"
-                            <i class="bx bx-quote-right ms-2"></i>
-                        </h3>
-                        <p class="motto-subtitle">- William Butler Yeats</p>
                     </div>
                 </div>
             </div>
@@ -343,7 +387,6 @@ export default {
 
         const teacherName = ref("Nguyễn Thị Mai");
         const totalStudents = ref(30);
-        const totalClasses = ref(1);
         const className = ref("Lớp Mầm 1A");
         const attendanceRate = ref(96.5);
         const pendingTasks = ref(5);
@@ -383,9 +426,9 @@ export default {
             xAxis: { type: "category", data: ["T2", "T3", "T4", "T5", "T6"] },
             yAxis: { type: "value", max: 30 },
             series: [
-                { name: "Có mặt", type: "bar", stack: "total", data: [28, 29, 27, 30, 29], itemStyle: { color: "#5cb85c" } },
-                { name: "Vắng mặt", type: "bar", stack: "total", data: [1, 0, 2, 0, 1], itemStyle: { color: "#d9534f" } },
-                { name: "Đi muộn", type: "bar", stack: "total", data: [1, 1, 1, 0, 0], itemStyle: { color: "#f0ad4e" } },
+                { name: "Có mặt", type: "bar", stack: "total", data: [28, 29, 27, 30, 29], itemStyle: { color: "#10b981" } },
+                { name: "Vắng mặt", type: "bar", stack: "total", data: [1, 0, 2, 0, 1], itemStyle: { color: "#ef4444" } },
+                { name: "Đi muộn", type: "bar", stack: "total", data: [1, 1, 1, 0, 0], itemStyle: { color: "#f59e0b" } },
             ],
         });
 
@@ -396,9 +439,9 @@ export default {
             xAxis: { type: "category", boundaryGap: false, data: ["T2", "T3", "T4", "T5", "T6"] },
             yAxis: { type: "value", max: 100 },
             series: [
-                { name: "Điểm danh", type: "line", data: [93, 97, 90, 100, 97], smooth: true, itemStyle: { color: "#5470c6" } },
-                { name: "Hoàn thành bài tập", type: "line", data: [85, 88, 90, 87, 92], smooth: true, itemStyle: { color: "#91cc75" } },
-                { name: "Tham gia hoạt động", type: "line", data: [95, 93, 97, 93, 100], smooth: true, itemStyle: { color: "#fac858" } },
+                { name: "Điểm danh", type: "line", data: [93, 97, 90, 100, 97], smooth: true, itemStyle: { color: "#667eea" } },
+                { name: "Hoàn thành bài tập", type: "line", data: [85, 88, 90, 87, 92], smooth: true, itemStyle: { color: "#10b981" } },
+                { name: "Tham gia hoạt động", type: "line", data: [95, 93, 97, 93, 100], smooth: true, itemStyle: { color: "#f59e0b" } },
             ],
         });
 
@@ -414,7 +457,7 @@ export default {
                 label: { show: true, formatter: "{b}: {c}" },
                 emphasis: { label: { show: true, fontSize: 16, fontWeight: "bold" } },
                 data: [
-                    { value: 16, name: "Nam", itemStyle: { color: "#5470c6" } },
+                    { value: 16, name: "Nam", itemStyle: { color: "#667eea" } },
                     { value: 14, name: "Nữ", itemStyle: { color: "#ec4899" } },
                 ],
             }],
@@ -441,7 +484,7 @@ export default {
         });
 
         return {
-            currentDate, currentTime, teacherName, totalStudents, totalClasses, className, attendanceRate,
+            currentDate, currentTime, teacherName, totalStudents, className, attendanceRate,
             pendingTasks, unreadMessages, todaySchedule, notifications, attentionStudents, tasks,
             attendanceChartOption, performanceChartOption, classDistributionOption,
             takeAttendance, createAssignment, viewSchedule, messageParents,
@@ -451,142 +494,168 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.teacher-dashboard {
-    padding: 1.5rem;
-}
+@use "../teacher-styles.scss" as teacher;
 
-.welcome-section {
-    margin-bottom: 2rem;
+.dashboard-page {
+    padding-bottom: 2rem;
+    background: #f5f7fa;
+    min-height: 100vh;
 
-    .school-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 2.5rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-
-        .welcome-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .welcome-subtitle {
+    .page-header {
+        .time-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
             font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.95;
-        }
+            font-weight: 600;
 
-        .welcome-info {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-
-            .badge {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-                font-weight: 500;
+            i {
+                font-size: 1.25rem;
             }
         }
     }
 }
 
-.stat-card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    cursor: pointer;
+.stats-section {
+    margin-bottom: 2rem;
+    padding: 0 1rem;
 
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    .stat-icon {
-        width: 60px;
-        height: 60px;
+    .stats-card {
+        background: white;
         border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        margin-right: 1rem;
-    }
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        height: 100%;
 
-    &.stat-primary .stat-icon {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-
-    &.stat-success .stat-icon {
-        background: linear-gradient(135deg, #5cb85c 0%, #4cae4c 100%);
-        color: white;
-    }
-
-    &.stat-warning .stat-icon {
-        background: linear-gradient(135deg, #f0ad4e 0%, #ec971f 100%);
-        color: white;
-    }
-
-    &.stat-info .stat-icon {
-        background: linear-gradient(135deg, #5bc0de 0%, #46b8da 100%);
-        color: white;
-    }
-
-    .stat-content {
-        flex: 1;
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            color: #2c3e50;
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
-        .stat-label {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-bottom: 0.25rem;
-        }
+        .stats-content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
 
-        .stat-change {
-            font-size: 0.85rem;
+            .stats-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.75rem;
+                color: white;
+                flex-shrink: 0;
+            }
 
-            &.positive {
-                color: #5cb85c;
+            .stats-content {
+                flex: 1;
+                min-width: 0;
+
+                .stats-number {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: #2c3e50;
+                    line-height: 1.2;
+                    margin-bottom: 0.25rem;
+                }
+
+                .stats-label {
+                    font-size: 0.875rem;
+                    color: #6c757d;
+                    font-weight: 600;
+                    margin-bottom: 0.25rem;
+                }
+
+                .stats-subtitle {
+                    font-size: 0.8125rem;
+                    color: #94a3b8;
+                }
+
+                .stats-change {
+                    font-size: 0.8125rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.25rem;
+
+                    &.positive {
+                        color: #10b981;
+                    }
+                }
             }
         }
+
+        &.stats-primary .stats-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        &.stats-success .stats-icon {
+            background: #10b981;
+        }
+
+        &.stats-warning .stats-icon {
+            background: #f59e0b;
+        }
+
+        &.stats-info .stats-icon {
+            background: #3b82f6;
+        }
     }
+}
+
+.content-section {
+    padding: 0 1rem;
 }
 
 .dashboard-card {
-    border: none;
+    background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    height: 100%;
 
-    .card-header {
-        background: #f8f9fa;
-        border-bottom: 2px solid #e9ecef;
-        border-radius: 12px 12px 0 0;
-        padding: 1.25rem;
+    .card-header-custom {
+        background: #ffffff;
+        padding: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        .card-title {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2c3e50;
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
 
-            i {
-                color: #667eea;
+            .header-icon {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.25rem;
+                flex-shrink: 0;
+            }
+
+            .header-text .card-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin: 0;
+                color: #2c3e50;
             }
         }
     }
 
     .card-body {
-        padding: 1.25rem;
+        padding: 1.5rem;
     }
 }
 
@@ -596,12 +665,13 @@ export default {
 
     .schedule-item {
         display: flex;
+        gap: 1rem;
         padding: 1rem;
-        border-left: 4px solid #e9ecef;
+        border-left: 3px solid #e9ecef;
         margin-bottom: 1rem;
         background: #f8f9fa;
         border-radius: 8px;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
 
         &:hover {
             background: #e9ecef;
@@ -619,6 +689,7 @@ export default {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .schedule-info {
@@ -628,18 +699,47 @@ export default {
                 margin: 0 0 0.25rem 0;
                 font-weight: 600;
                 color: #2c3e50;
+                font-size: 0.95rem;
             }
 
             p {
                 margin: 0 0 0.5rem 0;
-                color: #7f8c8d;
-                font-size: 0.9rem;
+                color: #6c757d;
+                font-size: 0.85rem;
             }
 
             .badge {
                 font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
             }
         }
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;
+
+        i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        p {
+            margin: 0;
+        }
+    }
+}
+
+.chart-container {
+    width: 100%;
+    height: 300px;
+    position: relative;
+
+    .chart {
+        width: 100% !important;
+        height: 100% !important;
     }
 }
 
@@ -649,14 +749,31 @@ export default {
 
     .notification-item {
         display: flex;
+        gap: 1rem;
         padding: 1rem;
         margin-bottom: 1rem;
         border-radius: 8px;
         border: none;
+        background: #f8f9fa;
+
+        &.alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+
+        &.alert-info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+        }
+
+        &.alert-success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
 
         .notification-icon {
             font-size: 1.5rem;
-            margin-right: 1rem;
+            flex-shrink: 0;
         }
 
         .notification-content {
@@ -665,15 +782,19 @@ export default {
             h6 {
                 margin: 0 0 0.25rem 0;
                 font-weight: 600;
+                color: #2c3e50;
+                font-size: 0.95rem;
             }
 
             p {
                 margin: 0 0 0.25rem 0;
-                font-size: 0.9rem;
+                font-size: 0.875rem;
+                color: #6c757d;
             }
 
             small {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
+                color: #94a3b8;
             }
         }
     }
@@ -686,137 +807,206 @@ export default {
     .student-item {
         display: flex;
         align-items: center;
+        gap: 1rem;
         padding: 1rem;
         margin-bottom: 1rem;
         background: #f8f9fa;
         border-radius: 8px;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
 
         &:hover {
             background: #e9ecef;
-            transform: translateX(5px);
+            transform: translateX(4px);
         }
 
         .student-avatar {
-            width: 50px;
-            height: 50px;
-            margin-right: 1rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
 
             img {
                 width: 100%;
                 height: 100%;
-                border-radius: 50%;
                 object-fit: cover;
             }
         }
 
         .student-info {
             flex: 1;
+            min-width: 0;
 
             h6 {
                 margin: 0 0 0.25rem 0;
                 font-weight: 600;
                 color: #2c3e50;
+                font-size: 0.95rem;
             }
 
             p {
                 margin: 0;
                 font-size: 0.85rem;
+                color: #6c757d;
             }
         }
 
         .student-status .badge {
             padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
         }
     }
 }
 
-.quick-actions .btn {
-    font-weight: 500;
-    border-width: 2px;
-    transition: all 0.3s ease;
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 
-    &:hover {
-        transform: scale(1.02);
-    }
-
-    i {
-        font-size: 1.2rem;
-    }
-}
-
-.table {
-    th {
-        font-weight: 600;
+    .btn-quick-action {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-weight: 500;
         color: #2c3e50;
-        border-bottom: 2px solid #dee2e6;
-    }
+        transition: all 0.2s ease;
+        text-align: left;
 
-    td {
-        vertical-align: middle;
-    }
+        i {
+            font-size: 1.25rem;
+            color: #667eea;
+        }
 
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
+        &:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateX(4px);
+
+            i {
+                color: white;
+            }
+        }
     }
 }
 
-.motto-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+.table-container {
+    overflow-x: auto;
 
-    .card-body {
-        padding: 2rem;
-    }
-
-    .motto-title {
-        color: white;
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .motto-subtitle {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 1.1rem;
+    .table-modern {
+        width: 100%;
         margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+
+        thead {
+            background: #f8f9fa;
+
+            th {
+                border: none;
+                padding: 1rem;
+                font-weight: 600;
+                color: #2c3e50;
+                font-size: 0.8125rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 2px solid #e9ecef;
+                white-space: nowrap;
+            }
+        }
+
+        tbody {
+            tr {
+                transition: background-color 0.2s ease;
+                border-bottom: 1px solid #f1f3f4;
+
+                &:hover {
+                    background: #f8f9fa;
+                }
+
+                td {
+                    border: none;
+                    padding: 1rem;
+                    vertical-align: middle;
+                    color: #2c3e50;
+                }
+            }
+        }
     }
 }
 
-.chart-container {
-    width: 100%;
-    position: relative;
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
 
-    .chart {
-        width: 100% !important;
-        height: 100% !important;
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &.btn-edit {
+            background: #3b82f6;
+            color: white;
+
+            &:hover {
+                background: #2563eb;
+            }
+        }
+
+        &.btn-view {
+            background: #10b981;
+            color: white;
+
+            &:hover {
+                background: #059669;
+            }
+        }
     }
 }
 
 @media (max-width: 768px) {
-    .welcome-section .school-banner {
-        padding: 1.5rem;
+    .stats-section {
+        .stats-card {
+            .stats-content-wrapper {
+                .stats-icon {
+                    width: 56px;
+                    height: 56px;
+                    font-size: 1.5rem;
+                }
 
-        .welcome-title {
-            font-size: 1.5rem;
-        }
-
-        .welcome-subtitle {
-            font-size: 1rem;
+                .stats-content .stats-number {
+                    font-size: 1.75rem;
+                }
+            }
         }
     }
 
-    .stat-card .stat-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-    }
+    .dashboard-card {
+        .card-header-custom {
+            padding: 1.25rem;
 
-    .stat-content .stat-number {
-        font-size: 1.5rem;
+            .header-content {
+                .header-icon {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 1.1rem;
+                }
+
+                .header-text .card-title {
+                    font-size: 1.1rem;
+                }
+            }
+        }
     }
 }
 </style>

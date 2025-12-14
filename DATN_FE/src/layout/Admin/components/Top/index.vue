@@ -31,12 +31,14 @@
       <div class="user-box dropdown ms-auto">
         <a class="user-profile-link" href="#" role="button" data-bs-toggle="dropdown">
           <div class="user-avatar">
-            <img src="../../../../assets/images/Home/giao-su-phan-van-truong.webp" alt="user avatar" />
+            <img
+              :src="userInfo.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userInfo.ho_va_ten || 'Admin') + '&background=random'"
+              alt="user avatar" />
             <span class="status-indicator online"></span>
           </div>
           <div class="user-info">
-            <p class="user-name">Admin Laura</p>
-            <p class="user-role">Quản trị viên</p>
+            <p class="user-name">{{ userInfo.ho_va_ten || 'Admin' }}</p>
+            <p class="user-role">{{ userInfo.chuc_vu || 'Quản trị viên' }}</p>
           </div>
           <i class="bx bx-chevron-down dropdown-arrow"></i>
         </a>
@@ -64,7 +66,7 @@
           </li>
           <li class="dropdown-divider"></li>
           <li>
-            <a class="dropdown-item text-danger" href="#">
+            <a v-on:click="logout()" class="dropdown-item text-danger" href="#">
               <i class="bx bx-log-out"></i>
               <span>Đăng xuất</span>
             </a>
@@ -76,525 +78,80 @@
   </div>
 </template>
 
-<script setup>
+<script>
+import baseRequestAdmin from '../../../../core/baseRequestAdmin';
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 
-const props = defineProps({
-  isSidebarOpen: {
-    type: Boolean,
-    default: false
+export default {
+  props: {
+    isSidebarOpen: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['toggleSidebar'],
+  setup(props, { emit }) {
+    const router = useRouter();
+    const userInfo = ref({
+      ho_va_ten: '',
+      avatar: '',
+      chuc_vu: '',
+      email: ''
+    });
+
+    // Load user info on mount
+    onMounted(async () => {
+      try {
+        const res = await baseRequestAdmin.get('admin/check-token');
+        if (res.data.status) {
+          userInfo.value = {
+            ho_va_ten: res.data.ho_ten,
+            avatar: res.data.avatar,
+            chuc_vu: res.data.chuc_vu || 'Quản trị viên',
+            email: res.data.email
+          };
+        }
+      } catch (err) {
+        console.error('Failed to load admin info:', err);
+      }
+    });
+
+    function handleToggleSidebar() {
+      emit('toggleSidebar');
+    }
+
+    function logout() {
+      baseRequestAdmin
+        .get('admin/logout')
+        .then((res) => {
+          if (res.data.status) {
+            // Xóa token và thông tin đăng nhập
+            localStorage.removeItem('token_admin');
+            localStorage.removeItem('admin_info');
+
+            // Redirect về trang login
+            router.push('/admin/login');
+          }
+        })
+        .catch((err) => {
+          console.error('Logout error:', err);
+          // Vẫn xóa token và redirect về login nếu có lỗi
+          localStorage.removeItem('token_admin');
+          localStorage.removeItem('admin_info');
+          router.push('/admin/login');
+        });
+    }
+
+    return {
+      handleToggleSidebar,
+      logout,
+      userInfo
+    };
   }
-});
-
-const emit = defineEmits(['toggleSidebar']);
-
-function handleToggleSidebar() {
-  emit('toggleSidebar');
 }
 </script>
 
-<style scoped>
-.topbar {
-  border-bottom: 1px solid #e9ecef;
-  padding: 10px 0;
-  height: auto;
-
-  position: relative;
-  z-index: 1000;
-}
-
-.navbar {
-  padding: 0.75rem 1.5rem;
-}
-
-/* Logo & School Name */
-.topbar-logo-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  min-width: 280px;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
-.logo-icon-wrapper {
-  width: 100px;
-  height: 100px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-icon {
-  width: 100%;
-  height: 100%;
-  color: white;
-}
-
-.school-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.school-name {
-  font-size: 1.55rem;
-  font-weight: 700;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  background: linear-gradient(90deg, #ff66c4, #ffde59);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.school-motto {
-  font-size: 0.8rem;
-  color: #6c757d;
-  margin: 0;
-  font-style: italic;
-}
-
-.mobile-toggle-menu {
-  display: none;
-  font-size: 24px;
-  color: #6c757d;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.mobile-toggle-menu:hover {
-  background: #f8f9fa;
-  color: #667eea;
-}
-
-.search-bar {
-  max-width: auto;
-  min-width: none;
-  margin: 0 2rem;
-}
-
-.search-container-layout {
-  position: relative;
-}
-
-.search-input-wrapper {
-  position: relative;
-}
-
-.search-control {
-  border: 2px solid #e9ecef;
-  border-radius: 25px;
-  padding: 12px 45px 12px 20px;
-  font-size: 0.9rem;
-  background: #f8f9fa;
-  transition: all 0.3s ease;
-}
-
-.search-control:focus {
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-}
-
-.search-icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6c757d;
-  font-size: 18px;
-}
-
-.search-close {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6c757d;
-  font-size: 18px;
-  cursor: pointer;
-  display: none;
-}
-
-/* Top Menu */
-.top-menu {
-  display: flex;
-  align-items: center;
-}
-
-.nav-item {
-  margin: 0 5px;
-}
-
-.nav-link {
-  color: #6c757d;
-  padding: 10px;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.nav-link:hover {
-  color: #667eea;
-  background: #f8f9fa;
-}
-
-.nav-link i {
-  font-size: 20px;
-}
-
-/* Dropdowns */
-.dropdown-menu {
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  padding: 0;
-  min-width: 320px;
-}
-
-.dropdown-header {
-  padding: 20px 20px 15px;
-  border-bottom: 1px solid #e9ecef;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dropdown-header h6 {
-  margin: 0;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.dropdown-footer {
-  padding: 15px 20px;
-  border-top: 1px solid #e9ecef;
-}
-
-/* Apps Dropdown */
-.apps-dropdown {
-  min-width: 400px;
-}
-
-.apps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  padding: 20px;
-}
-
-.app-item {
-  text-align: center;
-  padding: 15px;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.app-item:hover {
-  background: #f8f9fa;
-  transform: translateY(-2px);
-}
-
-.app-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-  font-size: 20px;
-  color: white;
-}
-
-.app-name {
-  font-size: 0.8rem;
-  color: #6c757d;
-  font-weight: 500;
-}
-
-/* Notifications */
-.notification-badge,
-.message-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #dc3545;
-  color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.notifications-list,
-.messages-list {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.notification-item,
-.message-item {
-  display: flex;
-  align-items: flex-start;
-  padding: 15px 20px;
-  border-bottom: 1px solid #f8f9fa;
-  transition: all 0.3s ease;
-}
-
-.notification-item:hover,
-.message-item:hover {
-  background: #f8f9fa;
-}
-
-.notification-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  flex-shrink: 0;
-  font-size: 18px;
-  color: white;
-}
-
-.notification-content h6,
-.message-content h6 {
-  margin: 0 0 5px 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.notification-content p,
-.message-content p {
-  margin: 0 0 5px 0;
-  font-size: 0.8rem;
-  color: #6c757d;
-  line-height: 1.4;
-}
-
-/* Messages */
-.message-avatar {
-  position: relative;
-  margin-right: 15px;
-  flex-shrink: 0;
-}
-
-.message-avatar img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.status-indicator {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid white;
-}
-
-.status-indicator.online {
-  background: #28a745;
-}
-
-.status-indicator.offline {
-  background: #6c757d;
-}
-
-/* User Profile */
-.user-box {
-  margin-left: 20px;
-}
-
-.user-profile-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 15px;
-  border-radius: 25px;
-  text-decoration: none;
-  color: #2c3e50;
-  transition: all 0.3s ease;
-}
-
-.user-profile-link:hover {
-  background: #f8f9fa;
-  text-decoration: none;
-  color: #2c3e50;
-}
-
-.user-avatar {
-  position: relative;
-}
-
-.user-avatar img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin: 0;
-  color: #2c3e50;
-}
-
-.user-role {
-  font-size: 0.75rem;
-  color: #6c757d;
-  margin: 0;
-}
-
-.dropdown-arrow {
-  font-size: 16px;
-  color: #6c757d;
-  transition: transform 0.3s ease;
-}
-
-.user-profile-link[aria-expanded="true"] .dropdown-arrow {
-  transform: rotate(180deg);
-}
-
-.user-dropdown {
-  min-width: 200px;
-}
-
-.user-dropdown .dropdown-item {
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-}
-
-.user-dropdown .dropdown-item:hover {
-  background: #f8f9fa;
-  color: #667eea;
-}
-
-.user-dropdown .dropdown-item i {
-  font-size: 18px;
-  width: 20px;
-}
-
-/* Mobile Responsive */
-@media (max-width: 1200px) {
-  .search-bar {
-    margin: 0 1rem;
-  }
-
-  .topbar-logo-header {
-    min-width: 250px;
-  }
-}
-
-@media (max-width: 992px) {
-  .mobile-toggle-menu {
-    display: block;
-    order: 1;
-    /* Nút toggle ở bên trái */
-  }
-
-  .search-bar {
-    display: none;
-  }
-
-  .d-flex.align-items-center {
-    order: 2;
-    /* Logo ở giữa */
-    flex: 1;
-    justify-content: center;
-    margin: 0 20px;
-    /* Tạo khoảng cách với nút toggle */
-  }
-
-  .user-box {
-    order: 3;
-    /* User profile ở bên phải */
-    margin-left: 0;
-  }
-
-  .topbar-logo-header {
-    min-width: 200px;
-  }
-
-  .school-name {
-    font-size: 1.1rem;
-  }
-
-  .school-motto {
-    display: none;
-  }
-
-  .navbar {
-    justify-content: space-between;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0.5rem 1rem;
-    justify-content: space-between;
-  }
-
-  .d-flex.align-items-center {
-    margin: 0 10px;
-    /* Giảm khoảng cách trên mobile */
-  }
-
-  .topbar-logo-header {
-    min-width: 180px;
-  }
-
-  .logo-icon-wrapper {
-    width: 40px;
-    height: 40px;
-  }
-
-  .logo-icon {
-    font-size: 20px;
-  }
-
-  .school-name {
-    font-size: 1rem;
-  }
-
-  .user-info {
-    display: none;
-  }
-
-  .dropdown-menu {
-    min-width: 280px;
-  }
-
-  .mobile-toggle-menu {
-    font-size: 20px;
-    padding: 6px;
-  }
-}
+<style lang="scss" scoped>
+@use "./style.scss";
 </style>

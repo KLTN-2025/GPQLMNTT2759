@@ -41,7 +41,7 @@
           <i class="fas fa-users"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">{{ getTotalStudents() }}</h3>
+          <h3 class="stats-number">{{ totalStudents }}</h3>
           <p class="stats-label">Tổng Học Sinh</p>
         </div>
       </div>
@@ -52,9 +52,7 @@
           <i class="fas fa-heart"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{ getHealthStatusCount('good') }}
-          </h3>
+          <h3 class="stats-number">{{ healthStatusSummary.good }}</h3>
           <p class="stats-label">Sức Khỏe Tốt</p>
         </div>
       </div>
@@ -65,9 +63,7 @@
           <i class="fas fa-exclamation-triangle"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{ getHealthStatusCount('monitor') }}
-          </h3>
+          <h3 class="stats-number">{{ healthStatusSummary.monitor }}</h3>
           <p class="stats-label">Cần Theo Dõi</p>
         </div>
       </div>
@@ -78,9 +74,7 @@
           <i class="fas fa-user-injured"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{ getHealthStatusCount('intervention') }}
-          </h3>
+          <h3 class="stats-number">{{ healthStatusSummary.intervention }}</h3>
           <p class="stats-label">Cần Can Thiệp</p>
         </div>
       </div>
@@ -89,96 +83,135 @@
 
   <!-- Health Dashboard Charts -->
   <div class="row mb-4">
+    <!-- Left Column: Class Health Stats -->
     <div class="col-lg-8">
-      <div class="dashboard-card">
-        <div class="card-header-custom">
-          <div class="header-content">
-            <div class="header-icon">
-              <i class="fas fa-chart-bar"></i>
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-transparent border-0 pt-4 px-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h5 class="fw-bold mb-1 text-dark">Thống Kê Sức Khỏe Lớp</h5>
+              <p class="text-muted small mb-0">Top 3 lớp có sĩ số đông nhất</p>
             </div>
-            <div class="header-text">
-              <h5 class="card-title">Tình Trạng Sức Khỏe Theo Lớp</h5>
-              <p class="card-subtitle">Phân tích sức khỏe học sinh theo từng lớp</p>
+            <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle p-3">
+              <i class="fas fa-chart-pie fa-lg"></i>
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <div class="health-chart-container">
-            <div v-for="(classData, index) in getClassHealthData()" :key="index" class="health-chart-item">
-              <div class="chart-header">
-                <div class="class-info">
-                  <span class="class-name">{{ classData.className }}</span>
-                  <span class="student-count">{{ classData.totalStudents }} học sinh</span>
-                </div>
-                <div class="health-percentage">
-                  <span class="percentage">{{ classData.healthPercentage }}%</span>
-                  <small>sức khỏe tốt</small>
-                </div>
+        <div class="card-body px-4">
+          <div v-for="(cls, idx) in classHealthData" :key="idx" class="mb-4 last-no-mb">
+            <div class="d-flex justify-content-between align-items-end mb-2">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark">{{ cls.className }}</h6>
+                <small class="text-muted">{{ cls.totalStudents }} học sinh</small>
               </div>
-              <div class="progress-container">
-                <div class="progress-bar">
-                  <div class="progress-fill good" :style="{ width: classData.goodPercentage + '%' }"></div>
-                  <div class="progress-fill monitor" :style="{ width: classData.monitorPercentage + '%' }"></div>
-                  <div class="progress-fill intervention" :style="{ width: classData.interventionPercentage + '%' }">
-                  </div>
-                </div>
-                <div class="progress-labels">
-                  <span class="label good">{{ classData.goodCount }} tốt</span>
-                  <span class="label monitor">{{ classData.monitorCount }} theo dõi</span>
-                  <span class="label intervention">{{ classData.interventionCount }} can thiệp</span>
-                </div>
+              <div class="text-end">
+                <span class="fs-5 fw-bold text-success">{{ cls.healthPercentage }}%</span>
+                <small class="d-block text-muted" style="font-size: 0.75rem;">Đạt chuẩn</small>
               </div>
+            </div>
+            <div class="progress" style="height: 10px; border-radius: 10px;">
+              <div class="progress-bar bg-success" :style="{ width: cls.goodPercentage + '%' }" title="Tốt"></div>
+              <div class="progress-bar bg-warning" :style="{ width: cls.monitorPercentage + '%' }" title="Theo dõi">
+              </div>
+              <div class="progress-bar bg-danger" :style="{ width: cls.interventionPercentage + '%' }"
+                title="Can thiệp"></div>
+              <div class="progress-bar bg-dark" :style="{ width: cls.criticalPercentage + '%' }" title="Nguy kịch">
+              </div>
+            </div>
+            <div class="d-flex justify-content-between mt-2 text-xs text-muted">
+              <span><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i>{{ cls.goodCount }}
+                Tốt</span>
+              <span><i class="fas fa-circle text-warning me-1" style="font-size: 8px;"></i>{{ cls.monitorCount }} Theo
+                dõi</span>
+              <span><i class="fas fa-circle text-danger me-1" style="font-size: 8px;"></i>{{ cls.interventionCount }}
+                Can thiệp</span>
+              <span v-if="cls.criticalCount > 0"><i class="fas fa-circle text-dark me-1" style="font-size: 8px;"></i>{{
+                cls.criticalCount }} Nguy kịch</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Right Column: Schedule Timeline -->
     <div class="col-lg-4">
-      <div class="dashboard-card">
-        <div class="card-header-custom">
-          <div class="header-content">
-            <div class="header-icon">
-              <i class="fas fa-calendar-check"></i>
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-transparent border-0 pt-4 px-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h5 class="fw-bold mb-1 text-dark">Tiến Độ Y Tế</h5>
+              <p class="text-muted small mb-0">Hoạt động trong tháng</p>
             </div>
-            <div class="header-text">
-              <h5 class="card-title">Lịch Khám Sức Khỏe</h5>
-              <p class="card-subtitle">Thống kê khám sức khỏe tháng này</p>
+            <div class="icon-box bg-info bg-opacity-10 text-info rounded-circle p-3">
+              <i class="fas fa-tasks fa-lg"></i>
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <div class="health-stats">
-            <div class="stat-item">
-              <div class="stat-icon">
-                <i class="fas fa-stethoscope"></i>
+        <div class="card-body px-4 pt-2">
+          <!-- Timeline Item 1 -->
+          <div class="d-flex mb-4">
+            <div class="flex-shrink-0 d-flex flex-column align-items-center me-3">
+              <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+                style="width: 36px; height: 36px; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);">
+                <i class="fas fa-check"></i>
               </div>
-              <div class="stat-content">
-                <div class="stat-title">Khám định kỳ</div>
-                <div class="stat-value">{{ getTotalStudents() }}/{{ getTotalStudents() }}</div>
-                <div class="stat-status completed">Hoàn thành</div>
-              </div>
+              <div class="h-100 border-start my-1" style="width: 2px; background-color: #e9ecef;"></div>
             </div>
-            <div class="stat-item">
-              <div class="stat-icon">
-                <i class="fas fa-syringe"></i>
+            <div class="flex-grow-1 pb-2">
+              <h6 class="fw-bold mb-1">Khám Định Kỳ</h6>
+              <div class="progress mb-2" style="height: 6px;">
+                <div class="progress-bar bg-success" style="width: 100%"></div>
               </div>
-              <div class="stat-content">
-                <div class="stat-title">Tiêm chủng</div>
-                <div class="stat-value">{{ getVaccinationCount() }}/{{ getTotalStudents() }}</div>
-                <div class="stat-status in-progress">Đang thực hiện</div>
-              </div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-icon">
-                <i class="fas fa-user-md"></i>
-              </div>
-              <div class="stat-content">
-                <div class="stat-title">Khám chuyên khoa</div>
-                <div class="stat-value">{{ getSpecialistCount() }}/{{ getTotalStudents() }}</div>
-                <div class="stat-status pending">Cần theo dõi</div>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">Hoàn thành 100%</small>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Đã xong</span>
               </div>
             </div>
           </div>
+
+          <!-- Timeline Item 2 -->
+          <div class="d-flex mb-4">
+            <div class="flex-shrink-0 d-flex flex-column align-items-center me-3">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                style="width: 36px; height: 36px; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.3);">
+                <i class="fas fa-syringe"></i>
+              </div>
+              <div class="h-100 border-start my-1" style="width: 2px; background-color: #e9ecef;"></div>
+            </div>
+            <div class="flex-grow-1 pb-2">
+              <h6 class="fw-bold mb-1">Tiêm Chủng</h6>
+              <div class="progress mb-2" style="height: 6px;">
+                <div class="progress-bar bg-primary" :style="{ width: (vaccinationCount / totalStudents * 100) + '%' }">
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{ vaccinationCount }}/{{ totalStudents }} bé</small>
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2">Đang chạy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 3: Cấp Cứu -->
+          <div class="d-flex">
+            <div class="flex-shrink-0 d-flex flex-column align-items-center me-3">
+              <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center"
+                style="width: 36px; height: 36px; box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);">
+                <i class="fas fa-ambulance"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h6 class="fw-bold mb-1">Trường Hợp Cấp Cứu</h6>
+              <div class="progress mb-2" style="height: 6px;">
+                <div class="progress-bar bg-danger" :style="{ width: (emergencyCount / totalStudents * 100) + '%' }">
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{ emergencyCount }}/{{ totalStudents }} ca</small>
+                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-2">Theo dõi</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -206,123 +239,181 @@
         </div>
 
         <div class="card-body">
-          <!-- Search Container -->
-          <div class="search-container mb-4">
-            <div class="search-input-group">
-              <div class="form-search">
-                <div class="search-icon">
-                  <i class="fas fa-search"></i>
-                </div>
+          <!-- Search & Filter Container -->
+          <div class="row p-3 ">
+            <div class="col-lg-8 col-md-12">
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0 ps-3">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
                 <input v-on:change="TiemKiem()" v-on:keyup.enter="TiemKiem()" v-model="search.noi_dung" type="text"
-                  class="search-input" placeholder="Tìm kiếm theo tên học sinh..." />
+                  class="form-control border-start-0 ps-0 py-2" placeholder="Tìm kiếm tên học sinh..."
+                  style="border-left: none; box-shadow: none;" />
               </div>
+            </div>
 
-              <div class="search-filters">
-                <select v-on:change="TiemKiem()" class="filter-select" v-model="search.id_lop">
+            <div class="col-lg-2 col-md-6">
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0 ps-3">
+                  <i class="fas fa-filter text-muted"></i>
+                </span>
+                <select v-on:change="TiemKiem()" class="form-select border-start-0 ps-0 py-2" v-model="search.id_lop"
+                  style="cursor: pointer; border-left: none; box-shadow: none;">
                   <option value="" selected>Tất cả lớp</option>
                   <template v-for="(lop) in list_lop_hoc" :key="lop.id">
                     <option :value="lop.id">{{ lop.ten_lop }}</option>
-
                   </template>
-
                 </select>
-                <select v-on:change="TiemKiem()" class="filter-select" v-model="search.tinh_trang_suc_khoe">
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0 ps-3">
+                  <i class="fas fa-heartbeat text-muted"></i>
+                </span>
+                <select v-on:change="TiemKiem()" class="form-select border-start-0 ps-0 py-2"
+                  v-model="search.tinh_trang_suc_khoe" style="cursor: pointer; border-left: none; box-shadow: none;">
                   <option value="" selected>Tất cả tình trạng</option>
-                  <option value="1">Sức khỏe tốt</option>
-                  <option value="2">Cần theo dõi</option>
-                  <option value="3">Cần can thiệp</option>
+                  <option value="3" class="text-success">💚 Tốt</option>
+                  <option value="2" class="text-warning">💛 Cần theo dõi</option>
+                  <option value="1" class="text-danger">❤️ Cần can thiệp</option>
+                  <option value="0" class="text-dark">⚫ Nguy hiểm</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <!-- Table -->
-          <div class="table-container">
-            <table class="table table-modern">
-              <thead>
+          <!-- Health Records Table -->
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
                 <tr>
-                  <th class="text-center">#</th>
-                  <th>Học Sinh</th>
-                  <th class="text-center">Thông Tin Sức Khỏe</th>
-                  <th class="text-center">Tình Trạng</th>
-                  <th class="text-center">Lần Khám Cuối</th>
-                  <th class="text-center">Thao Tác</th>
+                  <th class="text-center" style="width: 60px;">#</th>
+                  <th style="min-width: 200px;">Học Sinh</th>
+                  <th class="text-center" style="min-width: 180px;">Chỉ Số Cơ Bản</th>
+                  <th class="text-center" style="min-width: 150px;">Sức Khỏe Chi Tiết</th>
+                  <th class="text-center" style="min-width: 130px;">Tình Trạng</th>
+                  <th class="text-center" style="min-width: 150px;">Thông Tin Khám</th>
+                  <th class="text-center" style="width: 150px;">Thao Tác</th>
                 </tr>
               </thead>
               <tbody>
-                <template v-for="(value, index) in list_kham_suc_khoe" :key="index">
-                  <tr class="table-row-hover">
-                    <td class="text-center table-index">
-                      {{ index + 1 }}
-                    </td>
-                    <td class="student-info">
-                      <div class="student-container">
-                        <div class="student-avatar">
-                          <img :src="value.avatar || '/default-avatar.jpg'" :alt="value.ho_va_ten" class="avatar-img" />
-                        </div>
-                        <div class="student-details">
-                          <span class="student-name">{{ value.ho_va_ten }}</span>
-                          <small class="student-class">{{ value.ten_lop }}</small>
-                        </div>
+                <tr v-for="(value, index) in list_kham_suc_khoe" :key="index">
+                  <!-- STT -->
+                  <td class="text-center fw-semibold text-muted">
+                    {{ index + 1 }}
+                  </td>
+
+                  <!-- Student Info -->
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img :src="value.avatar || '/default-avatar.jpg'" :alt="value.ho_va_ten"
+                        class="rounded-circle me-3 border" style="width: 45px; height: 45px; object-fit: cover;" />
+                      <div>
+                        <div class="fw-bold text-dark mb-0">{{ value.ho_va_ten }}</div>
+                        <small class="text-muted">
+                          <i class="fas fa-school me-1"></i>{{ value.ten_lop }}
+                        </small>
                       </div>
-                    </td>
-                    <td class="text-center health-info">
-                      <div class="health-metrics">
-                        <div class="metric-item">
-                          <i class="fas fa-ruler-vertical"></i>
-                          <span>{{ value.chieu_cao }}cm</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-weight-scale"></i>
-                          <span>{{ value.can_nang }}kg</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-eye"></i>
-                          <span v-if="value.thi_luc == 1">Tốt</span>
-                          <span v-else-if="value.thi_luc == 2">Hơi kém</span>
-                          <span v-else-if="value.thi_luc == 3">Kém</span>
-                          <span v-else>Chưa rõ</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-tooth"></i>
-                          <span v-if="value.rang_mieng == 1">Tốt</span>
-                          <span v-else-if="value.rang_mieng == 2">Bình thường</span>
-                          <span v-else-if="value.rang_mieng == 3">Cần chăm sóc</span>
-                          <span v-else>Chưa rõ</span>
-                        </div>
+                    </div>
+                  </td>
+
+                  <!-- Basic Metrics -->
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center gap-3">
+                      <div>
+                        <i class="fas fa-ruler-vertical text-primary me-1"></i>
+                        <span class="fw-semibold">{{ value.chieu_cao }}</span>
+                        <small class="text-muted">cm</small>
                       </div>
-                    </td>
-                    <td class="text-center">
-                      <button v-if="value.tinh_trang_suc_khoe == 1" class="btn btn-success">Sức Khoẻ Tốt</button>
-                      <button v-else-if="value.tinh_trang_suc_khoe == 2" class="btn btn-warning">Cần Theo Dõi</button>
-                      <button v-else-if="value.tinh_trang_suc_khoe == 3" class="btn btn-danger">Cần Can Thiệp</button>
-                      <button v-else class="btn btn-secondary">Chưa Rõ</button>
-                    </td>
-                    <td class="text-center">
-                      <div class="last-checkup">
-                        <div class="checkup-date">{{ formatDate(value.ngay_kham) }}</div>
-                        <small v-if="value.loai_kham == 1" class="checkup-type">Khám Định Kỳ</small>
-                        <small v-else-if="value.loai_kham == 2" class="checkup-type">Khám Cấp Cứu</small>
-                        <small v-else class="checkup-type">Chưa Rõ</small>
+                      <div>
+                        <i class="fas fa-weight-scale text-success me-1"></i>
+                        <span class="fw-semibold">{{ value.can_nang }}</span>
+                        <small class="text-muted">kg</small>
                       </div>
-                    </td>
-                    <td class="text-center">
-                      <div class="action-buttons">
-                        <button class="btn-action btn-view" @click="viewHealthDetails(value)" title="Xem chi tiết">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn-action btn-edit" @click="Object.assign(update_kham_suc_khoe, value)"
-                          data-bs-toggle="modal" data-bs-target="#capNhatModal" title="Chỉnh sửa">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-action btn-delete" @click="Object.assign(delete_kham_suc_khoe, value)"
-                          data-bs-toggle="modal" data-bs-target="#xoaModal" title="Xóa">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </template>
+                    </div>
+                  </td>
+
+                  <!-- Health Details -->
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center gap-2">
+                      <span class="badge bg-light text-dark border" style="font-size: 0.75rem;">
+                        <i class="fas fa-eye me-1"></i>
+                        <span v-if="value.thi_luc == 1">Tốt</span>
+                        <span v-else-if="value.thi_luc == 2">Khá</span>
+                        <span v-else-if="value.thi_luc == 3">TB</span>
+                        <span v-else-if="value.thi_luc == 4">Yếu</span>
+                        <span v-else>-</span>
+                      </span>
+                      <span class="badge bg-light text-dark border" style="font-size: 0.75rem;">
+                        <i class="fas fa-tooth me-1"></i>
+                        <span v-if="value.rang_mieng == 1">Tốt</span>
+                        <span v-else-if="value.rang_mieng == 2">Khá</span>
+                        <span v-else-if="value.rang_mieng == 3">TB</span>
+                        <span v-else-if="value.rang_mieng == 4">Yếu</span>
+                        <span v-else>-</span>
+                      </span>
+                    </div>
+                  </td>
+
+                  <!-- Health Status -->
+                  <td class="text-center">
+                    <span class="badge rounded-pill px-3 py-2" :class="{
+                      'bg-success': value.tinh_trang_suc_khoe == 3,
+                      'bg-warning text-dark': value.tinh_trang_suc_khoe == 2,
+                      'bg-danger': value.tinh_trang_suc_khoe == 1,
+                      'bg-dark': value.tinh_trang_suc_khoe == 0
+                    }">
+                      <i class="fas fa-heart me-1"></i>
+                      <span v-if="value.tinh_trang_suc_khoe == 3">Tốt</span>
+                      <span v-else-if="value.tinh_trang_suc_khoe == 2">Theo dõi</span>
+                      <span v-else-if="value.tinh_trang_suc_khoe == 1">Can thiệp</span>
+                      <span v-else-if="value.tinh_trang_suc_khoe == 0">Nguy kịch</span>
+                      <span v-else>Chưa rõ</span>
+                    </span>
+                  </td>
+
+                  <!-- Exam Info -->
+                  <td class="text-center">
+                    <div class="fw-semibold text-dark mb-1">{{ formatDate(value.ngay_kham) }}</div>
+                    <small class="text-muted">
+                      <span v-if="value.loai_kham == 1">
+                        <i class="fas fa-calendar-check text-primary me-1"></i>Định kỳ
+                      </span>
+                      <span v-else-if="value.loai_kham == 0">
+                        <i class="fas fa-ambulance text-danger me-1"></i>Cấp cứu
+                      </span>
+                      <span v-else>Chưa rõ</span>
+                    </small>
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="text-center">
+                    <div class="action-buttons">
+                      <button class="btn-action btn-edit" @click="Object.assign(update_kham_suc_khoe, value)"
+                        data-bs-toggle="modal" data-bs-target="#capNhatModal" title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn-action btn-view" @click="viewHealthDetails(value)" title="Xem chi tiết">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="btn-action btn-delete" @click="Object.assign(delete_kham_suc_khoe, value)"
+                        data-bs-toggle="modal" data-bs-target="#xoaModal" title="Xóa">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Empty State -->
+                <tr v-if="list_kham_suc_khoe.length === 0">
+                  <td colspan="7" class="text-center py-5">
+                    <i class="fas fa-heartbeat text-muted mb-3" style="font-size: 3rem; opacity: 0.3;"></i>
+                    <h6 class="text-muted mb-2">Không tìm thấy hồ sơ sức khỏe</h6>
+                    <p class="text-muted small mb-0">Thử thay đổi bộ lọc hoặc thêm hồ sơ mới</p>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -376,9 +467,10 @@
                 <label for="thiLuc" class="form-label">Thị Lực *</label>
                 <select class="form-select" id="thiLuc" v-model="create_kham_suc_khoe.thi_luc" required>
                   <option value="">Chọn thị lực</option>
-                  <option value="1">Bình thường</option>
-                  <option value="2">Hơi kém</option>
-                  <option value="3">Kém</option>
+                  <option value="1">Tốt</option>
+                  <option value="2">Khá</option>
+                  <option value="3">Trung bình</option>
+                  <option value="4">Yếu</option>
                 </select>
               </div>
               <div class="col-md-6">
@@ -386,8 +478,9 @@
                 <select class="form-select" id="rangMieng" v-model="create_kham_suc_khoe.rang_mieng" required>
                   <option value="">Chọn tình trạng</option>
                   <option value="1">Tốt</option>
-                  <option value="2">Bình thường</option>
-                  <option value="3">Cần chăm sóc</option>
+                  <option value="2">Khá</option>
+                  <option value="3">Trung bình</option>
+                  <option value="4">Yếu</option>
                 </select>
               </div>
             </div>
@@ -397,18 +490,18 @@
                 <select class="form-select" id="tinhTrangSucKhoe" v-model="create_kham_suc_khoe.tinh_trang_suc_khoe"
                   required>
                   <option value="">Chọn tình trạng</option>
-                  <option value="1">Sức khỏe tốt</option>
+                  <option value="3">Tốt</option>
                   <option value="2">Cần theo dõi</option>
-                  <option value="3">Cần can thiệp</option>
+                  <option value="1">Cần can thiệp</option>
+                  <option value="0">Nguy hiểm</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="loaiKham" class="form-label">Loại Khám *</label>
                 <select class="form-select" id="loaiKham" v-model="create_kham_suc_khoe.loai_kham" required>
                   <option value="">Chọn loại khám</option>
-                  <option value="1">Khám định kỳ</option>
-                  <option value="2">Khám cấp cứu</option>
-                  <option value="3">Khám chuyên khoa</option>
+                  <option value="1">Định kỳ</option>
+                  <option value="0">Cấp cứu</option>
                 </select>
               </div>
             </div>
@@ -490,9 +583,10 @@
                   <label for="updateThiLuc" class="form-label">Thị Lực *</label>
                   <select class="form-select" id="updateThiLuc" v-model="update_kham_suc_khoe.thi_luc" required>
                     <option value="">Chọn thị lực</option>
-                    <option value="1">Bình thường</option>
-                    <option value="2">Hơi kém</option>
-                    <option value="3">Kém</option>
+                    <option value="1">Tốt</option>
+                    <option value="2">Khá</option>
+                    <option value="3">Trung bình</option>
+                    <option value="4">Yếu</option>
                   </select>
                 </div>
               </div>
@@ -502,8 +596,9 @@
                   <select class="form-select" id="updateRangMieng" v-model="update_kham_suc_khoe.rang_mieng" required>
                     <option value="">Chọn tình trạng</option>
                     <option value="1">Tốt</option>
-                    <option value="2">Bình thường</option>
-                    <option value="3">Cần chăm sóc</option>
+                    <option value="2">Khá</option>
+                    <option value="3">Trung bình</option>
+                    <option value="4">Yếu</option>
                   </select>
                 </div>
               </div>
@@ -515,9 +610,10 @@
                   <select class="form-select" id="updateTinhTrangSucKhoe"
                     v-model="update_kham_suc_khoe.tinh_trang_suc_khoe" required>
                     <option value="">Chọn tình trạng</option>
-                    <option value="1">Sức khỏe tốt</option>
+                    <option value="3">Tốt</option>
                     <option value="2">Cần theo dõi</option>
-                    <option value="3">Cần can thiệp</option>
+                    <option value="1">Cần can thiệp</option>
+                    <option value="0">Nguy hiểm</option>
                   </select>
                 </div>
               </div>
@@ -526,8 +622,8 @@
                   <label for="updateLoaiKham" class="form-label">Loại Khám *</label>
                   <select class="form-select" id="updateLoaiKham" v-model="update_kham_suc_khoe.loai_kham" required>
                     <option value="">Chọn loại khám</option>
-                    <option value="1">Khám định kỳ</option>
-                    <option value="2">Khám cấp cứu</option>
+                    <option value="1">Định kỳ</option>
+                    <option value="0">Cấp cứu</option>
                   </select>
                 </div>
               </div>
@@ -653,6 +749,107 @@ export default {
     this.loadHocSinh();
   },
 
+  computed: {
+    totalStudents() {
+      return this.list_kham_suc_khoe.length || 0;
+    },
+    healthStatusSummary() {
+      return this.list_kham_suc_khoe.reduce(
+        (acc, item) => {
+          const key = this.normalizeHealthStatusKey(item.tinh_trang_suc_khoe);
+          if (acc[key] !== undefined) {
+            acc[key] += 1;
+          } else {
+            acc.unknown += 1;
+          }
+          return acc;
+        },
+        { good: 0, monitor: 0, intervention: 0, critical: 0, unknown: 0 }
+      );
+    },
+    classHealthData() {
+      // Group bởi id_hoc_sinh để lấy lần khám mới nhất
+      const studentLatestExams = {};
+      this.list_kham_suc_khoe.forEach((item) => {
+        const studentId = item.id_hoc_sinh;
+        if (!studentLatestExams[studentId] || new Date(item.ngay_kham) > new Date(studentLatestExams[studentId].ngay_kham)) {
+          studentLatestExams[studentId] = item;
+        }
+      });
+
+      // Group theo lớp với unique students
+      const buckets = {};
+      Object.values(studentLatestExams).forEach((item) => {
+        const className = item.ten_lop || item.lop_hoc || "Chưa phân lớp";
+        if (!buckets[className]) {
+          buckets[className] = {
+            total: 0,
+            counts: { good: 0, monitor: 0, intervention: 0, critical: 0 },
+          };
+        }
+        buckets[className].total += 1;
+        const key = this.normalizeHealthStatusKey(item.tinh_trang_suc_khoe);
+        if (buckets[className].counts[key] !== undefined) {
+          buckets[className].counts[key] += 1;
+        }
+      });
+
+      return Object.keys(buckets)
+        .map((className) => {
+          const bucket = buckets[className];
+          const total = bucket.total || 0;
+          const { good, monitor, intervention, critical } = bucket.counts;
+          const toPercent = (count) => (total > 0 ? Math.round((count / total) * 100) : 0);
+          return {
+            className,
+            totalStudents: total,
+            goodCount: good,
+            monitorCount: monitor,
+            interventionCount: intervention,
+            criticalCount: critical,
+            goodPercentage: toPercent(good),
+            monitorPercentage: toPercent(monitor),
+            interventionPercentage: toPercent(intervention),
+            criticalPercentage: toPercent(critical),
+            healthPercentage: toPercent(good),
+          };
+        })
+        .sort((a, b) => b.totalStudents - a.totalStudents) // Sắp xếp theo số học sinh giảm dần
+        .slice(0, 3);
+    },
+    vaccinationCount() {
+      return Math.floor(this.totalStudents * 0.8);
+    },
+    emergencyCount() {
+      return this.list_kham_suc_khoe.filter(item => item.loai_kham == 0).length;
+    },
+    healthStatusDescriptor() {
+      const descriptors = {
+        good: {
+          label: "Sức Khoẻ Tốt",
+          icon: "fas fa-smile-beam",
+          pillClass: "is-good",
+        },
+        monitor: {
+          label: "Cần Theo Dõi",
+          icon: "fas fa-exclamation-circle",
+          pillClass: "is-monitor",
+        },
+        intervention: {
+          label: "Cần Can Thiệp",
+          icon: "fas fa-user-md",
+          pillClass: "is-intervention",
+        },
+        unknown: {
+          label: "Chưa rõ",
+          icon: "fas fa-question-circle",
+          pillClass: "is-unknown",
+        },
+      };
+      return (status) => descriptors[this.normalizeHealthStatusKey(status)] || descriptors.unknown;
+    },
+  },
+
   methods: {
     formatDate(dateString) {
       if (!dateString) return "";
@@ -660,45 +857,13 @@ export default {
       return date.toLocaleDateString("vi-VN");
     },
 
-    getTotalStudents() {
-      return this.list_kham_suc_khoe.length;
-    },
-
-    getHealthStatusCount(status) {
-      return this.list_kham_suc_khoe.filter(item => item.tinh_trang_suc_khoe === status).length;
-    },
-
-    getClassHealthData() {
-      const classes = ['Lớp Mầm', 'Lớp Chồi', 'Lớp Lá'];
-      return classes.map(className => {
-        const classStudents = this.list_kham_suc_khoe.filter(item => item.lop_hoc === className);
-        const totalStudents = classStudents.length;
-        const goodCount = classStudents.filter(item => item.tinh_trang_suc_khoe === 'good').length;
-        const monitorCount = classStudents.filter(item => item.tinh_trang_suc_khoe === 'monitor').length;
-        const interventionCount = classStudents.filter(item => item.tinh_trang_suc_khoe === 'intervention').length;
-
-        return {
-          className,
-          totalStudents,
-          goodCount,
-          monitorCount,
-          interventionCount,
-          goodPercentage: totalStudents > 0 ? Math.round((goodCount / totalStudents) * 100) : 0,
-          monitorPercentage: totalStudents > 0 ? Math.round((monitorCount / totalStudents) * 100) : 0,
-          interventionPercentage: totalStudents > 0 ? Math.round((interventionCount / totalStudents) * 100) : 0,
-          healthPercentage: totalStudents > 0 ? Math.round((goodCount / totalStudents) * 100) : 0,
-        };
-      });
-    },
-
-    getVaccinationCount() {
-      // Mock data - trong thực tế sẽ lấy từ API
-      return Math.floor(this.getTotalStudents() * 0.8);
-    },
-
-    getSpecialistCount() {
-      // Mock data - trong thực tế sẽ lấy từ API
-      return Math.floor(this.getTotalStudents() * 0.15);
+    normalizeHealthStatusKey(status) {
+      const value = String(status ?? "").toLowerCase();
+      if (["3", "good", "tot", "suc_khoe_tot"].includes(value)) return "good";
+      if (["2", "monitor", "theo doi", "can_theo_doi"].includes(value)) return "monitor";
+      if (["1", "intervention", "can thiep", "can_can_thiep"].includes(value)) return "intervention";
+      if (["0", "critical", "nguy kich", "nguy_kich"].includes(value)) return "critical";
+      return "unknown";
     },
 
     loadLopHoc() {

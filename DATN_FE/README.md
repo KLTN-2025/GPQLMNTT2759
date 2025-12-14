@@ -1,162 +1,187 @@
-# 🌟 Laura School
+# 🌟 Laura School – Digital Kindergarten Platform
 
-**Hệ thống quản lý giáo dục mầm non hiện đại – Chuyển đổi số từ trái tim đến lớp học.**
-
----
-
-## 📘 Giới thiệu
-
-**Laura School** là một nền tảng phần mềm quản lý trường mầm non toàn diện, giúp số hóa toàn bộ quy trình vận hành của nhà trường – từ quản lý học sinh, giáo viên, lớp học, điểm danh, đến theo dõi sức khỏe, thực đơn và hoạt động hàng ngày. Hệ thống không chỉ tối ưu hiệu quả vận hành nội bộ mà còn tăng cường kết nối giữa phụ huynh và giáo viên, hướng đến mô hình giáo dục hiện đại, minh bạch, lấy trẻ làm trung tâm.
+> Một hệ sinh thái Vue 3 giúp số hóa toàn bộ hoạt động của trường mầm non, kết nối chặt chẽ giữa **Ban giám hiệu – Giáo viên – Phụ huynh**.
 
 ---
 
-## 🚀 Hướng dẫn sử dụng
+## 🧭 Tổng quan
 
-### 1. Cài đặt
+Laura School tách giao diện theo 3 miền chức năng:
 
-```bash
-npm install
+| Không gian  | Đường dẫn chính  | Mô tả                                                                  |
+| ----------- | ---------------- | ---------------------------------------------------------------------- |
+| **Client**  | `/`, `/login`, … | Website/phụ huynh: giới thiệu, blog, sự kiện, hồ sơ, học phí, mailbox  |
+| **Admin**   | `/admin/**`      | Ban giám hiệu: dashboard, nhân sự, lớp học, học phí, thực đơn, báo cáo |
+| **Teacher** | `/teacher/**`    | Giáo viên: điểm danh, bài giảng, nhật ký, sức khỏe, thực đơn, báo cáo  |
+
+Mỗi miền có màn hình **Login / Forgot Password / Reset Password** và gọi API thông qua client riêng (baseRequestClient/Admin/Teacher).
+
+---
+
+## ✨ Tính năng chính
+
+### Client (Phụ huynh)
+
+- Landing page, chương trình học, blog/sự kiện.
+- Quản lý hồ sơ phụ huynh & con, lịch học, sổ liên lạc.
+- Theo dõi học phí, lịch sử thanh toán, hướng dẫn nộp tiền.
+- Mailbox/notification kết nối với giáo viên & nhà trường.
+
+### Admin
+
+- Dashboard tổng quan, thống kê học phí – sĩ số – sức khỏe.
+- Quản lý nhân sự, phân quyền, lịch làm việc.
+- Quản lý học sinh, lớp học, điểm danh, thực đơn, sức khỏe.
+- Quản lý thông báo, bài viết, hoạt động ngoại khóa.
+
+### Teacher
+
+- Dashboard lớp phụ trách, lịch dạy.
+- Ghi nhật ký lớp, gửi thông báo, đánh giá học sinh.
+- Quản lý bài giảng, kế hoạch bài học, thực đơn trong ngày.
+
+---
+
+## 🗂 Cấu trúc chính
+
+```
+src/
+├─ assets/                # Logo, hình ảnh, icon
+├─ components/
+│  ├─ Client/             # Module giao diện phụ huynh
+│  ├─ Admin/              # Module quản trị
+│  └─ Teachers/          # Module giáo viên
+├─ core/
+│  ├─ baseRequestClient.ts
+│  ├─ baseRequestAdmin.ts
+│  └─ baseRequestTeacher.ts
+├─ layout/                # Layout & menu dùng chung
+├─ router/
+│  ├─ index.js            # Khai báo route
+│  ├─ checkAdmin.js       # route guard
+│  └─ checkTeacher.js
+└─ store/, utils/, ...
 ```
 
-### 2. Khởi động dự án
-
-```bash
-npm run dev
-```
-
 ---
 
-## 📁 Cấu trúc thư mục
-
-- `public/`: Tài nguyên tĩnh (hình ảnh, favicon, v.v.)
-- `src/`: Mã nguồn chính của ứng dụng Vue
-- `README.md`: Tài liệu giới thiệu và hướng dẫn sử dụng hệ thống
-- `.env`: Biến môi trường cấu hình
-
----
-
-## 🛠️ Công nghệ sử dụng
+## 🛠 Tech stack
 
 - **Vue 3** + **Vite**
-- **TypeScript** *(tuỳ chọn)*
-- **Pinia** – Quản lý trạng thái hiện đại
-- **Vue Router** – Quản lý định tuyến
-- **Axios** – Giao tiếp API
-- **Element Plus** – UI component
-- **Day.js** – Xử lý ngày tháng
-- **ESLint + Prettier** – Kiểm tra & định dạng mã nguồn
+- **Vue Router**
+- **Pinia** (nếu dùng store tập trung)
+- **Axios** (request layer riêng cho từng vai trò)
+- **SCSS / CSS Modules**
+- **Font Awesome / Boxicons**
+- **ESLint & Prettier**
 
 ---
 
-## 🌱 Tầm nhìn (Vision)
+## ⚙️ Cài đặt & chạy
 
-> Trở thành nền tảng công nghệ quản trị giáo dục mầm non hàng đầu khu vực, dẫn dắt quá trình chuyển đổi số toàn diện trong lĩnh vực chăm sóc và giáo dục trẻ nhỏ, góp phần xây dựng hệ sinh thái giáo dục lấy trẻ làm trung tâm, hiện đại, minh bạch và kết nối.
+```bash
+# 1. Cài dependencies
+npm install
 
----
+# 2. Chạy môi trường phát triển
+npm run dev
 
-## 🎯 Sứ mệnh (Mission)
+# 3. Build production
+npm run build
 
-- Cung cấp công cụ quản lý trường mầm non hiệu quả, tinh gọn và đồng bộ.
-- Nâng cao chất lượng chăm sóc – giáo dục dựa trên dữ liệu và số liệu phân tích thực tế.
-- Kết nối phụ huynh, giáo viên và nhà trường trong một nền tảng thống nhất.
-- Giảm thiểu công việc thủ công, tăng năng suất, tối ưu vận hành nhà trường.
+# 4. Preview production build
+npm run preview
 
----
+# 5. Lint code (nếu đã setup ESLint)
+npm run lint
 
-## 💡 Giá trị cốt lõi (Core Values)
+# 6. Type check (nếu dùng TypeScript)
+npm run type-check
+```
 
-- **Trẻ là trung tâm** – Mọi thiết kế đều vì sự phát triển toàn diện của trẻ.
-- **Minh bạch & Kết nối** – Phụ huynh và nhà trường đồng hành chặt chẽ.
-- **Tự động hóa & Hiệu quả** – Vận hành thông minh, tiết kiệm chi phí.
-- **Bảo mật & Tin cậy** – Bảo vệ dữ liệu người dùng, tuân thủ pháp lý.
-
----
-
-## 🔑 Các tính năng chính
-
-### 1. Quản lý học sinh
-- Hồ sơ học sinh, phân lớp, chuyển lớp
-- Sức khỏe, chỉ số phát triển, tiêm chủng
-- Nhật ký cảm xúc – hành vi – hoạt động mỗi ngày
-
-### 2. Quản lý giáo viên
-- Thông tin cá nhân, phân công giảng dạy
-- Giáo án, kế hoạch dạy học
-- Chấm công, đánh giá định kỳ
-
-### 3. Quản lý lớp học
-- Danh sách học sinh, thời khóa biểu
-- Ghi chú trao đổi giữa giáo viên – phụ huynh
-- Hoạt động hàng ngày & chuyên đề
-
-### 4. Điểm danh & giám sát
-- Điểm danh thủ công hoặc nhận diện khuôn mặt
-- Thống kê vắng mặt, thông báo tự động
-
-### 5. Thực đơn & dinh dưỡng
-- Quản lý khẩu phần ăn, thực đơn theo tuần/tháng
-- Ghi nhận lượng ăn của từng trẻ
-- Gửi thực đơn hàng ngày đến phụ huynh
-
-### 6. Y tế & sức khỏe
-- Lịch sử bệnh, tiêm phòng, ghi chú y tế
-- Cảnh báo sức khỏe bất thường
-- Hệ thống theo dõi chăm sóc đặc biệt
-
-### 7. Thông báo & truyền thông nội bộ
-- Gửi tin nhắn, thông báo đến phụ huynh – giáo viên
-- Đăng tin tức, lịch sự kiện, hoạt động ngoại khóa
-
-### 8. Báo cáo & thống kê
-- Dashboard trực quan: sĩ số, sức khỏe, hoạt động
-- Xuất file PDF/Excel theo lớp, trường, thời gian
+> Cấu hình endpoint/tokens trong `.env`. Ví dụ: `VITE_API_URL`, `VITE_ADMIN_TOKEN_KEY`, …
 
 ---
 
-## 🧑‍💼 Phân quyền người dùng
+## 🚀 CI/CD Pipeline
 
-| Vai trò      | Quyền hạn |
-|--------------|-----------|
-| **Admin**    | Toàn quyền hệ thống, cấu hình chung |
-| **Hiệu trưởng** | Giám sát toàn trường, xem báo cáo tổng hợp |
-| **Giáo viên** | Quản lý lớp, cập nhật điểm danh, nhật ký |
-| **Phụ huynh** | Theo dõi thông tin con, nhận thông báo & tương tác |
+Dự án đã được cấu hình với **GitHub Actions** để tự động build, test và deploy.
+
+### Workflows có sẵn:
+
+- **CI Pipeline**: Build và test tự động khi push/PR
+- **Deploy to Vercel**: Deploy tự động lên Vercel
+- **Deploy to Netlify**: Deploy tự động lên Netlify
+- **Deploy to FTP**: Deploy tự động lên FTP server
+- **Docker Build**: Build và push Docker image
+- **Code Quality**: Kiểm tra code quality
+- **Security Scan**: Quét lỗ hổng bảo mật
+
+### Setup CI/CD:
+
+Xem chi tiết trong file [`CI_CD_SETUP.md`](./CI_CD_SETUP.md)
+
+**Quick Start:**
+1. Push code lên GitHub
+2. Vào **Settings → Secrets and variables → Actions**
+3. Thêm secrets cần thiết (Vercel/Netlify/FTP tokens)
+4. Workflows sẽ tự động chạy khi push code
+
+### Docker Deployment:
+
+```bash
+# Build Docker image
+docker build -t laura-school .
+
+# Run container
+docker run -p 80:80 laura-school
+```
 
 ---
 
-## 🎯 Lợi ích nổi bật
+## 🔐 Định tuyến & phân quyền
 
-### ✅ Đối với Nhà Trường
-- Giảm 50–70% công việc hành chính
-- Theo dõi hiệu suất vận hành và giáo viên
-- Quản lý đồng bộ – chuyên nghiệp hóa hoạt động
-
-### ✅ Đối với Phụ huynh
-- Cập nhật liên tục tình hình của con
-- Kết nối dễ dàng với giáo viên – nhà trường
-- An tâm & tin tưởng thông qua minh bạch dữ liệu
+- Client: `/login`, `/forgot-password`, `/reset-password`.
+- Teacher: `/teacher/login`, `/teacher/forgot-password`, `/teacher/reset-password`.
+- Admin: `/admin/login`, `/admin/forgot-password`, `/admin/reset-password`.
+- Route `/admin/**` được bảo vệ bởi `checkAdmin`, `/teacher/**` bởi `checkTeacher`. Hai guard này kiểm tra token từ localStorage và chuyển hướng nếu chưa xác thực.
 
 ---
 
-## ✍️ Đóng góp
+## 🌈 Quy ước UI
 
-Chúng tôi hoan nghênh mọi đóng góp từ cộng đồng.  
-Vui lòng tạo Pull Request hoặc liên hệ qua email nhóm phát triển nếu muốn tham gia phát triển hệ thống.
+- Client dùng tông sáng, nhấn mạnh hình ảnh marketing (HomePage, Blog, Events…).
+- Admin & Teacher dùng theme gradient tím–xanh, card bo tròn, đổ bóng nhẹ.
+- Form tĩnh (ví dụ `Client/Profile`) đã có data mẫu để dễ dàng thay bằng dữ liệu API.
+- Khi thêm component mới, tạo file SCSS riêng trong cùng thư mục để tránh xung đột.
 
 ---
 
-## 📬 Liên hệ
+## 🧪 Tài liệu phát triển
+
+- Ưu tiên viết logic hiển thị ngay trong template bằng `v-if`, computed thay cho getter rời rạc.
+- Với các request, sử dụng đúng client (`baseRequestClient`, `baseRequestAdmin`, `baseRequestTeacher`) để tự động gắn baseURL & token.
+- Khi mở rộng router, thêm meta `layout` (`client`, `blank`, `admin`, …) để layout wrapper biết cách render.
+
+---
+
+## 🤝 Đóng góp
+
+1. Fork & tạo nhánh mới.
+2. Commit theo chuẩn rõ ràng.
+3. Tạo Pull Request mô tả thay đổi & ảnh minh họa (nếu có).
+
+---
+
+## 📮 Liên hệ
 
 - Website: [https://lauraschool.edu.vn](https://lauraschool.edu.vn)
 - Email: info.contact@lauraschool.edu.vn
 - Facebook: [fb.com/lauraschool](https://facebook.com/lauraschool)
-- Youtube | Zalo | TikTok: Đang cập nhật...
+- Youtube · Zalo · TikTok: đang cập nhật
+
+> **Slogan**: “Laura School – Quản lý thông minh, kết nối yêu thương.”
 
 ---
 
-## 🪧 Slogan đề xuất
-
-- **"Laura School – Đồng hành cùng bước chân đầu đời"**
-- **"Quản lý thông minh – Kết nối yêu thương"**
-- **"Số hóa trường mầm non, kết nối ngàn trái tim"**
-- **"Dành cho nhà trường – Tạo dựng tương lai"**
+🎉 Cảm ơn bạn đã đồng hành cùng dự án!

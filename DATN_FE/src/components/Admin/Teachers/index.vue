@@ -51,9 +51,7 @@
           <i class="fas fa-user-check"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{list_giao_vien.filter((gv) => gv.tinh_trang == 1).length}}
-          </h3>
+          <h3 class="stats-number">{{ activeTeacherCount }}</h3>
           <p class="stats-label">Đang Hoạt Động</p>
         </div>
       </div>
@@ -64,9 +62,7 @@
           <i class="fas fa-user-pause"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{list_giao_vien.filter((gv) => gv.tinh_trang == 0).length}}
-          </h3>
+          <h3 class="stats-number">{{ inactiveTeacherCount }}</h3>
           <p class="stats-label">Tạm Ngừng</p>
         </div>
       </div>
@@ -74,11 +70,11 @@
     <div class="col-xl-3 col-md-6">
       <div class="stats-card stats-info">
         <div class="stats-icon">
-          <i class="fas fa-graduation-cap"></i>
+          <i class="fas fa-mars"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">{{ getUniqueClasses().length }}</h3>
-          <p class="stats-label">Lớp Phụ Trách</p>
+          <h3 class="stats-number">{{ maleTeacherCount }}</h3>
+          <p class="stats-label">Giáo Viên Nam</p>
         </div>
       </div>
     </div>
@@ -97,10 +93,15 @@
               <p class="card-subtitle">Quản lý thông tin giáo viên hệ thống</p>
             </div>
           </div>
-          <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
-            <i class="fas fa-user-plus"></i>
-            Thêm Giáo Viên
-          </button>
+          <div class="header-actions">
+            <button class="btn btn-outline-success btn-sm me-2" @click="exportTeachersExcel">
+              <i class="fas fa-file-excel"></i> Xuất Excel
+            </button>
+            <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
+              <i class="fas fa-user-plus"></i>
+              Thêm Giáo Viên
+            </button>
+          </div>
         </div>
 
         <div class="card-body">
@@ -175,9 +176,8 @@
                       <td class="text-center personal-info">
                         <div class="info-group">
                           <div class="info-item">
-                            <i
-                              :class="value.gioi_tinh === 1 ? 'fas fa-mars text-primary' : 'fas fa-venus text-danger'"></i>
-                            <span>{{ value.gioi_tinh === 1 ? "Nam" : "Nữ" }}</span>
+                            <i :class="genderDescriptor(value.gioi_tinh).icon"></i>
+                            <span>{{ genderDescriptor(value.gioi_tinh).label }}</span>
                           </div>
                           <div class="info-item">
                             <i class="fas fa-birthday-cake"></i>
@@ -204,14 +204,10 @@
                         <span v-else class="text-muted">Chưa phân lớp</span>
                       </td>
                       <td class="text-center">
-                        <button v-on:click="DoiTrangThai(value)" v-if="value.tinh_trang == 1"
-                          class="btn btn-success status-active">
-                          <i class="fas fa-check-circle"></i>
-                          Hoạt Động
-                        </button>
-                        <button v-on:click="DoiTrangThai(value)" v-else class="btn btn-danger status-inactive">
-                          <i class="fas fa-pause-circle"></i>
-                          Tạm Ngừng
+                        <button @click="DoiTrangThai(value)" class="btn btn-sm"
+                          :class="[statusDescriptor(value.tinh_trang).buttonClass, statusDescriptor(value.tinh_trang).statusClass]">
+                          <i :class="statusDescriptor(value.tinh_trang).icon"></i>
+                          {{ statusDescriptor(value.tinh_trang).label }}
                         </button>
                       </td>
                       <td class="text-center">
@@ -281,7 +277,8 @@
               </div>
               <div class="col-md-6">
                 <label for="chucVu" class="form-label">Trình Độ *</label>
-                <select class="form-select" id="chucVu" v-model="create_giao_vien.trinh_do" placeholder="Chọn trình độ" required>
+                <select class="form-select" id="chucVu" v-model="create_giao_vien.trinh_do" placeholder="Chọn trình độ"
+                  required>
                   <option value="">Chọn trình độ</option>
                   <option value="0">Trung cấp</option>
                   <option value="1">Cao đẳng</option>
@@ -403,7 +400,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="row">
               <div class="col-md-6">
                 <div class="mb-3">
@@ -506,8 +503,10 @@
 <script>
 import axios from "axios";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
+import { ExcelExportMixin } from '../../../mixins/ExcelExportMixin';
 
 export default {
+  mixins: [ExcelExportMixin],
   data() {
     return {
       list_giao_vien: [],
@@ -564,27 +563,71 @@ export default {
     };
   },
 
+  computed: {
+    activeTeacherCount() {
+      return this.list_giao_vien.filter((gv) => Number(gv.tinh_trang) === 1).length;
+    },
+    inactiveTeacherCount() {
+      return this.list_giao_vien.filter((gv) => Number(gv.tinh_trang) === 0).length;
+    },
+    maleTeacherCount() {
+      return this.list_giao_vien.filter((gv) => Number(gv.gioi_tinh) === 1).length;
+    },
+    uniqueClasses() {
+      const classes = new Set();
+      this.list_giao_vien.forEach((gv) => {
+        if (gv.lop_phu_trach) {
+          gv.lop_phu_trach.split(",").forEach((className) => {
+            const trimmed = className.trim();
+            if (trimmed) {
+              classes.add(trimmed);
+            }
+          });
+        }
+      });
+      return Array.from(classes);
+    },
+    genderDescriptor() {
+      const meta = {
+        1: { label: "Nam", icon: "fas fa-mars text-primary" },
+        0: { label: "Nữ", icon: "fas fa-venus text-danger" },
+      };
+      return (gender) => meta[Number(gender)] || meta[0];
+    },
+    statusDescriptor() {
+      const meta = {
+        1: { label: "Hoạt Động", icon: "fas fa-check-circle", buttonClass: "btn-success", statusClass: "status-active" },
+        0: { label: "Tạm Ngừng", icon: "fas fa-pause-circle", buttonClass: "btn-danger", statusClass: "status-inactive" },
+      };
+      return (status) => meta[Number(status)] || meta[0];
+    },
+  },
+
   mounted() {
     this.loadData();
   },
 
   methods: {
+    exportTeachersExcel() {
+      const columns = [
+        { header: 'Họ và Tên', value: 'ho_va_ten', width: 25 },
+        { header: 'Ngày Sinh', value: (item) => this.formatDate(item.ngay_sinh), width: 15 },
+        { header: 'Giới Tính', value: (item) => item.gioi_tinh == 1 ? 'Nam' : 'Nữ', width: 12 },
+        { header: 'Số Điện Thoại', value: 'so_dien_thoai', width: 15 },
+        { header: 'Email', value: 'email', width: 30 },
+        { header: 'Chức Vụ', value: 'ten_chuc_vu', width: 20 },
+        { header: 'Lớp Phụ Trách', value: 'ten_lop', width: 25 },
+        { header: 'Ngày Vào Làm', value: (item) => this.formatDate(item.ngay_vao_lam), width: 15 },
+        { header: 'Trạng Thái', value: (item) => item.tinh_trang == 1 ? 'Đang dạy' : 'Nghỉ việc', width: 15 }
+      ];
+
+      this.exportToExcel(this.list_giao_vien, columns, 'danh-sach-giao-vien');
+    },
+
     formatDate(dateString) {
       if (!dateString) return "";
       const date = new Date(dateString);
       return date.toLocaleDateString("vi-VN");
-    },
-
-    getUniqueClasses() {
-      const classes = new Set();
-      this.list_giao_vien.forEach((gv) => {
-        if (gv.lop_phu_trach) {
-          gv.lop_phu_trach.split(", ").forEach((className) => {
-            classes.add(className.trim());
-          });
-        }
-      });
-      return Array.from(classes);
     },
 
     loadData() {
