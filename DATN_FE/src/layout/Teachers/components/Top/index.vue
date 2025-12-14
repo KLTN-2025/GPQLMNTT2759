@@ -48,12 +48,13 @@
             <div class="user-box dropdown ms-auto">
                 <a class="user-profile-link" href="#" role="button" data-bs-toggle="dropdown">
                     <div class="user-avatar">
-                        <img src="../../../../assets/images/avatars/avatar-1.png" alt="user avatar" />
+                        <img :src="userInfo.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userInfo.ho_va_ten || 'Teacher') + '&background=random'"
+                            alt="user avatar" />
                         <span class="status-indicator online"></span>
                     </div>
                     <div class="user-info">
-                        <p class="user-name">Nguyễn Thị Mai</p>
-                        <p class="user-role">Giáo viên</p>
+                        <p class="user-name">{{ userInfo.ho_va_ten || 'Giáo viên' }}</p>
+                        <p class="user-role">{{ userInfo.chuc_vu || 'Giáo viên' }}</p>
                     </div>
                     <i class="bx bx-chevron-down dropdown-arrow"></i>
                 </a>
@@ -81,7 +82,7 @@
                     </li>
                     <li class="dropdown-divider"></li>
                     <li>
-                        <a class="dropdown-item text-danger" href="#">
+                        <a v-on:click="logout()" class="dropdown-item text-danger" href="#">
                             <i class="bx bx-log-out"></i>
                             <span>Đăng xuất</span>
                         </a>
@@ -93,6 +94,9 @@
 </template>
 
 <script setup>
+import baseRequestTeacher from '../../../../core/baseRequestTeacher';
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     isSidebarOpen: {
@@ -102,9 +106,55 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['toggleSidebar']);
+const router = useRouter();
+const userInfo = ref({
+    ho_va_ten: '',
+    avatar: '',
+    chuc_vu: '',
+    email: ''
+});
+
+// Load user info on mount
+onMounted(async () => {
+    try {
+        const res = await baseRequestTeacher.get('teacher/user-info');
+        if (res.data.status) {
+            userInfo.value = {
+                ho_va_ten: res.data.data.ho_va_ten,
+                avatar: res.data.data.avatar,
+                chuc_vu: res.data.data.chuc_vu || 'Giáo viên',
+                email: res.data.data.email
+            };
+        }
+    } catch (err) {
+        console.error('Failed to load teacher info:', err);
+    }
+});
 
 function handleToggleSidebar() {
     emit('toggleSidebar');
+}
+
+function logout() {
+    baseRequestTeacher
+        .get('teacher/logout')
+        .then((res) => {
+            if (res.data.status) {
+                // Xóa token và thông tin đăng nhập
+                localStorage.removeItem('token_giao_vien');
+                localStorage.removeItem('ho_ten_giao_vien');
+
+                // Redirect về trang login
+                router.push('/teacher/login');
+            }
+        })
+        .catch((err) => {
+            console.error('Logout error:', err);
+            // Vẫn xóa token và redirect về login nếu có lỗi
+            localStorage.removeItem('token_giao_vien');
+            localStorage.removeItem('ho_ten_giao_vien');
+            router.push('/teacher/login');
+        });
 }
 </script>
 

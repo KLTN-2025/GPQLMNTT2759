@@ -12,9 +12,11 @@ export default function (to, from, next) {
     .then((res) => {
       if (res.data.status) {
         localStorage.setItem("ho_ten_phu_huynh", res.data.ho_ten);
+        localStorage.setItem("avatar_phu_huynh", res.data.avatar);
+        localStorage.setItem("email_phu_huynh", res.data.email);
         next();
       } else {
-        next("/admin/login");
+        next("/login");
         toaster.error(res.data.message);
       }
     });

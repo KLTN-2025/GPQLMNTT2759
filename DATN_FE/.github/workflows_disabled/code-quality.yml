@@ -1,0 +1,53 @@
+name: Code Quality Check
+
+on:
+  pull_request:
+    branches: [ main, develop, master ]
+  push:
+    branches: [ main, develop, master ]
+
+jobs:
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for linting errors
+        run: |
+          if npm run | grep -q "lint"; then
+            npm run lint || echo "Linting issues found"
+          else
+            echo "No lint script found, skipping..."
+          fi
+        continue-on-error: true
+
+      - name: Check build
+        run: npm run build
+
+      - name: Check for TypeScript errors
+        run: |
+          if npm run | grep -q "type-check"; then
+            npm run type-check || echo "TypeScript errors found"
+          else
+            echo "No type-check script found, skipping..."
+          fi
+        continue-on-error: true
+
+      - name: Check file sizes
+        run: |
+          echo "Checking build output size..."
+          du -sh dist/ || echo "dist/ not found"
+          find dist/ -type f -size +500k -exec ls -lh {} \; || echo "No large files found"
+

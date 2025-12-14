@@ -77,7 +77,14 @@
                     <i class="fas fa-eye"></i>
                 </div>
                 <div class="stats-content">
-                    <h3 class="stats-number">{{ getTotalViews() }}</h3>
+                    <h3 class="stats-number">
+                        {{
+                            list_bai_viet.reduce(
+                                (total, bv) => total + (bv.luot_xem || 0),
+                                0
+                            )
+                        }}
+                    </h3>
                     <p class="stats-label">Tổng Lượt Xem</p>
                 </div>
             </div>
@@ -158,8 +165,15 @@
                                             <div class="article-container">
                                                 <div class="article-details">
                                                     <span class="article-title">{{ value.tieu_de }}</span>
-                                                    <small class="article-excerpt">{{ truncateText(value.noi_dung, 80)
-                                                        }}</small>
+                                                    <small class="article-excerpt">
+                                                        {{
+                                                            !value.noi_dung
+                                                                ? ""
+                                                                : value.noi_dung.length > 80
+                                                                    ? value.noi_dung.substring(0, 80) + "..."
+                                                                    : value.noi_dung
+                                                        }}
+                                                    </small>
                                                 </div>
                                             </div>
                                         </td>
@@ -170,14 +184,26 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <span class="type-badge" :class="getTypeClass(value.loai_bai_viet)">
-                                                <i class="fas" :class="getTypeIcon(value.loai_bai_viet)"></i>
-                                                {{ value.loai_bai_viet }}
+                                            <span class="type-badge" :class="value.ten_loai_bai_viet === 'Tin tức'
+                                                ? 'type-news'
+                                                : value.ten_loai_bai_viet === 'Thông báo'
+                                                    ? 'type-notice'
+                                                    : value.ten_loai_bai_viet === 'Hoạt động'
+                                                        ? 'type-activity'
+                                                        : 'type-other'">
+                                                <i class="fas" :class="value.ten_loai_bai_viet === 'Tin tức'
+                                                    ? 'fa-newspaper'
+                                                    : value.ten_loai_bai_viet === 'Thông báo'
+                                                        ? 'fa-bullhorn'
+                                                        : value.ten_loai_bai_viet === 'Hoạt động'
+                                                            ? 'fa-calendar-check'
+                                                            : 'fa-file-alt'"></i>
+                                                {{ value.ten_loai_bai_viet }}
                                             </span>
                                         </td>
                                         <td class="text-center">
                                             <div class="author-info">
-                                                <div class="author-name">{{ value.ten_tac_gia || 'Chưa cập nhật' }}
+                                                <div class="author-name">{{ value.nguoi_dang || 'Chưa cập nhật' }}
                                                 </div>
                                             </div>
                                         </td>
@@ -194,13 +220,11 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <button v-on:click="DoiTrangThai(value)" v-if="value.tinh_trang == 1"
-                                                class="btn status-badge status-active">
+                                            <button v-if="value.tinh_trang == 1" class="btn status-badge status-active">
                                                 <i class="fas fa-check-circle"></i>
                                                 Đã Xuất Bản
                                             </button>
-                                            <button v-on:click="DoiTrangThai(value)" v-else
-                                                class="btn status-badge status-inactive">
+                                            <button v-else class="btn status-badge status-inactive">
                                                 <i class="fas fa-clock"></i>
                                                 Bản Nháp
                                             </button>
@@ -213,10 +237,7 @@
                                                     title="Chỉnh sửa">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn-action btn-view" @click="viewArticle(value)"
-                                                    title="Xem chi tiết">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
+                                                
                                                 <button class="btn-action btn-delete"
                                                     @click="Object.assign(delete_bai_viet, value)"
                                                     data-bs-toggle="modal" data-bs-target="#xoaModal" title="Xóa">
@@ -256,17 +277,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label for="updateSlug" class="form-label">Slug tiêu đề *</label>
+                            <input type="text" class="form-control" id="updateSlug"
+                                v-model="update_bai_viet.slug_tieu_de" placeholder="vd: giao-luu-cung-phu-huynh"
+                                required />
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="updateLoaiBaiViet" class="form-label">Loại Bài Viết *</label>
-                                    <select class="form-select" id="updateLoaiBaiViet"
-                                        v-model="update_bai_viet.loai_bai_viet" required>
+                                    <select class="form-select" id="loaiBaiViet"
+                                        v-model="update_bai_viet.id_loai_bai_viet" required>
                                         <option value="">Chọn loại bài viết</option>
-                                        <option value="Tin tức">Tin tức</option>
-                                        <option value="Thông báo">Thông báo</option>
-                                        <option value="Hoạt động">Hoạt động</option>
-                                        <option value="Khác">Khác</option>
+                                        <option v-for="nh in list_loai_bai_viet" :key="nh.id" :value="nh.id">
+                                            {{ nh.ten_loai }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -283,8 +309,12 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="updateTacGia" class="form-label">Tác Giả *</label>
-                                    <input type="text" class="form-control" id="updateTacGia"
-                                        v-model="update_bai_viet.ten_tac_gia" required />
+                                    <select class="form-select" id="loaiBaiViet" v-model="update_bai_viet.id_nhan_vien"
+                                        required>
+                                        <option v-for="nh in list_nhan_vien" :key="nh.id" :value="nh.id">
+                                            {{ nh.ho_va_ten }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -303,11 +333,7 @@
                                 v-model="update_bai_viet.noi_dung" placeholder="Nhập nội dung bài viết..."
                                 required></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="updateMoTa" class="form-label">Mô Tả Ngắn</label>
-                            <textarea class="form-control" id="updateMoTa" rows="3" v-model="update_bai_viet.mo_ta"
-                                placeholder="Mô tả ngắn về bài viết..."></textarea>
-                        </div>
+                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -345,8 +371,8 @@
                         <div class="alert alert-warning" role="alert">
                             <strong>Thông tin bài viết:</strong><br>
                             <strong>Tiêu đề:</strong> {{ delete_bai_viet.tieu_de }}<br>
-                            <strong>Loại:</strong> {{ delete_bai_viet.loai_bai_viet }}<br>
-                            <strong>Tác giả:</strong> {{ delete_bai_viet.ten_tac_gia }}
+                            <strong>Loại:</strong> {{ delete_bai_viet.ten_loai_bai_viet }}<br>
+                            <strong>Tác giả:</strong> {{ delete_bai_viet.nguoi_dang }}
                         </div>
                         <p class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
@@ -390,16 +416,24 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-12">
+                                <label for="slugTieuDe" class="form-label">Slug tiêu đề *</label>
+                                <input type="text" class="form-control" id="slugTieuDe"
+                                    v-model="create_bai_viet.slug_tieu_de" placeholder="vd: giao-luu-cung-phu-huynh"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <label for="loaiBaiViet" class="form-label">Loại Bài Viết *</label>
-                                <select class="form-select" id="loaiBaiViet" v-model="create_bai_viet.loai_bai_viet"
+                                <select class="form-select" id="loaiBaiViet" v-model="create_bai_viet.id_loai_bai_viet"
                                     required>
                                     <option value="">Chọn loại bài viết</option>
-                                    <option value="Tin tức">Tin tức</option>
-                                    <option value="Thông báo">Thông báo</option>
-                                    <option value="Hoạt động">Hoạt động</option>
-                                    <option value="Khác">Khác</option>
+                                    <option v-for="nh in list_loai_bai_viet" :key="nh.id" :value="nh.id">
+                                        {{ nh.ten_loai }}
+                                    </option>
                                 </select>
+
                             </div>
                             <div class="col-md-6">
                                 <label for="hinhAnh" class="form-label">Hình Ảnh URL</label>
@@ -410,8 +444,12 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="tacGia" class="form-label">Tác Giả *</label>
-                                <input type="text" class="form-control" id="tacGia"
-                                    v-model="create_bai_viet.ten_tac_gia" required />
+                                <select class="form-select" id="tacGia" v-model="create_bai_viet.id_nhan_vien" required>
+                                    <option value="">Chọn tác giả</option>
+                                    <option v-for="nh in list_nhan_vien" :key="nh.id" :value="nh.id">
+                                        {{ nh.ho_va_ten }}
+                                    </option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="tinhTrang" class="form-label">Trạng Thái</label>
@@ -428,13 +466,7 @@
                                     placeholder="Nhập nội dung bài viết..." required></textarea>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <label for="moTa" class="form-label">Mô Tả Ngắn</label>
-                                <textarea class="form-control" id="moTa" rows="3" v-model="create_bai_viet.mo_ta"
-                                    placeholder="Mô tả ngắn về bài viết..."></textarea>
-                            </div>
-                        </div>
+                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -461,30 +493,36 @@ export default {
     data() {
         return {
             list_bai_viet: [],
+            list_loai_bai_viet: [],
+            list_nhan_vien: [],
             create_bai_viet: {
                 tieu_de: "",
                 noi_dung: "",
-                mo_ta: "",
+                slug_tieu_de: "",
                 hinh_anh: "",
                 loai_bai_viet: "",
                 ten_tac_gia: "",
                 tinh_trang: "0",
+                id_loai_bai_viet: "",
+                id_nhan_vien: "",
             },
             update_bai_viet: {
                 id: "",
                 tieu_de: "",
                 noi_dung: "",
-                mo_ta: "",
+                slug_tieu_de: "",
                 hinh_anh: "",
                 loai_bai_viet: "",
                 ten_tac_gia: "",
                 tinh_trang: "",
+                id_loai_bai_viet: "",
+                id_nhan_vien: "",
             },
             delete_bai_viet: {
                 id: "",
                 tieu_de: "",
-                loai_bai_viet: "",
-                ten_tac_gia: "",
+                ten_loai_bai_viet: "",
+                nguoi_dang: "",
             },
             search: {
                 noi_dung: "",
@@ -498,6 +536,8 @@ export default {
 
     mounted() {
         this.loadData();
+        this.loadLoaiBaiViet();
+        this.loadDatanhanvien();
     },
 
     methods: {
@@ -513,42 +553,56 @@ export default {
             return date.toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
         },
 
-        truncateText(text, length) {
-            if (!text) return "";
-            if (text.length <= length) return text;
-            return text.substring(0, length) + "...";
-        },
-
-        getTotalViews() {
-            return this.list_bai_viet.reduce((total, bv) => total + (bv.luot_xem || 0), 0);
-        },
-
-        getTypeClass(loai) {
-            const typeMap = {
-                "Tin tức": "type-news",
-                "Thông báo": "type-notice",
-                "Hoạt động": "type-activity",
-                "Khác": "type-other",
-            };
-            return typeMap[loai] || "type-other";
-        },
-
-        getTypeIcon(loai) {
-            const iconMap = {
-                "Tin tức": "fa-newspaper",
-                "Thông báo": "fa-bullhorn",
-                "Hoạt động": "fa-calendar-check",
-                "Khác": "fa-file-alt",
-            };
-            return iconMap[loai] || "fa-file-alt";
-        },
-
         loadData() {
             baseRequestAdmin
                 .get("admin/bai-viet/data")
                 .then((res) => {
                     if (res.data.status) {
                         this.list_bai_viet = res.data.data;
+                        this.$toast.success(res.data.message);
+                    } else {
+                        this.$toast.error(res.data.message);
+                    }
+                })
+                .catch((err) => {
+                    const listErr = err.response?.data?.errors;
+                    if (listErr) {
+                        Object.values(listErr).forEach((error) => {
+                            this.$toast.error(error[0]);
+                        });
+                    } else {
+                        this.$toast.error("Có lỗi xảy ra khi tải dữ liệu");
+                    }
+                });
+        },
+        loadLoaiBaiViet() {
+            baseRequestAdmin
+                .get("admin/loai-bai-viet/data")
+                .then((res) => {
+                    if (res.data.status) {
+                        this.list_loai_bai_viet = res.data.data;
+                        this.$toast.success(res.data.message);
+                    } else {
+                        this.$toast.error(res.data.message);
+                    }
+                })
+                .catch((err) => {
+                    const listErr = err.response?.data?.errors;
+                    if (listErr) {
+                        Object.values(listErr).forEach((error) => {
+                            this.$toast.error(error[0]);
+                        });
+                    } else {
+                        this.$toast.error("Có lỗi xảy ra khi tải dữ liệu");
+                    }
+                });
+        },
+        loadDatanhanvien() {
+            baseRequestAdmin
+                .get("admin/nhan-vien/data")
+                .then((res) => {
+                    if (res.data.status) {
+                        this.list_nhan_vien = res.data.data;
                         this.$toast.success(res.data.message);
                     } else {
                         this.$toast.error(res.data.message);
@@ -651,7 +705,12 @@ export default {
                     if (res.data.status) {
                         this.$toast.success(res.data.message);
                         this.loadData();
-                        this.delete_bai_viet = {};
+                        this.delete_bai_viet = {
+                            id: "",
+                            tieu_de: "",
+                            ten_loai_bai_viet: "",
+                            nguoi_dang: "",
+                        };
                         // Đóng modal
                         const modal = bootstrap.Modal.getInstance(document.getElementById("xoaModal"));
                         if (modal) modal.hide();
@@ -706,17 +765,19 @@ export default {
             this.create_bai_viet = {
                 tieu_de: "",
                 noi_dung: "",
-                mo_ta: "",
+                slug_tieu_de: "",
                 hinh_anh: "",
                 loai_bai_viet: "",
                 ten_tac_gia: "",
                 tinh_trang: "0",
+                id_loai_bai_viet: "",
+                id_nhan_vien: "",
             };
         },
     },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "./style.scss";
 </style>

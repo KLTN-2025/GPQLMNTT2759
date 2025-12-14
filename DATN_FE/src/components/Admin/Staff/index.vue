@@ -51,9 +51,7 @@
           <i class="fas fa-user-check"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{list_nhan_vien.filter((nv) => nv.tinh_trang == 1).length}}
-          </h3>
+          <h3 class="stats-number">{{ activeEmployeeCount }}</h3>
           <p class="stats-label">Đang Hoạt Động</p>
         </div>
       </div>
@@ -64,9 +62,7 @@
           <i class="fas fa-user-pause"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">
-            {{list_nhan_vien.filter((nv) => nv.tinh_trang == 0).length}}
-          </h3>
+          <h3 class="stats-number">{{ inactiveEmployeeCount }}</h3>
           <p class="stats-label">Tạm Ngừng</p>
         </div>
       </div>
@@ -97,10 +93,15 @@
               <p class="card-subtitle">Quản lý thông tin nhân viên hệ thống</p>
             </div>
           </div>
-          <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
-            <i class="fas fa-user-plus"></i>
-            Thêm Nhân Viên
-          </button>
+          <div class="header-actions">
+            <button class="btn btn-outline-success btn-sm me-2" @click="exportStaffExcel">
+              <i class="fas fa-file-excel"></i> Xuất Excel
+            </button>
+            <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
+              <i class="fas fa-user-plus"></i>
+              Thêm Nhân Viên
+            </button>
+          </div>
         </div>
 
         <div class="card-body">
@@ -158,12 +159,14 @@
                             <img :src="value.avatar || '/default-avatar.jpg'" :alt="value.ho_va_ten"
                               class="avatar-img" />
                           </div>
+
                           <div class="employee-details">
                             <span class="employee-name">{{ value.ho_va_ten }}</span>
                             <small class="employee-email">{{ value.email }}</small>
                           </div>
                         </div>
                       </td>
+
                       <td class="text-center contact-info">
                         <div class="contact-item">
                           <i class="fas fa-phone"></i>
@@ -173,9 +176,8 @@
                       <td class="text-center personal-info">
                         <div class="info-group">
                           <div class="info-item">
-                            <i
-                              :class="value.gioi_tinh === 1 ? 'fas fa-mars text-primary' : 'fas fa-venus text-danger'"></i>
-                            <span>{{ value.gioi_tinh === 1 ? "Nam" : "Nữ" }}</span>
+                            <i :class="genderDescriptor(value.gioi_tinh).icon"></i>
+                            <span>{{ genderDescriptor(value.gioi_tinh).label }}</span>
                           </div>
                           <div class="info-item">
                             <i class="fas fa-birthday-cake"></i>
@@ -194,14 +196,13 @@
                         </span>
                       </td>
                       <td class="text-center">
-                        <button v-on:click="DoiTrangThai(value)" v-if="value.tinh_trang == 1"
-                          class="btn btn-success status-active">
-                          <i class="fas fa-check-circle"></i>
-                          Hoạt Động
-                        </button>
-                        <button v-on:click="DoiTrangThai(value)" v-else class="btn btn-danger status-inactive">
-                          <i class="fas fa-pause-circle"></i>
-                          Tạm Ngừng
+                        <button
+                          @click="DoiTrangThai(value)"
+                          class="btn btn-sm"
+                          :class="[statusDescriptor(value.tinh_trang).buttonClass, statusDescriptor(value.tinh_trang).statusClass]"
+                        >
+                          <i :class="statusDescriptor(value.tinh_trang).icon"></i>
+                          {{ statusDescriptor(value.tinh_trang).label }}
                         </button>
                       </td>
                       <td class="text-center">
@@ -468,8 +469,10 @@
 <script>
 import axios from "axios";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
+import { ExcelExportMixin } from '../../../mixins/ExcelExportMixin';
 
 export default {
+  mixins: [ExcelExportMixin],
   data() {
     return {
       list_nhan_vien: [],
@@ -512,12 +515,50 @@ export default {
     };
   },
 
+  computed: {
+    activeEmployeeCount() {
+      return this.list_nhan_vien.filter((nv) => Number(nv.tinh_trang) === 1).length;
+    },
+    inactiveEmployeeCount() {
+      return this.list_nhan_vien.filter((nv) => Number(nv.tinh_trang) === 0).length;
+    },
+    genderDescriptor() {
+      const meta = {
+        1: { label: "Nam", icon: "fas fa-mars text-primary" },
+        0: { label: "Nữ", icon: "fas fa-venus text-danger" },
+      };
+      return (gender) => meta[Number(gender)] || meta[0];
+    },
+    statusDescriptor() {
+      const meta = {
+        1: { label: "Hoạt Động", icon: "fas fa-check-circle", buttonClass: "btn-success", statusClass: "status-active" },
+        0: { label: "Tạm Ngừng", icon: "fas fa-pause-circle", buttonClass: "btn-danger", statusClass: "status-inactive" },
+      };
+      return (status) => meta[Number(status)] || meta[0];
+    },
+  },
+
   mounted() {
     this.loadData();
     this.loadChucVu();
   },
 
   methods: {
+    exportStaffExcel() {
+      const columns = [
+        { header: 'Họ và Tên', value: 'ho_va_ten', width: 25 },
+        { header: 'Chức Vụ', value: 'ten_chuc_vu', width: 20 },
+        { header: 'Số Điện Thoại', value: 'so_dien_thoai', width: 15 },
+        { header: 'Email', value: 'email', width: 30 },
+        { header: 'Giới Tính', value: (item) => item.gioi_tinh == 1 ? 'Nam' : 'Nữ', width: 12 },
+        { header: 'Ngày Sinh', value: (item) => this.formatDate(item.ngay_sinh), width: 15 },
+        { header: 'Địa Chỉ', value: 'dia_chi', width: 40 },
+        { header: 'Trạng Thái', value: (item) => item.tinh_trang == 1 ? 'Đang làm việc' : 'Nghỉ việc', width: 15 }
+      ];
+      
+      this.exportToExcel(this.list_nhan_vien, columns, 'danh-sach-nhan-vien');
+    },
+
     formatDate(dateString) {
       if (!dateString) return "";
       const date = new Date(dateString);

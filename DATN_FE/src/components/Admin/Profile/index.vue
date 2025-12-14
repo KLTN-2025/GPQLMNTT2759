@@ -25,7 +25,7 @@
         <div class="profile-info-card">
           <div class="profile-avatar-section">
             <div class="avatar-container">
-              <img :src="thong_tin.avatar || '/default-avatar.png'" alt="avatar" class="profile-avatar">
+              <img :src="anh_tmp || thong_tin.avatar || '/default-avatar.png'" alt="avatar" class="profile-avatar">
               <div class="avatar-status"></div>
             </div>
             <h3 class="profile-name">{{ thong_tin.ho_va_ten || 'Nguyễn Văn Admin' }}</h3>
@@ -35,10 +35,11 @@
                 <i class="bx bx-edit"></i>
                 Chỉnh sửa
               </button>
-              <button class="btn-avatar">
+              <label class="btn-avatar" for="avatar-upload" style="cursor: pointer; margin-bottom: 0;">
                 <i class="bx bx-camera"></i>
                 Đổi ảnh
-              </button>
+                <input type="file" id="avatar-upload" hidden @change="loadAnhTuLocal" accept="image/*">
+              </label>
             </div>
           </div>
         </div>
@@ -155,20 +156,11 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="firstName" class="form-label">Họ và tên đệm <span class="text-danger">*</span></label>
+                    <label for="firstName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="firstName" v-model="update_tt.ho_va_ten"
-                      placeholder="Nhập họ và tên đệm" required>
+                      placeholder="Nhập họ và tên" required>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="lastName" class="form-label">Tên</label>
-                    <input type="text" class="form-control" id="lastName" v-model="update_tt.ten"
-                      placeholder="Nhập tên">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
@@ -176,6 +168,8 @@
                       placeholder="Nhập email" required>
                   </div>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="phone" class="form-label">Điện thoại</label>
@@ -183,36 +177,22 @@
                       placeholder="Nhập số điện thoại">
                   </div>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="birthDate" class="form-label">Ngày sinh</label>
                     <input type="date" class="form-control" id="birthDate" v-model="update_tt.ngay_sinh">
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="gender" class="form-label">Giới tính</label>
-                    <select class="form-select" id="gender" v-model="update_tt.gioi_tinh">
-                      <option value="Nam">Nam</option>
-                      <option value="Nữ">Nữ</option>
-                      <option value="Khác">Khác</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="address" class="form-label">Địa chỉ</label>
-                <textarea class="form-control" id="address" rows="3" v-model="update_tt.dia_chi"
-                  placeholder="Nhập địa chỉ"></textarea>
               </div>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="department" class="form-label">Phòng ban</label>
-                    <input type="text" class="form-control" id="department" v-model="update_tt.phong_ban"
-                      placeholder="Nhập phòng ban">
+                    <label for="gender" class="form-label">Giới tính</label>
+                    <select class="form-select" id="gender" v-model="update_tt.gioi_tinh">
+                      <option :value="1">Nam</option>
+                      <option :value="0">Nữ</option>
+                      <option :value="2">Khác</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -222,6 +202,11 @@
                       placeholder="Nhập chức vụ">
                   </div>
                 </div>
+              </div>
+              <div class="form-group">
+                <label for="address" class="form-label">Địa chỉ</label>
+                <textarea class="form-control" id="address" rows="3" v-model="update_tt.dia_chi"
+                  placeholder="Nhập địa chỉ"></textarea>
               </div>
               <div class="form-actions">
                 <button type="button" class="btn-cancel" @click="resetForm">Hủy</button>
@@ -341,7 +326,9 @@ export default {
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
-      }
+      },
+      file_anh: null,
+      anh_tmp: null,
     }
   },
   mounted() {
@@ -372,13 +359,9 @@ export default {
     },
 
     updateProfile() {
-      if (!this.update_tt.ho_va_ten || !this.update_tt.email) {
-        this.$toast.error('Vui lòng điền đầy đủ thông tin bắt buộc');
-        return;
-      }
 
       baseRequestAdmin
-        .put("admin/profile/update", this.update_tt)
+        .post("admin/profile/update", this.update_tt)
         .then((res) => {
           if (res.data.status) {
             this.thong_tin = { ...this.thong_tin, ...this.update_tt };
@@ -416,7 +399,7 @@ export default {
       }
 
       baseRequestAdmin
-        .put("admin/profile/change-password", this.passwordForm)
+        .post("admin/profile/change-password", this.passwordForm)
         .then((res) => {
           if (res.data.status) {
             this.$toast.success('Đổi mật khẩu thành công');
@@ -444,7 +427,52 @@ export default {
     resetForm() {
       this.update_tt = {};
       this.$toast.info('Đã hủy thay đổi');
-    }
+    },
+
+    loadAnhTuLocal(event) {
+      this.file_anh = event.target.files[0];
+      this.createImage(this.file_anh);
+    },
+
+    createImage(file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = (e) => {
+        vm.anh_tmp = e.target.result;
+        this.updateChange(); // Auto upload when image selected
+      };
+      reader.readAsDataURL(file);
+    },
+
+    updateChange() {
+      const payload = new FormData();
+      payload.append("hinh_anh", this.file_anh);
+
+      baseRequestAdmin
+        .post("admin/profile/update-avatar", payload, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          if (res.data.status) {
+            this.$toast.success(res.data.message);
+            this.loadData();
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.errors) {
+            const listErr = err.response.data.errors;
+            Object.values(listErr).forEach((error) => {
+              this.$toast.error(error[0]);
+            });
+          } else {
+            this.$toast.error('Có lỗi xảy ra khi cập nhật ảnh đại diện');
+          }
+        });
+    },
   }
 }
 </script>

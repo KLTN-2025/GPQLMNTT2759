@@ -11,11 +11,8 @@
           </p>
         </div>
         <div class="hero-image">
-          <img
-            src="../../../assets/images/Home/IMG_3071-scaled (1).jpg"
-            alt="Trường Mầm Non Hoa Sen"
-            class="hero-img"
-          />
+          <img src="../../../assets/images/Home/IMG_3071-scaled (1).jpg" alt="Trường Mầm Non Hoa Sen"
+            class="hero-img" />
         </div>
       </div>
 
@@ -41,35 +38,19 @@
             </p>
           </div>
           <div class="about-stats">
-            <div
-              class="stat-item animate-on-scroll"
-              data-animation="slide-up"
-              data-delay="100"
-            >
+            <div class="stat-item animate-on-scroll" data-animation="slide-up" data-delay="100">
               <div class="stat-number">15+</div>
               <div class="stat-label">Năm Kinh Nghiệm</div>
             </div>
-            <div
-              class="stat-item animate-on-scroll"
-              data-animation="slide-up"
-              data-delay="200"
-            >
+            <div class="stat-item animate-on-scroll" data-animation="slide-up" data-delay="200">
               <div class="stat-number">500+</div>
               <div class="stat-label">Học Sinh</div>
             </div>
-            <div
-              class="stat-item animate-on-scroll"
-              data-animation="slide-up"
-              data-delay="300"
-            >
+            <div class="stat-item animate-on-scroll" data-animation="slide-up" data-delay="300">
               <div class="stat-number">30+</div>
               <div class="stat-label">Giáo Viên</div>
             </div>
-            <div
-              class="stat-item animate-on-scroll"
-              data-animation="slide-up"
-              data-delay="400"
-            >
+            <div class="stat-item animate-on-scroll" data-animation="slide-up" data-delay="400">
               <div class="stat-number">98%</div>
               <div class="stat-label">Hài Lòng</div>
             </div>
@@ -80,10 +61,7 @@
       <!-- Mission & Vision Section -->
       <div class="mission-vision-section">
         <div class="mission-vision-grid">
-          <div
-            class="mission-card animate-on-scroll"
-            data-animation="slide-left"
-          >
+          <div class="mission-card animate-on-scroll" data-animation="slide-left">
             <div class="card-icon">
               <i class="fas fa-bullseye"></i>
             </div>
@@ -94,10 +72,7 @@
               hội.
             </p>
           </div>
-          <div
-            class="vision-card animate-on-scroll"
-            data-animation="slide-right"
-          >
+          <div class="vision-card animate-on-scroll" data-animation="slide-right">
             <div class="card-icon">
               <i class="fas fa-eye"></i>
             </div>
@@ -112,131 +87,57 @@
       </div>
 
       <!-- School News Section -->
-      <div
-        class="school-news-section animate-on-scroll"
-        data-animation="fade-up"
-      >
+      <div class="school-news-section animate-on-scroll" data-animation="fade-up">
         <div class="section-header">
           <h2>Tin Tức Nhà Trường</h2>
           <div class="divider"></div>
         </div>
         <div class="news-grid">
-          <div
-            class="news-item animate-on-scroll"
-            data-animation="fade-up"
-            data-delay="100"
-          >
-            <div class="news-image">
-              <img
-                src="../../../assets/images/Home/lich-hoat-dong-cua-tre-tai-truong-mam-non.jpg_636767702616441017.jpg"
-                alt="Tin tức 1"
-              />
-            </div>
-            <div class="news-content">
-              <div class="news-meta">
-                <span class="news-date">15/12/2024</span>
-                <span class="news-category">Thông Báo</span>
+          <!-- Template -->
+          <template v-for="(value, index) in list_bai_viet" :key="index">
+            <div class="news-item animate-on-scroll" data-animation="fade-up" :data-delay="100 * (index + 1)">
+              <div class="news-image">
+                <img :src="value.hinh_anh" :alt="value.tieu_de" />
               </div>
-              <h3 class="news-title">Khai Giảng Năm Học Mới 2024-2025</h3>
-              <p class="news-excerpt">
-                Trường Mầm Non Hoa Sen thông báo lịch khai giảng năm học mới với
-                nhiều hoạt động thú vị và ý nghĩa dành cho các bé.
-              </p>
-              <button class="read-more-btn">Đọc Thêm</button>
+              <div class="news-content">
+                <div class="news-meta">
+                  <span class="news-date">{{ formatDate(value.ngay_dang) }}</span>
+                  <span class="news-category">{{ value.danh_muc ?? 'Thông Báo' }}</span>
+                </div>
+                <h3 class="news-title">{{ value.tieu_de }}</h3>
+                <p class="news-excerpt">{{ value.noi_dung }}</p>
+                <router-link class="read-more-btn btn btn-outline-danger w-100" :to="`/blog-detail/${value.id}`">
+                  Đọc thêm
+                </router-link>
+              </div>
             </div>
-          </div>
+          </template>
 
-          <div
-            class="news-item animate-on-scroll"
-            data-animation="fade-up"
-            data-delay="200"
-          >
-            <div class="news-image">
-              <img
-                src="../../../assets/images/Home/thuc-don-cho-tre-5-tuoi-bieng-an.jpg.webp"
-                alt="Tin tức 2"
-              />
-            </div>
-            <div class="news-content">
-              <div class="news-meta">
-                <span class="news-date">10/12/2024</span>
-                <span class="news-category">Hoạt Động</span>
-              </div>
-              <h3 class="news-title">
-                Chương Trình Dinh Dưỡng Mới Cho Tuần 12
-              </h3>
-              <p class="news-excerpt">
-                Nhà trường triển khai chương trình dinh dưỡng mới được thiết kế
-                bởi chuyên gia, đảm bảo sức khỏe tối ưu cho các bé.
-              </p>
-              <button class="read-more-btn">Đọc Thêm</button>
-            </div>
-          </div>
-
-          <div
-            class="news-item animate-on-scroll"
-            data-animation="fade-up"
-            data-delay="300"
-          >
-            <div class="news-image">
-              <img
-                src="../../../assets/images/Home/IMG_3071-scaled (1).jpg"
-                alt="Tin tức 3"
-              />
-            </div>
-            <div class="news-content">
-              <div class="news-meta">
-                <span class="news-date">05/12/2024</span>
-                <span class="news-category">Sự Kiện</span>
-              </div>
-              <h3 class="news-title">Lễ Hội Trại Mùa Đông 2024 - 2025</h3>
-              <p class="news-excerpt">
-                Cùng tham gia lễ hội mùa đông với nhiều trò chơi, hoạt động giải
-                trí và quà tặng hấp dẫn dành cho các bé.
-              </p>
-              <button class="read-more-btn">Đọc Thêm</button>
-            </div>
-          </div>
         </div>
       </div>
 
       <!-- Facilities Section -->
-      <div
-        class="facilities-section animate-on-scroll"
-        data-animation="fade-up"
-      >
+      <div class="facilities-section animate-on-scroll" data-animation="fade-up">
         <div class="section-header">
           <h2>Cơ Sở Vật Chất</h2>
           <div class="divider"></div>
         </div>
         <div class="facilities-grid">
-          <div
-            class="facility-item animate-on-scroll"
-            data-animation="zoom-in"
-            data-delay="100"
-          >
+          <div class="facility-item animate-on-scroll" data-animation="zoom-in" data-delay="100">
             <div class="facility-icon">
               <i class="fas fa-chalkboard-teacher"></i>
             </div>
             <h4>Phòng Học Hiện Đại</h4>
             <p>Trang bị đầy đủ thiết bị học tập, âm thanh, ánh sáng tối ưu</p>
           </div>
-          <div
-            class="facility-item animate-on-scroll"
-            data-animation="zoom-in"
-            data-delay="200"
-          >
+          <div class="facility-item animate-on-scroll" data-animation="zoom-in" data-delay="200">
             <div class="facility-icon">
               <i class="fas fa-gamepad"></i>
             </div>
             <h4>Khu Vui Chơi An Toàn</h4>
             <p>Sân chơi rộng rãi với đồ chơi an toàn, phù hợp lứa tuổi</p>
           </div>
-          <div
-            class="facility-item animate-on-scroll"
-            data-animation="zoom-in"
-            data-delay="300"
-          >
+          <div class="facility-item animate-on-scroll" data-animation="zoom-in" data-delay="300">
             <div class="facility-icon">
               <i class="fas fa-utensils"></i>
             </div>
@@ -245,11 +146,7 @@
               Đảm bảo vệ sinh an toàn thực phẩm, thực đơn cân bằng dinh dưỡng
             </p>
           </div>
-          <div
-            class="facility-item animate-on-scroll"
-            data-animation="zoom-in"
-            data-delay="400"
-          >
+          <div class="facility-item animate-on-scroll" data-animation="zoom-in" data-delay="400">
             <div class="facility-icon">
               <i class="fas fa-shield-alt"></i>
             </div>
@@ -287,18 +184,10 @@
             <h4>Đăng Ký Tham Quan</h4>
             <form @submit.prevent="submitForm">
               <div class="form-group">
-                <input
-                  type="text"
-                  placeholder="Họ và tên phụ huynh"
-                  v-model="form.parentName"
-                />
+                <input type="text" placeholder="Họ và tên phụ huynh" v-model="form.parentName" />
               </div>
               <div class="form-group">
-                <input
-                  type="text"
-                  placeholder="Số điện thoại"
-                  v-model="form.phone"
-                />
+                <input type="text" placeholder="Số điện thoại" v-model="form.phone" />
               </div>
               <div class="form-group">
                 <input type="email" placeholder="Email" v-model="form.email" />
@@ -315,77 +204,83 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+<script>
+import baseRequestClient from '../../../core/baseRequestClient';
 
-const router = useRouter();
-let observer = null;
+export default {
+  data() {
+    return {
+      list_bai_viet: [],
+      form: {
+        parentName: "",
+        phone: "",
+        email: "",
+        note: ""
+      }
+    };
+  },
+  mounted() {
+    this.loadData();
+    this.$nextTick(() => {
+      this.setupScrollAnimations();
+      window.addEventListener('scroll', this.handleScroll);
+    });
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    async loadData() {
+      try {
+        const res = await baseRequestClient.get('client/bai-viet/data');
+        if (res.data.status) {
+          this.list_bai_viet = res.data.data;
+          this.$toast.success(res.data.message);
+          this.$nextTick(() => {
+            this.handleScroll();
+          });
+        } else {
+          this.$toast.error(res.data.message);
+        }
+      } catch (err) {
+        const listErr = err.response?.data?.errors;
+        if (listErr) {
+          Object.values(listErr).forEach((error) => this.$toast.error(error[0]));
+        } else {
+          this.$toast.error('Có lỗi xảy ra khi tải dữ liệu');
+        }
+      }
+    },
+    setupScrollAnimations() {
+      const elements = document.querySelectorAll('.animate-on-scroll');
+      elements.forEach((el) => {
+        const animation = el.dataset.animation || 'fade-up';
+        el.classList.add(`animate-${animation}`);
+      });
+      this.handleScroll();
+    },
+    handleScroll() {
+      const elements = document.querySelectorAll('.animate-on-scroll');
+      elements.forEach((el) => {
+        const elementTop = el.getBoundingClientRect().top;
+        const elementBottom = el.getBoundingClientRect().bottom;
+        const windowHeight = window.innerHeight;
 
-const form = ref({
-  parentName: "",
-  phone: "",
-  email: "",
-  note: "",
-});
-
-const submitForm = () => {
-  // Handle form submission
-  console.log("Form submitted:", form.value);
-  alert("Cảm ơn bạn đã đăng ký! Chúng tôi sẽ liên hệ sớm nhất.");
-  // Reset form
-  form.value = {
-    parentName: "",
-    phone: "",
-    email: "",
-    note: "",
-  };
-};
-
-const initScrollAnimation = () => {
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animation = element.dataset.animation;
-          const delay = element.dataset.delay || 0;
-
-          setTimeout(() => {
-            element.classList.add("animate-visible");
-            if (animation) {
-              element.classList.add(`animate-${animation}`);
-            }
-          }, delay);
-
-          observer.unobserve(element);
+        if (elementTop < windowHeight && elementBottom > 0) {
+          el.classList.add('animate-visible');
+        } else {
+          el.classList.remove('animate-visible');
         }
       });
     },
-    {
-      threshold: 0.1,
-      rootMargin: "0px 0px -50px 0px",
-    }
-  );
-
-  const animatedElements = document.querySelectorAll(".animate-on-scroll");
-  animatedElements.forEach((element) => {
-    observer.observe(element);
-  });
+    formatDate(date) {
+      const d = new Date(date);
+      return d.toLocaleDateString('vi-VN');
+    },
+  },
 };
-
-onMounted(() => {
-  setTimeout(() => {
-    initScrollAnimation();
-  }, 100);
-});
-
-onUnmounted(() => {
-  if (observer) {
-    observer.disconnect();
-  }
-});
 </script>
+
 
 <style lang="scss">
 @use "./style.scss";

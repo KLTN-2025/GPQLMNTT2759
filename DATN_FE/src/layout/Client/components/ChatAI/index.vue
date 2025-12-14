@@ -1,169 +1,282 @@
 <template>
   <div>
-    <!-- Floating round button -->
-    <button
-      class="chat-fab"
-      aria-label="Open chat"
-      v-if="!isOpen"
+    <!-- Floating Chat Button -->
+    <div
+      :class="['chat-fab', { 'is-active': chatOpen }]"
       @click="toggleChat"
     >
-      <svg class="chat-fab__icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M4 4h16v12H7l-3 3V4zm3 5h10M7 9h10M7 12h7"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
+      <div class="chat-fab-icon">
+        <transition name="icon-fade" mode="out-in">
+          <img v-if="!chatOpen" :src="botAvatar" alt="AI" key="avatar" />
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" key="close">
+            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </transition>
+      </div>
+    </div>
 
-    <!-- Chat container -->
-    <div
-      v-if="isOpen"
-      class="chat-container"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Chat dialog"
-    >
-      <header class="chat-header">
-        <div class="chat-header__title">
-          <span class="chat-header__avatar">🤖</span>
-          <div>
-            <div class="chat-header__name">Chat Assistant</div>
-            <div class="chat-header__status">Online</div>
+    <!-- Chat Window -->
+    <transition name="chat-fade">
+      <div v-if="chatOpen" class="chat-container">
+        <!-- Background Overlay -->
+        <div class="chat-bg-overlay"></div>
+
+        <!-- Header -->
+       
+        <!-- Messages Area -->
+        <div class="chat-body" ref="messagesEl">
+          <!-- Copilot-style Welcome Screen -->
+          <div v-if="messages.length === 0" class="welcome-container">
+            <div class="welcome-content">
+              <h1>{{ greeting }}</h1>
+              <h2>Mầm non Hoa Sen có thể giúp gì cho bạn?</h2>
+              
+              <div class="suggestion-grid">
+                <button class="suggestion-card" @click="fillDraft('Thực đơn hôm nay có gì?')">
+                  <span class="icon">🥦</span>
+                  <span class="text">Thực đơn</span>
+                </button>
+                <button class="suggestion-card" @click="fillDraft('Học phí tháng này bao nhiêu?')">
+                  <span class="icon">💰</span>
+                  <span class="text">Học phí</span>
+                </button>
+                <button class="suggestion-card" @click="fillDraft('Thời gian đưa đón trẻ?')">
+                  <span class="icon">⏰</span>
+                  <span class="text">Giờ giấc</span>
+                </button>
+                <button class="suggestion-card" @click="fillDraft('Hoạt động ngoại khóa sắp tới?')">
+                  <span class="icon">🎨</span>
+                  <span class="text">Hoạt động</span>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <button
-          class="chat-header__close"
-          aria-label="Close chat"
-          @click="toggleChat"
-        >
-          ✖
-        </button>
-      </header>
 
-      <div ref="messagesEl" class="chat-messages">
-        <div
-          v-for="(m, idx) in messages"
-          :key="idx"
-          class="chat-message"
-          :class="m.role === 'user' ? 'chat-message--user' : 'chat-message--bot'"
-        >
-          <div class="chat-message__bubble">{{ m.text }}</div>
-          <div class="chat-message__meta">{{ m.time }}</div>
+          <!-- Message List -->
+          <TransitionGroup v-else name="message-anim" tag="div" class="message-list">
+            <div
+              v-for="(msg, index) in messages"
+              :key="index"
+              :class="['message-row', msg.role === 'user' ? 'message-right' : 'message-left']"
+            >
+              <div v-if="msg.role !== 'user'" class="message-avatar">
+                <img :src="botAvatar" alt="Bot" />
+              </div>
+              
+              <div class="message-content">
+                <div class="message-bubble" v-html="formatMessage(msg.text)"></div>
+                <!-- <div class="message-time">{{ msg.time }}</div> -->
+              </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div v-if="isLoading" class="message-row message-left" key="typing">
+              <div class="message-avatar">
+                <img :src="botAvatar" alt="Bot" />
+              </div>
+              <div class="message-bubble typing-bubble">
+                <div class="typing-dots">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </TransitionGroup>
+        </div>
+
+        <!-- Floating Input Area -->
+        <div class="chat-footer">
+          <div class="input-capsule">
+            <button class="attach-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <input
+              type="text"
+              v-model="draft"
+              @keyup.enter="send"
+              placeholder="Nhập câu hỏi của bạn..."
+              :disabled="isLoading"
+            />
+            <div class="input-actions">
+               <button class="send-btn" @click="send" :disabled="!canSend">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="footer-note">AI có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
         </div>
       </div>
-
-      <footer class="chat-input">
-        <input
-          v-model="draft"
-          type="text"
-          class="chat-input__field"
-          placeholder="Nhập tin nhắn và nhấn Enter..."
-          @keydown.enter="send"
-        />
-        <button
-          class="chat-input__send"
-          :disabled="!canSend"
-          @click="send"
-          aria-label="Send message"
-        >
-          Gửi
-        </button>
-      </footer>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, computed } from 'vue'
+import axios from 'axios'
+import botAvatar from '../../../../assets/images/logo-icon.png'
 
-// State
-const isOpen = ref(false)
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+
+const chatOpen = ref(false)
 const draft = ref('')
-const messages = ref([
-  {
-    role: 'bot',
-    text: 'Xin chào! Mình có thể giúp gì cho bạn?',
-    time: formatTime(new Date()),
-  },
-])
-
+const messages = ref([])
+const isLoading = ref(false)
 const messagesEl = ref(null)
 
-// Helpers
+const greeting = computed(() => {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Chào buổi sáng'
+  if (hour < 18) return 'Chào buổi chiều'
+  return 'Chào buổi tối'
+})
+
 function formatTime(d) {
-  const hh = String(d.getHours()).padStart(2, '0')
-  const mm = String(d.getMinutes()).padStart(2, '0')
+  if (!d) return ''
+  const date = new Date(d)
+  const hh = String(date.getHours()).padStart(2, '0')
+  const mm = String(date.getMinutes()).padStart(2, '0')
   return `${hh}:${mm}`
 }
 
-const canSend = ref(false)
-watch(draft, (v) => {
-  canSend.value = String(v || '').trim().length > 0
+function formatMessage(text) {
+  if (!text) return ''
+  return text
+    .replace(/\n/g, '<br>')
+    .replace(/^[•\-*]\s+(.+)$/gm, '<div class="list-item">• $1</div>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+}
+
+// Basic local responses for demo/fallback
+function getCurrentDayInfo() {
+  const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy']
+  const now = new Date()
+  return {
+    dayName: days[now.getDay()],
+    fullDate: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
+    time: formatTime(now)
+  }
+}
+
+function getBasicResponse(message) {
+  const msg = message.toLowerCase().trim()
+  const dayInfo = getCurrentDayInfo()
+  
+  if (msg.match(/(hôm nay|bây giờ).*(thứ mấy|ngày nào)/i)) {
+    return `Hôm nay là ${dayInfo.dayName}, ngày ${dayInfo.fullDate}.`
+  }
+  if (msg.match(/(mấy giờ|bây giờ|hiện tại)/i)) {
+    return `Hiện tại là ${dayInfo.time}, ${dayInfo.dayName}, ngày ${dayInfo.fullDate}.`
+  }
+  if (msg.match(/^(hi|hello|chào|xin chào)$/i)) {
+    return `Xin chào! Tôi là AI Hoa Sen. Tôi có thể giúp gì cho bạn?`
+  }
+  return null
+}
+
+const canSend = computed(() => {
+  return String(draft.value || '').trim().length > 0 && !isLoading.value
 })
 
-// Auto-scroll when messages change
-watch(messages, async () => {
+watch([messages, isLoading], async () => {
   await nextTick()
   if (messagesEl.value) {
-    messagesEl.value.scrollTop = messagesEl.value.scrollHeight
+    messagesEl.value.scrollTo({
+      top: messagesEl.value.scrollHeight,
+      behavior: 'smooth'
+    })
   }
 }, { deep: true })
 
-onMounted(() => {
-  // Ensure initial scroll
-  nextTick(() => {
-    if (messagesEl.value) {
-      messagesEl.value.scrollTop = messagesEl.value.scrollHeight
-    }
-  })
-})
-
-// Actions
-function toggleChat() {
-  isOpen.value = !isOpen.value
-  if (isOpen.value) {
-    nextTick(() => {
-      if (messagesEl.value) {
-        messagesEl.value.scrollTop = messagesEl.value.scrollHeight
+async function loadChatHistory() {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/chat/history`, {}, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+        'Content-Type': 'application/json'
       }
     })
+    if (response.data.success && response.data.history?.length) {
+      messages.value = response.data.history.map(msg => ({
+        role: msg.role === 'assistant' ? 'bot' : 'user',
+        text: msg.content,
+        time: formatTime(new Date())
+      }))
+    }
+  } catch (error) {
+    console.error('Error loading history:', error)
   }
 }
 
-function send() {
-  const text = draft.value.trim()
-  if (!text) return
-  const now = new Date()
+onMounted(loadChatHistory)
 
+function toggleChat() {
+  chatOpen.value = !chatOpen.value
+}
+
+function resetChat() {
+  messages.value = [] // Optional: clear view to show welcome screen again, or navigate home
+}
+
+function fillDraft(text) {
+  draft.value = text
+  send()
+}
+
+async function send() {
+  const text = draft.value.trim()
+  if (!text || isLoading.value) return
+  
   messages.value.push({
     role: 'user',
     text,
-    time: formatTime(now),
+    time: formatTime(new Date())
   })
   draft.value = ''
-
-  // Simulate bot reply
-  setTimeout(() => {
+  
+  const basicResponse = getBasicResponse(text)
+  if (basicResponse) {
+    isLoading.value = true
+    setTimeout(() => {
+      messages.value.push({
+        role: 'bot',
+        text: basicResponse,
+        time: formatTime(new Date())
+      })
+      isLoading.value = false
+    }, 500)
+    return
+  }
+  
+  isLoading.value = true
+  try {
+    const response = await axios.post(`${API_BASE_URL}/tu-van-ai`, 
+      { message: text },
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    if (response.data.success && response.data.data) {
+      messages.value.push({
+        role: 'bot',
+        text: response.data.data,
+        time: formatTime(new Date())
+      })
+    }
+  } catch (error) {
     messages.value.push({
       role: 'bot',
-      text: getBotReply(text),
-      time: formatTime(new Date()),
+      text: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại.',
+      time: formatTime(new Date())
     })
-  }, 500)
-}
-
-function getBotReply(input) {
-  const lower = input.toLowerCase()
-  if (lower.includes('hello') || lower.includes('xin chào')) {
-    return 'Chào bạn! Mình luôn sẵn sàng hỗ trợ.'
+  } finally {
+    isLoading.value = false
   }
-  if (lower.includes('giúp')) {
-    return 'Bạn mô tả thêm vấn đề để mình hỗ trợ nhé.'
-  }
-  return 'Mình đã nhận được tin nhắn, cảm ơn bạn!'
 }
 </script>
 

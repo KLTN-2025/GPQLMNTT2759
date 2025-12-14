@@ -52,7 +52,7 @@
                 </div>
                 <div class="stats-content">
                     <h3 class="stats-number">
-                        {{list_lop_hoc.filter((lh) => lh.tinh_trang == 1).length}}
+                        {{list_lop_hoc.filter((lh) => lh.is_block == 0).length}}
                     </h3>
                     <p class="stats-label">Đang Hoạt Động</p>
                 </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="stats-content">
                     <h3 class="stats-number">
-                        {{list_lop_hoc.filter((lh) => lh.tinh_trang == 0).length}}
+                        {{list_lop_hoc.filter((lh) => lh.is_block == 1).length}}
                     </h3>
                     <p class="stats-label">Tạm Ngừng</p>
                 </div>
@@ -86,7 +86,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="management-card" :class="{ 'no-hover': modalOpen }">
+            <div class="management-card">
                 <div class="card-header-custom">
                     <div class="header-content">
                         <div class="header-icon">
@@ -97,10 +97,15 @@
                             <p class="card-subtitle">Quản lý thông tin lớp học hệ thống</p>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
-                        <i class="fas fa-plus"></i>
-                        Thêm Lớp Học
-                    </button>
+                    <div class="header-actions">
+                        <button class="btn btn-outline-success btn-sm me-2" @click="exportClassesExcel">
+                            <i class="fas fa-file-excel"></i> Xuất Excel
+                        </button>
+                        <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
+                            <i class="fas fa-plus"></i>
+                            Thêm Lớp Học
+                        </button>
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -116,7 +121,7 @@
                             </div>
 
                             <div class="search-filters">
-                                <select v-on:change="TiemKiem()" class="filter-select" v-model="search.tinh_trang">
+                                <select v-on:change="TiemKiem()" class="filter-select" v-model="search.is_block">
                                     <option value="">Tất cả trạng thái</option>
                                     <option value="1">Hoạt động</option>
                                     <option value="0">Tạm ngừng</option>
@@ -141,7 +146,6 @@
                                     <th class="text-center">Thông Tin</th>
                                     <th class="text-center">Giáo Viên</th>
                                     <th class="text-center">Học Sinh</th>
-                                    <th class="text-center">Học Phí</th>
                                     <th class="text-center">Trạng Thái</th>
                                     <th class="text-center">Thao Tác</th>
                                 </tr>
@@ -169,19 +173,19 @@
                                                     <span>{{ value.do_tuoi }} tuổi</span>
                                                 </div>
                                                 <div class="info-item">
-                                                    <i class="fas fa-clock"></i>
-                                                    <span>{{ value.thoi_gian_hoc }}</span>
+                                                    <i class="fas fa-book"></i>
+                                                    <span>{{ value.ten_khoi_lop }}</span>
                                                 </div>
                                                 <div class="info-item">
-                                                    <i class="fas fa-door-open"></i>
-                                                    <span>{{ value.phong_hoc }}</span>
+                                                    <i class="fas fa-calendar"></i>
+                                                    <span>{{ value.ten_nam_hoc }}</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center">
                                             <div class="teacher-info">
                                                 <div class="teacher-name">{{ value.ten_giao_vien || 'Chưa phân công'
-                                                }}</div>
+                                                    }}</div>
                                                 <small class="teacher-role">Chủ nhiệm</small>
                                             </div>
                                         </td>
@@ -195,12 +199,7 @@
                                                     :style="{ width: getStudentPercentage(value) + '%' }"></div>
                                             </div>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="fee-info">
-                                                <div class="fee-amount">{{ formatCurrency(value.hoc_phi) }}</div>
-                                                <small class="fee-period">/tháng</small>
-                                            </div>
-                                        </td>
+
                                         <td class="text-center">
                                             <button v-on:click="DoiTrangThai(value)" v-if="value.is_block == 0"
                                                 class="btn status-badge status-active">
@@ -215,18 +214,17 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="action-buttons">
-                                                <button class="btn-action btn-edit"
-                                                    @click="Object.assign(update_lop_hoc, value)" data-bs-toggle="modal"
-                                                    data-bs-target="#capNhatModal" title="Chỉnh sửa">
+                                                <button class="btn-action btn-edit" @click="OpenUpdateModal(value)"
+                                                    data-bs-toggle="modal" data-bs-target="#capNhatModal"
+                                                    title="Chỉnh sửa">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <button class="btn-action btn-view" @click="viewClassDetails(value)"
                                                     title="Xem chi tiết">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button class="btn-action btn-delete"
-                                                    @click="Object.assign(delete_lop_hoc, value)" data-bs-toggle="modal"
-                                                    data-bs-target="#xoaModal" title="Xóa">
+                                                <button class="btn-action btn-delete" @click="OpenDeleteModal(value)"
+                                                    data-bs-toggle="modal" data-bs-target="#xoaModal" title="Xóa">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -255,48 +253,64 @@
                 <div class="modal-body">
                     <form>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="updateTenLop" class="form-label">Tên Lớp *</label>
                                     <input type="text" class="form-control" id="updateTenLop"
                                         v-model="update_lop_hoc.ten_lop" required />
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateMaLop" class="form-label">Mã Lớp *</label>
-                                    <input type="text" class="form-control" id="updateMaLop"
-                                        v-model="update_lop_hoc.ma_lop" required />
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="updateDoTuoi" class="form-label">Độ Tuổi *</label>
-                                    <select class="form-select" id="updateDoTuoi" v-model="update_lop_hoc.do_tuoi"
+                                    <label for="updateNamHoc" class="form-label">Năm Học *</label>
+                                    <select class="form-select" id="updateNamHoc" v-model="update_lop_hoc.id_nam_hoc"
                                         required>
-                                        <option value="">Chọn độ tuổi</option>
-                                        <option value="3-4">3-4 tuổi (Lớp Mầm)</option>
-                                        <option value="4-5">4-5 tuổi (Lớp Chồi)</option>
-                                        <option value="5-6">5-6 tuổi (Lớp Lá)</option>
+                                        <option value="">Chọn Năm Học</option>
+                                        <option v-for="nh in list_nam_hoc" :key="nh.id" :value="nh.id">{{ nh.ten_nam_hoc
+                                            }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="updateSoLuongToiDa" class="form-label">Số Lượng Tối Đa *</label>
-                                    <input type="number" class="form-control" id="updateSoLuongToiDa"
-                                        v-model="update_lop_hoc.so_luong_toi_da" min="1" max="30" required />
+                                    <label for="updateKhoiLop" class="form-label">Khối Lớp *</label>
+                                    <select class="form-select" id="updateKhoiLop" v-model="update_lop_hoc.id_khoi_lop"
+                                        required>
+                                        <option value="">Chọn khối lớp</option>
+                                        <option v-for="kl in list_khoi_lop" :key="kl.id" :value="kl.id">
+                                            {{ kl.ten_khoi_lop }} ({{ kl.do_tuoi }} tuổi)
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="updateSoLuongToiDa" class="form-label">Số Lượng Tối Đa *</label>
+                                    <input type="number" class="form-control" id="updateSoLuongToiDa"
+                                        v-model="update_lop_hoc.so_luong" min="1" max="30" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="updateTinhTrang" class="form-label">Tình Trạng</label>
+                                    <select v-model="update_lop_hoc.is_block" class="form-select">
+                                        <option value="0">Hoạt Động</option>
+                                        <option value="1">Tạm Ngừng</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
                                     <label for="updateGiaoVienChuNhiem" class="form-label">Giáo Viên Chủ Nhiệm *</label>
                                     <select class="form-select" id="updateGiaoVienChuNhiem"
-                                        v-model="update_lop_hoc.id_giao_vien_chu_nhiem" required>
+                                        v-model="update_lop_hoc.id_giao_vien" required>
                                         <option value="">Chọn giáo viên</option>
                                         <option v-for="gv in list_giao_vien" :key="gv.id" :value="gv.id">
                                             {{ gv.ho_va_ten }}
@@ -304,53 +318,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updatePhongHoc" class="form-label">Phòng Học *</label>
-                                    <input type="text" class="form-control" id="updatePhongHoc"
-                                        v-model="update_lop_hoc.phong_hoc" required />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateThoiGianHoc" class="form-label">Thời Gian Học *</label>
-                                    <input type="text" class="form-control" id="updateThoiGianHoc"
-                                        v-model="update_lop_hoc.thoi_gian_hoc" placeholder="VD: 7:30 - 17:00"
-                                        required />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateHocPhi" class="form-label">Học Phí (VNĐ) *</label>
-                                    <input type="number" class="form-control" id="updateHocPhi"
-                                        v-model="update_lop_hoc.hoc_phi" min="0" required />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateTinhTrang" class="form-label">Tình Trạng</label>
-                                    <select v-model="update_lop_hoc.tinh_trang" class="form-select">
-                                        <option value="1">Hoạt Động</option>
-                                        <option value="0">Tạm Ngừng</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="updateGhiChu" class="form-label">Ghi Chú</label>
-                                    <input type="text" class="form-control" id="updateGhiChu"
-                                        v-model="update_lop_hoc.ghi_chu" placeholder="Ghi chú về lớp học..." />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="updateMoTa" class="form-label">Mô Tả Lớp Học</label>
-                            <textarea class="form-control" id="updateMoTa" rows="3" v-model="update_lop_hoc.mo_ta"
-                                placeholder="Mô tả chi tiết về lớp học..."></textarea>
                         </div>
                     </form>
                 </div>
@@ -389,8 +356,8 @@
                         <div class="alert alert-warning" role="alert">
                             <strong>Thông tin lớp học:</strong><br>
                             <strong>Tên lớp:</strong> {{ delete_lop_hoc.ten_lop }}<br>
-                            <strong>Mã lớp:</strong> {{ delete_lop_hoc.ma_lop }}<br>
-                            <strong>Độ tuổi:</strong> {{ delete_lop_hoc.do_tuoi }} tuổi
+                            <strong>Khối lớp:</strong> {{ delete_lop_hoc.ten_khoi_lop || 'N/A' }}<br>
+                            <strong>Năm học:</strong> {{ delete_lop_hoc.ten_nam_hoc || 'N/A' }}
                         </div>
                         <p class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
@@ -407,6 +374,180 @@
                         <i v-if="loading" class="fas fa-spinner fa-spin me-1"></i>
                         <i v-else class="fas fa-trash me-1"></i>
                         {{ loading ? 'Đang xử lý...' : 'Xóa Lớp Học' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi Tiết Lớp Học -->
+    <div class="modal fade" id="chiTietModal" tabindex="-1" aria-labelledby="chiTietModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chiTietModalLabel">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Chi Tiết Lớp Học
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông Tin Lớp Học -->
+                    <div class="class-detail-section mb-4">
+                        <h6 class="section-title">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Thông Tin Lớp Học
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-tag me-2"></i>
+                                        Tên Lớp:
+                                    </div>
+                                    <div class="info-value">{{ selected_lop_hoc.ten_lop || 'N/A' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-book me-2"></i>
+                                        Khối Lớp:
+                                    </div>
+                                    <div class="info-value">{{ selected_lop_hoc.ten_khoi_lop || 'N/A' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        Độ Tuổi:
+                                    </div>
+                                    <div class="info-value">{{ selected_lop_hoc.do_tuoi || 'N/A' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar me-2"></i>
+                                        Năm Học:
+                                    </div>
+                                    <div class="info-value">{{ selected_lop_hoc.ten_nam_hoc || 'N/A' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-user-tie me-2"></i>
+                                        Giáo Viên Chủ Nhiệm:
+                                    </div>
+                                    <div class="info-value">{{ selected_lop_hoc.ten_giao_vien || 'Chưa phân công' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-users me-2"></i>
+                                        Số Lượng Học Sinh:
+                                    </div>
+                                    <div class="info-value">
+                                        {{ selected_lop_hoc.tong_hoc_sinh || 0 }} / {{ selected_lop_hoc.so_luong || 0 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Trạng Thái:
+                                    </div>
+                                    <div class="info-value">
+                                        <span v-if="selected_lop_hoc.is_block == 0" class="badge bg-success">Hoạt
+                                            Động</span>
+                                        <span v-else class="badge bg-warning">Tạm Ngừng</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Danh Sách Học Sinh -->
+                    <div class="students-detail-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-child me-2"></i>
+                            Danh Sách Học Sinh
+                            <span class="badge bg-primary ms-2">{{ list_hoc_sinh_lop.length }}</span>
+                        </h6>
+
+                        <div v-if="loading_students" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Đang tải...</span>
+                            </div>
+                            <p class="mt-2">Đang tải danh sách học sinh...</p>
+                        </div>
+
+                        <div v-else-if="list_hoc_sinh_lop.length === 0" class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Lớp học chưa có học sinh nào</p>
+                        </div>
+
+                        <div v-else class="table-container">
+                            <table class="table table-modern table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>Tên Học Sinh</th>
+                                        <th>Phụ Huynh</th>
+                                        <th>Quan Hệ</th>
+                                        <th>Số Điện Thoại</th>
+                                        <th>Địa Chỉ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(hs, index) in list_hoc_sinh_lop" :key="hs.id">
+                                        <td class="text-center">{{ index + 1 }}</td>
+                                        <td>
+                                            <div class="student-name">
+                                                <i class="fas fa-user-graduate me-2 text-primary"></i>
+                                                <strong>{{ hs.ho_va_ten || 'N/A' }}</strong>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="parent-name">
+                                                <i class="fas fa-user me-2 text-info"></i>
+                                                {{ hs.ten_phu_huynh || 'N/A' }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ hs.quan_he || 'N/A' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="phone-number">
+                                                <i class="fas fa-phone me-2 text-success"></i>
+                                                <a :href="`tel:${hs.so_dien_thoai}`" class="text-decoration-none">
+                                                    {{ hs.so_dien_thoai || 'N/A' }}
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="address">
+                                                <i class="fas fa-map-marker-alt me-2 text-danger"></i>
+                                                <span>{{ hs.dia_chi || 'N/A' }}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Đóng
                     </button>
                 </div>
             </div>
@@ -436,18 +577,19 @@
                                 <label for="maLop" class="form-label">Năm Học *</label>
                                 <select class="form-select" id="doTuoi" v-model="create_lop_hoc.id_nam_hoc" required>
                                     <option value="">Chọn Năm Học</option>
-                                    <option v-for="nh in list_nam_hoc" :key="nh.id" :value="nh.id">{{ nh.ten_nam_hoc }}</option>
+                                    <option v-for="nh in list_nam_hoc" :key="nh.id" :value="nh.id">{{ nh.ten_nam_hoc }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="doTuoi" class="form-label">Độ Tuổi *</label>
+                                <label for="doTuoi" class="form-label">Khối Lớp *</label>
                                 <select class="form-select" id="doTuoi" v-model="create_lop_hoc.id_khoi_lop" required>
-                                    <option value="">Chọn độ tuổi</option>
-                                    <option value="1">3-4 tuổi (Lớp Mầm)</option>
-                                    <option value="2">4-5 tuổi (Lớp Chồi)</option>
-                                    <option value="3">5-6 tuổi (Lớp Lá)</option>
+                                    <option value="">Chọn khối lớp</option>
+                                    <option v-for="kl in list_khoi_lop" :key="kl.id" :value="kl.id">
+                                        {{ kl.ten_khoi_lop }} ({{ kl.do_tuoi }} tuổi)
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -459,8 +601,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="giaoVienChuNhiem" class="form-label">Giáo Viên Chủ Nhiệm *</label>
-                                <select class="form-select" id="giaoVienChuNhiem"
-                                    v-model="create_lop_hoc.id_giao_vien" required>
+                                <select class="form-select" id="giaoVienChuNhiem" v-model="create_lop_hoc.id_giao_vien"
+                                    required>
                                     <option value="">Chọn giáo viên</option>
                                     <option v-for="gv in list_giao_vien" :key="gv.id" :value="gv.id">
                                         {{ gv.ho_va_ten }}
@@ -468,42 +610,11 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="phongHoc" class="form-label">Phòng Học *</label>
-                                <input type="text" class="form-control" id="phongHoc" v-model="create_lop_hoc.phong_hoc"
-                                    required />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="thoiGianHoc" class="form-label">Thời Gian Học *</label>
-                                <input type="text" class="form-control" id="thoiGianHoc"
-                                    v-model="create_lop_hoc.thoi_gian_hoc" placeholder="VD: 7:30 - 17:00" required />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="hocPhi" class="form-label">Học Phí (VNĐ) *</label>
-                                <input type="number" class="form-control" id="hocPhi" v-model="create_lop_hoc.hoc_phi"
-                                    min="0" required />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
                                 <label for="tinhTrang" class="form-label">Tình Trạng</label>
-                                <select v-model="create_lop_hoc.tinh_trang" class="form-select">
-                                    <option value="1">Hoạt Động</option>
-                                    <option value="0">Tạm Ngừng</option>
+                                <select v-model="create_lop_hoc.is_block" class="form-select">
+                                    <option value="0">Hoạt Động</option>
+                                    <option value="1">Tạm Ngừng</option>
                                 </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="ghiChu" class="form-label">Ghi Chú</label>
-                                <input type="text" class="form-control" id="ghiChu" v-model="create_lop_hoc.ghi_chu"
-                                    placeholder="Ghi chú về lớp học..." />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <label for="moTa" class="form-label">Mô Tả Lớp Học</label>
-                                <textarea class="form-control" id="moTa" rows="3" v-model="create_lop_hoc.mo_ta"
-                                    placeholder="Mô tả chi tiết về lớp học..."></textarea>
                             </div>
                         </div>
                     </form>
@@ -527,45 +638,47 @@
 <script>
 import axios from "axios";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
+import { ExcelExportMixin } from '../../../mixins/ExcelExportMixin';
 
 export default {
+    mixins: [ExcelExportMixin],
     data() {
         return {
             list_lop_hoc: [],
             list_giao_vien: [],
             list_nam_hoc: [],
+            list_khoi_lop: [
+                { id: 1, ten_khoi_lop: "Nhà trẻ", do_tuoi: "18-36 tháng" },
+                { id: 2, ten_khoi_lop: "Mầm", do_tuoi: "3-4 tuổi" },
+                { id: 3, ten_khoi_lop: "Chồi", do_tuoi: "4-5 tuổi" },
+                { id: 4, ten_khoi_lop: "Lá", do_tuoi: "5-6 tuổi" },
+            ],
             create_lop_hoc: {
                 ten_lop: "",
-                ma_lop: "",
-                do_tuoi: "",
-                so_luong_toi_da: "",
-                id_giao_vien_chu_nhiem: "",
-                phong_hoc: "",
-                thoi_gian_hoc: "",
+                id_khoi_lop: "",
+                id_nam_hoc: "",
+                so_luong: "",
+                id_giao_vien: "",
                 hoc_phi: "",
-                is_block: "1",
+                is_block: "0",
                 ghi_chu: "",
                 mo_ta: "",
             },
             update_lop_hoc: {
                 id: "",
                 ten_lop: "",
-                ma_lop: "",
-                do_tuoi: "",
-                so_luong_toi_da: "",
-                id_giao_vien_chu_nhiem: "",
-                phong_hoc: "",
-                thoi_gian_hoc: "",
-                hoc_phi: "",
+                id_khoi_lop: "",
+                id_nam_hoc: "",
+                so_luong: "",
+                id_giao_vien: "",
                 is_block: "",
-                ghi_chu: "",
                 mo_ta: "",
             },
             delete_lop_hoc: {
                 id: "",
                 ten_lop: "",
-                ma_lop: "",
-                do_tuoi: "",
+                ten_khoi_lop: "",
+                ten_nam_hoc: "",
             },
             search: {
                 noi_dung: "",
@@ -573,6 +686,9 @@ export default {
                 do_tuoi: "",
             },
             loading: false,
+            selected_lop_hoc: {},
+            list_hoc_sinh_lop: [],
+            loading_students: false,
         };
     },
 
@@ -583,6 +699,20 @@ export default {
     },
 
     methods: {
+        exportClassesExcel() {
+            const columns = [
+                { header: 'Tên Lớp', value: 'ten_lop', width: 25 },
+                { header: 'Khối Lớp', value: 'ten_khoi_lop', width: 20 },
+                { header: 'Độ Tuổi', value: 'do_tuoi', width: 15 },
+                { header: 'Năm Học', value: 'ten_nam_hoc', width: 20 },
+                { header: 'Giáo Viên', value: 'ten_giao_vien', width: 25 },
+                { header: 'Sĩ Số', value: (item) => `${item.tong_hoc_sinh || 0}/${item.so_luong}`, width: 15 },
+                { header: 'Trạng Thái', value: (item) => item.is_block == 0 ? 'Hoạt động' : 'Tạm ngừng', width: 15 }
+            ];
+            
+            this.exportToExcel(this.list_lop_hoc, columns, 'danh-sach-lop-hoc');
+        },
+
         formatCurrency(amount) {
             if (!amount) return "0 VNĐ";
             return new Intl.NumberFormat('vi-VN', {
@@ -592,12 +722,12 @@ export default {
         },
 
         getTotalStudents() {
-            return this.list_lop_hoc.reduce((total, lop) => total + (lop.so_hoc_sinh || 0), 0);
+            return this.list_lop_hoc.reduce((total, lop) => total + (parseInt(lop.tong_hoc_sinh) || 0), 0);
         },
 
         getStudentPercentage(lop) {
-            if (!lop.so_luong_toi_da || lop.so_luong_toi_da === 0) return 0;
-            return Math.round(((lop.so_hoc_sinh || 0) / lop.so_luong_toi_da) * 100);
+            if (!lop.so_luong || lop.so_luong === 0) return 0;
+            return Math.round(((parseInt(lop.tong_hoc_sinh) || 0) / lop.so_luong) * 100);
         },
 
         loadNamHoc() {
@@ -609,6 +739,7 @@ export default {
                     }
                 });
         },
+
         loadData() {
             baseRequestAdmin
                 .get("admin/lop-hoc/data")
@@ -693,9 +824,44 @@ export default {
         },
 
         CapNhatLopHoc() {
+            // Validate required fields
+            if (!this.update_lop_hoc.id) {
+                this.$toast.error("Không tìm thấy ID lớp học");
+                return;
+            }
+            if (!this.update_lop_hoc.ten_lop) {
+                this.$toast.error("Vui lòng nhập tên lớp");
+                return;
+            }
+            if (!this.update_lop_hoc.id_khoi_lop) {
+                this.$toast.error("Vui lòng chọn khối lớp");
+                return;
+            }
+            if (!this.update_lop_hoc.id_nam_hoc) {
+                this.$toast.error("Vui lòng chọn năm học");
+                return;
+            }
+            if (!this.update_lop_hoc.id_giao_vien) {
+                this.$toast.error("Vui lòng chọn giáo viên chủ nhiệm");
+                return;
+            }
+
             this.loading = true;
+
+            // Prepare data for update
+            const updateData = {
+                id: this.update_lop_hoc.id,
+                ten_lop: this.update_lop_hoc.ten_lop,
+                id_khoi_lop: parseInt(this.update_lop_hoc.id_khoi_lop),
+                id_nam_hoc: parseInt(this.update_lop_hoc.id_nam_hoc),
+                so_luong: parseInt(this.update_lop_hoc.so_luong) || 0,
+                id_giao_vien: parseInt(this.update_lop_hoc.id_giao_vien),
+                is_block: parseInt(this.update_lop_hoc.is_block) || 0,
+                mo_ta: this.update_lop_hoc.mo_ta || "",
+            };
+
             baseRequestAdmin
-                .post("admin/lop-hoc/update", this.update_lop_hoc)
+                .post("admin/lop-hoc/update", updateData)
                 .then((res) => {
                     if (res.data.status) {
                         this.$toast.success(res.data.message);
@@ -723,14 +889,31 @@ export default {
         },
 
         XoaLopHoc() {
+            // Validate
+            if (!this.delete_lop_hoc.id) {
+                this.$toast.error("Không tìm thấy ID lớp học");
+                return;
+            }
+
             this.loading = true;
+
+            // Only send ID for delete
+            const deleteData = {
+                id: this.delete_lop_hoc.id
+            };
+
             baseRequestAdmin
-                .post("admin/lop-hoc/delete", this.delete_lop_hoc)
+                .post("admin/lop-hoc/delete", deleteData)
                 .then((res) => {
                     if (res.data.status) {
                         this.$toast.success(res.data.message);
                         this.loadData();
-                        this.delete_lop_hoc = {};
+                        this.delete_lop_hoc = {
+                            id: "",
+                            ten_lop: "",
+                            ten_khoi_lop: "",
+                            ten_nam_hoc: "",
+                        };
                         // Đóng modal
                         const modal = bootstrap.Modal.getInstance(document.getElementById("xoaModal"));
                         if (modal) modal.hide();
@@ -754,8 +937,26 @@ export default {
         },
 
         TiemKiem() {
+            // Chuẩn bị dữ liệu tìm kiếm - chỉ gửi các field có giá trị
+            const searchData = {};
+
+            if (this.search.noi_dung && this.search.noi_dung.trim()) {
+                searchData.noi_dung = this.search.noi_dung.trim();
+            }
+
+            if (this.search.is_block !== "" && this.search.is_block !== null) {
+                // Frontend: 1 = Hoạt động, 0 = Tạm ngừng
+                // Backend sẽ đảo ngược: frontend 1 => database 0, frontend 0 => database 1
+                searchData.is_block = this.search.is_block;
+            }
+
+            if (this.search.do_tuoi && this.search.do_tuoi.trim()) {
+                // Backend sẽ thêm " tuổi" vào giá trị (ví dụ: "3-4" => "3-4 tuổi")
+                searchData.do_tuoi = this.search.do_tuoi.trim();
+            }
+
             baseRequestAdmin
-                .post("admin/lop-hoc/search", this.search)
+                .post("admin/lop-hoc/search", searchData)
                 .then((res) => {
                     if (res.data.status) {
                         this.$toast.success(res.data.message);
@@ -777,23 +978,110 @@ export default {
         },
 
         viewClassDetails(lop) {
-            // Implement view class details functionality
-            alert(`Xem chi tiết lớp học: ${lop.ten_lop}`);
+            if (!lop || !lop.id) {
+                this.$toast.error("Không tìm thấy thông tin lớp học");
+                return;
+            }
+
+            this.selected_lop_hoc = {};
+            this.list_hoc_sinh_lop = [];
+            this.loading_students = true;
+
+            // Load chi tiết lớp học và danh sách học sinh
+            baseRequestAdmin
+                .get(`admin/lop-hoc/chi-tiet-lop/data?id=${lop.id}`)
+                .then((res) => {
+                    if (res.data.status) {
+                        // Lấy thông tin lớp học từ response
+                        const thongTinLop = res.data.data.thong_tin_lop || {};
+                        const danhSachHocSinh = res.data.data.danh_sach_hoc_sinh || [];
+
+                        // Gán thông tin lớp học và tính tổng học sinh
+                        this.selected_lop_hoc = {
+                            ...thongTinLop,
+                            tong_hoc_sinh: danhSachHocSinh.length
+                        };
+
+                        // Map dữ liệu học sinh từ backend sang format template
+                        this.list_hoc_sinh_lop = danhSachHocSinh.map(hs => ({
+                            id: hs.id,
+                            ho_va_ten: hs.ten_hoc_sinh || 'N/A',
+                            ten_phu_huynh: hs.ten_phu_huynh || 'N/A',
+                            quan_he: hs.quan_he || 'N/A',
+                            so_dien_thoai: hs.so_dien_thoai || 'N/A',
+                            dia_chi: hs.dia_chi || 'N/A'
+                        }));
+
+                        // Mở modal
+                        const modal = new bootstrap.Modal(document.getElementById("chiTietModal"));
+                        modal.show();
+                    } else {
+                        this.$toast.error(res.data.message);
+                    }
+                })
+                .catch((err) => {
+                    const listErr = err.response?.data?.errors;
+                    if (listErr) {
+                        Object.values(listErr).forEach((error) => {
+                            this.$toast.error(error[0]);
+                        });
+                    } else {
+                        this.$toast.error("Có lỗi xảy ra khi tải chi tiết lớp học");
+                    }
+                })
+                .finally(() => {
+                    this.loading_students = false;
+                });
         },
 
         resetCreateForm() {
             this.create_lop_hoc = {
                 ten_lop: "",
-                ma_lop: "",
-                do_tuoi: "",
-                so_luong_toi_da: "",
-                id_giao_vien_chu_nhiem: "",
-                phong_hoc: "",
-                thoi_gian_hoc: "",
+                id_khoi_lop: "",
+                id_nam_hoc: "",
+                so_luong: "",
+                id_giao_vien: "",
                 hoc_phi: "",
                 is_block: "0",
                 ghi_chu: "",
                 mo_ta: "",
+            };
+        },
+
+        OpenUpdateModal(value) {
+            // Reset form first
+            this.update_lop_hoc = {
+                id: "",
+                ten_lop: "",
+                id_khoi_lop: "",
+                id_nam_hoc: "",
+                so_luong: "",
+                id_giao_vien: "",
+                is_block: "0",
+                mo_ta: "",
+            };
+
+            // Then assign values from backend - ensure proper type conversion
+            this.$nextTick(() => {
+                this.update_lop_hoc = {
+                    id: value.id ? String(value.id) : "",
+                    ten_lop: value.ten_lop || "",
+                    id_khoi_lop: (value.id_khoi_lop !== undefined && value.id_khoi_lop !== null) ? String(value.id_khoi_lop) : "",
+                    id_nam_hoc: (value.id_nam_hoc !== undefined && value.id_nam_hoc !== null) ? String(value.id_nam_hoc) : "",
+                    so_luong: (value.so_luong !== undefined && value.so_luong !== null) ? String(value.so_luong) : "",
+                    id_giao_vien: (value.id_giao_vien !== undefined && value.id_giao_vien !== null) ? String(value.id_giao_vien) : "",
+                    is_block: (value.is_block !== undefined && value.is_block !== null) ? String(value.is_block) : "0",
+                    mo_ta: value.mo_ta || "",
+                };
+            });
+        },
+
+        OpenDeleteModal(value) {
+            this.delete_lop_hoc = {
+                id: value.id ? String(value.id) : "",
+                ten_lop: value.ten_lop || "",
+                ten_khoi_lop: value.ten_khoi_lop || "",
+                ten_nam_hoc: value.ten_nam_hoc || "",
             };
         },
     },

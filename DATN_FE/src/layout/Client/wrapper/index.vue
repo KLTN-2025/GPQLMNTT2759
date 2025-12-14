@@ -5,11 +5,13 @@
       <router-view />
     </div>
     <BotClient />
+    <ChatAI />
   </div>
 </template>
 <script>
 import TopClient from "../components/Top/index.vue";
 import BotClient from "../components/Bottom/index.vue";
+import ChatAI from "../components/ChatAI/index.vue";
 import "../../../assets/js/bootstrap.bundle.min.js";
 import "../../../assets/js/jquery.min.js";
 import "../../../assets/plugins/simplebar/js/simplebar.min.js";
@@ -23,6 +25,7 @@ export default {
   components: {
     TopClient,
     BotClient,
+    ChatAI,
   },
   mounted() {
     // Đảm bảo scroll về đầu trang khi component được mount

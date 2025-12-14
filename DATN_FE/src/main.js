@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import "./plugins/echo";
 import Default from "./layout/Admin/wrapper/index.vue";
 import Client from "./layout/Client/wrapper/index.vue";
 import Blank from "./layout/Blank/wrapper/index.vue";
@@ -36,4 +37,3 @@ app.component("blank-layout", Blank);
 app.component("teacher-layout", Teacher);
 
 app.mount("#app");
-

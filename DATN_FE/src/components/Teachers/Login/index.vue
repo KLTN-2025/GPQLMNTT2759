@@ -49,7 +49,7 @@
                         <input class="form-check-input" type="checkbox" id="remember" />
                         <label class="form-check-label text-white" for="remember">Ghi nhớ đăng nhập</label>
                     </div>
-                    <a href="#" class="text-primary small">Quên mật khẩu?</a>
+                    <button @click="goToForgotPassword" class="btn-forgot-password">Quên mật khẩu?</button>
                 </div>
 
                 <button @click="DangNhap()" class="btn btn-gradient w-100">Đăng Nhập</button>
@@ -84,7 +84,7 @@ export default {
                         toaster.success(res.data.message)
                         this.user = {};
                         localStorage.setItem('token_giao_vien', res.data.token);
-                        this.$router.push('/teacher/dashboard');
+                        this.$router.push('/teacher');
                     } else {
                         toaster.error(res.data?.message || 'Đăng nhập thất bại');
                     }
@@ -99,6 +99,9 @@ export default {
                         toaster.error('Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại.');
                     }
                 });
+        },
+        goToForgotPassword() {
+            this.$router.push('/teacher/forgot-password');
         }
     }
 }
@@ -211,5 +214,22 @@ export default {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-50%);
     z-index: 0;
+}
+
+.btn-forgot-password {
+    background: transparent;
+    border: none;
+    color: #7873f5;
+    font-weight: 500;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.btn-forgot-password:hover {
+    color: #ff6ec4;
+    text-decoration: underline;
 }
 </style>

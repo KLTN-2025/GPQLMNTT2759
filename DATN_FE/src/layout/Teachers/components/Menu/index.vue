@@ -8,7 +8,7 @@
             <div class="form-nav">
                 <div class="nav-menu">
                     <div class="item-home" @click="goToDashboard">Dashboard</div>
-                    <div class="item-home" @click="goToMyClass">Lớp học của tôi</div>
+                    <div class="item-home" @click="goToMyClass">Lớp học</div>
                     <div class="item-home" @click="goToAttendance">Điểm danh</div>
 
                     <!-- Hoạt động -->
@@ -17,15 +17,13 @@
                         <transition name="fade-slide">
                             <v-card class="blog-dropdown" v-show="hoverActivity">
                                 <v-list v-model:opened="open">
-                                    <v-list-item @click="goToAssignments" title="Bài tập" />
-                                    <v-list-item @click="goToSchedule" title="Lịch dạy" />
-                                    <v-list-item @click="goToNotes" title="Sổ đầu bài" />
+                                    <v-list-item @click="goToSchedule" title="Lịch làm việc" />
+                                    <v-list-item @click="goToLessonPlan" title="Kế hoạch dạy học" />
+                                    <v-list-item @click="goToNotes" title="Ghi chú" />
                                 </v-list>
                             </v-card>
                         </transition>
                     </div>
-
-                    <div class="item-home" @click="goToNotebook">Sổ liên lạc</div>
                     <div class="item-home" @click="goToMessages">Tin nhắn</div>
                     <div class="item-home" @click="goToHealth">Sức khỏe</div>
 
@@ -75,23 +73,18 @@
                 <i class="bx" :class="activeSubMenu === 'activity' ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
             </div>
             <div v-show="activeSubMenu === 'activity'" class="sidebar-sub">
-                <div class="sub-item" @click="goToAssignments">
-                    <i class="bx bx-book"></i>
-                    <span>Bài tập</span>
-                </div>
                 <div class="sub-item" @click="goToSchedule">
                     <i class="bx bx-calendar"></i>
-                    <span>Lịch dạy</span>
+                    <span>Lịch làm việc</span>
+                </div>
+                <div class="sub-item" @click="goToLessonPlan">
+                    <i class="bx bx-book-open"></i>
+                    <span>Kế hoạch dạy học</span>
                 </div>
                 <div class="sub-item" @click="goToNotes">
                     <i class="bx bx-edit"></i>
-                    <span>Sổ đầu bài</span>
+                    <span>Ghi chú</span>
                 </div>
-            </div>
-
-            <div class="sidebar-item" @click="goToNotebook">
-                <i class="bx bx-notebook"></i>
-                <span>Sổ liên lạc</span>
             </div>
 
             <div class="sidebar-item" @click="goToMessages">
@@ -170,13 +163,12 @@ onUnmounted(() => {
 });
 
 // Navigation functions
-function goToDashboard() { router.push("/teacher/dashboard"); closeSidebar(); }
+function goToDashboard() { router.push("/teacher"); closeSidebar(); }
 function goToMyClass() { router.push("/teacher/my-class"); closeSidebar(); }
 function goToAttendance() { router.push("/teacher/attendance"); closeSidebar(); }
-function goToAssignments() { router.push("/teacher/assignments"); closeSidebar(); }
 function goToSchedule() { router.push("/teacher/schedule"); closeSidebar(); }
+function goToLessonPlan() { router.push("/teacher/lesson-plan"); closeSidebar(); }
 function goToNotes() { router.push("/teacher/notes"); closeSidebar(); }
-function goToNotebook() { router.push("/teacher/notebook"); closeSidebar(); }
 function goToMessages() { router.push("/teacher/messages"); closeSidebar(); }
 function goToHealth() { router.push("/teacher/health"); closeSidebar(); }
 function goToReports() { router.push("/teacher/reports"); closeSidebar(); }

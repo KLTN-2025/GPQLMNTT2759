@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import checkAdmin from "./checkAdmin";
 import checkTeacher from "./checkTeacher";
+import checkClient from "./checkClient";
 const routes = [
   // Client Routes
 
@@ -11,8 +12,18 @@ const routes = [
   },
   {
     path: "/login",
-    component: () => import("../components/Client/Auth/Login/index.vue"),
-    meta: { layout: "auth" },
+    component: () => import("../components/Client/Login/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/forgot-password",
+    component: () => import("../components/Client/ForgotPassword/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/reset-password",
+    component: () => import("../components/Client/ResetPassword/index.vue"),
+    meta: { layout: "blank" },
   },
   {
     path: "/blog",
@@ -41,7 +52,7 @@ const routes = [
     meta: { layout: "client" },
   },
   {
-    path: "/blog-detail",
+    path: "/blog-detail/:id",
     component: () => import("../components/Client/BlogDetail/index.vue"),
     meta: { layout: "client" },
   },
@@ -78,13 +89,13 @@ const routes = [
     meta: { layout: "client" },
   },
   {
-    path: "/notebook",
-    component: () => import("../components/Client/Notebook/index.vue"),
+    path: "/notebook-detail",
+    component: () => import("../components/Client/NotebookDetail/index.vue"),
     meta: { layout: "client" },
   },
   {
-    path: "/notebook-detail",
-    component: () => import("../components/Client/NotebookDetail/index.vue"),
+    path: "/notebook",
+    component: () => import("../components/Client/Notebook/index.vue"),
     meta: { layout: "client" },
   },
   {
@@ -119,6 +130,7 @@ const routes = [
     component: () => import("../components/Client/BigProgram/index.vue"),
     meta: { layout: "client" },
   },
+
   {
     path: "/paymentHistory",
     component: () => import("../components/Client/PaymentHistory/index.vue"),
@@ -140,18 +152,24 @@ const routes = [
     meta: { layout: "client" },
   },
   {
-    path: "/re-password",
-    component: () => import("../components/Client/Auth/RePassWord/index.vue"),
-    meta: { layout: "auth" },
+    path: "/about",
+    component: () => import("../components/Client/About/index.vue"),
+    meta: { layout: "client" },
   },
   {
-    path: "/new-password",
-    component: () => import("../components/Client/Auth/NewPassWord/index.vue"),
-    meta: { layout: "auth" },
+    path: "/client/profile",
+    component: () => import("../components/Client/Profile/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: checkClient,
+  },
+  {
+    path: "/client/messages",
+    component: () => import("../components/Client/Messages/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: checkClient,
   },
 
-
-  // {  
+  // {
   //     path : '/register',
   //     component: ()=>import('../components/Client/Register/index.vue'),
   //     meta:{ layout : 'blank' },
@@ -164,11 +182,22 @@ const routes = [
     component: () => import("../components/Teachers/Login/index.vue"),
     meta: { layout: "blank" },
   },
+  {
+    path: "/teacher/forgot-password",
+    component: () => import("../components/Teachers/ForgotPassword/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/teacher/reset-password",
+    component: () => import("../components/Teachers/ResetPassword/index.vue"),
+    meta: { layout: "blank" },
+  },
   // TEACHER - Dashboard
   {
-    path: "/teacher/dashboard",
+    path: "/teacher",
     component: () => import("../components/Teachers/Dashboard/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
   // TEACHER - My Class
   {
@@ -184,46 +213,38 @@ const routes = [
     meta: { layout: "teacher" },
     beforeEnter: checkTeacher,
   },
-  // TEACHER - Assignments
-  {
-    path: "/teacher/assignments",
-    component: () => import("../components/Teachers/Assignments/index.vue"),
-    meta: { layout: "teacher" },
-  },
-  // TEACHER - Schedule
+  // TEACHER - Schedule (Lịch làm việc)
   {
     path: "/teacher/schedule",
     component: () => import("../components/Teachers/Schedule/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
   // TEACHER - Notes
   {
     path: "/teacher/notes",
     component: () => import("../components/Teachers/Notes/index.vue"),
     meta: { layout: "teacher" },
-  },
-  // TEACHER - Notebook
-  {
-    path: "/teacher/notebook",
-    component: () => import("../components/Teachers/Notebook/index.vue"),
-    meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
   // TEACHER - Messages
   {
     path: "/teacher/messages",
     component: () => import("../components/Teachers/Messages/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
   // TEACHER - Health
   {
     path: "/teacher/health",
     component: () => import("../components/Teachers/Health/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
-  // TEACHER - Teaching Plan
+  // TEACHER - Lesson Plan (Kế hoạch dạy học)
   {
-    path: "/teacher/teaching-plan",
-    component: () => import("../components/Teachers/TeachingPlan/index.vue"),
+    path: "/teacher/lesson-plan",
+    component: () => import("../components/Teachers/LessonPlan/index.vue"),
     meta: { layout: "teacher" },
     beforeEnter: checkTeacher,
   },
@@ -239,18 +260,21 @@ const routes = [
     path: "/teacher/reports",
     component: () => import("../components/Teachers/Reports/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
   // TEACHER - Progress
   {
     path: "/teacher/progress",
     component: () => import("../components/Teachers/Progress/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
   // TEACHER - Profile
   {
     path: "/teacher/profile",
     component: () => import("../components/Teachers/Profile/index.vue"),
     meta: { layout: "teacher" },
+    beforeEnter: checkTeacher,
   },
 
 
@@ -262,9 +286,19 @@ const routes = [
     component: () => import("../components/Admin/Login/index.vue"),
     meta: { layout: "blank" },
   },
+  {
+    path: "/admin/forgot-password",
+    component: () => import("../components/Admin/ForgotPassword/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/admin/reset-password",
+    component: () => import("../components/Admin/ResetPassword/index.vue"),
+    meta: { layout: "blank" },
+  },
   // ADMIN - Dashboard
   {
-    path: "/admin/dashboard",
+    path: "/admin",
     component: () => import("../components/Admin/Dashboard/index.vue"),
     beforeEnter: checkAdmin,
   },
@@ -292,17 +326,20 @@ const routes = [
   {
     path: "/admin/giao-vien",
     component: () => import("../components/Admin/Teachers/index.vue"),
+    beforeEnter: checkAdmin,
   },
   // ADMIN - Phụ Huynh
   {
     path: "/admin/phu-huynh",
     component: () => import("../components/Admin/Parents/index.vue"),
+    beforeEnter: checkAdmin,
   },
 
   // ADMIN - Điểm danh
   {
     path: "/admin/diem-danh",
     component: () => import("../components/Admin/Attendance/index.vue"),
+    beforeEnter: checkAdmin,
   },
   // ADMIN - Lớp Học
   {
@@ -329,6 +366,12 @@ const routes = [
   {
     path: "/admin/thuc-don",
     component: () => import("../components/Admin/Menu/index.vue"),
+    beforeEnter: checkAdmin,
+  },
+  // ADMIN - Quản lý Món Ăn
+  {
+    path: "/admin/mon-an",
+    component: () => import("../components/Admin/Menu/Food.vue"),
     beforeEnter: checkAdmin,
   },
   // ADMIN - Tài chính
@@ -381,7 +424,12 @@ const routes = [
     component: () => import("../components/Admin/Articles/index.vue"),
     beforeEnter: checkAdmin,
   },
-
+  // ADMIN - Lịch làm việc
+  {
+    path: "/admin/lich-lam-viec",
+    component: () => import("../components/Admin/Schedule/index.vue"),
+    beforeEnter: checkAdmin,
+  },
 
 ];
 

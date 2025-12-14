@@ -1,5 +1,5 @@
 // Notification Management Styles
-@use "../shared-styles";
+@use "../admin-styles" as admin;
 
 // Notification Title
 .notification-title {
@@ -8,23 +8,31 @@
   gap: 0.25rem;
 
   strong {
-    color: #2c3e50;
+    color: admin.$admin-gray-900;
     font-weight: 600;
   }
 
   small {
     font-size: 0.85rem;
+    color: admin.$admin-gray-500;
+  }
+}
+
+// Send Button (for pending notifications)
+.btn-send {
+  background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+  color: white !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4) !important;
   }
 }
 
 // Type Badge
 .type-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  @include admin.chip-badge(admin.$admin-gray-100, admin.$admin-gray-900);
+  gap: 0.4rem;
   font-weight: 600;
   white-space: nowrap;
 
@@ -33,41 +41,47 @@
   }
 
   &.type-system {
-    background: rgba(108, 117, 125, 0.1);
-    color: #6c757d;
+    @include admin.chip-badge(
+      rgba(admin.$admin-gray-500, 0.15),
+      admin.$admin-gray-500
+    );
   }
 
   &.type-admin {
-    background: rgba(0, 123, 255, 0.1);
-    color: #007bff;
+    @include admin.chip-badge(
+      rgba(admin.$admin-primary, 0.12),
+      admin.$admin-primary
+    );
   }
 
   &.type-classroom {
-    background: rgba(40, 167, 69, 0.1);
-    color: #28a745;
+    @include admin.chip-badge(
+      rgba(admin.$admin-success-start, 0.12),
+      admin.$admin-success-start
+    );
   }
 
   &.type-event {
-    background: rgba(255, 193, 7, 0.1);
-    color: #ffc107;
+    @include admin.chip-badge(
+      rgba(admin.$admin-warning-start, 0.15),
+      admin.$admin-warning-start
+    );
   }
 
   &.type-alert {
-    background: rgba(220, 53, 69, 0.1);
-    color: #dc3545;
+    @include admin.chip-badge(
+      rgba(admin.$admin-danger-start, 0.15),
+      admin.$admin-danger-start
+    );
   }
 }
 
 // Audience Badge
 .audience-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  @include admin.pill-badge(admin.$admin-primary, admin.$admin-secondary);
+  gap: 0.4rem;
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 // User Badge
@@ -75,11 +89,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6c757d;
+  color: admin.$admin-gray-500;
   font-size: 0.9rem;
 
   i {
-    color: #adb5bd;
+    color: admin.$admin-gray-300;
   }
 }
 
@@ -88,46 +102,52 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6c757d;
+  color: admin.$admin-gray-500;
   font-size: 0.9rem;
 
   i {
-    color: #adb5bd;
+    color: admin.$admin-gray-300;
   }
 }
 
 // Filter Section
 .filter-section {
-  background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+  background: admin.$admin-gray-100;
+  border-bottom: 1px solid admin.$admin-gray-300;
 }
 
 // Status Badge Extended
 .status-badge {
   &.status-success {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
+    @include admin.pill-badge(
+      admin.$admin-success-start,
+      admin.$admin-success-end
+    );
   }
 
   &.status-warning {
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
-    color: white;
+    @include admin.pill-badge(
+      admin.$admin-warning-start,
+      admin.$admin-warning-end
+    );
   }
 
   &.status-danger {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    color: white;
+    @include admin.pill-badge(
+      admin.$admin-danger-start,
+      admin.$admin-danger-end
+    );
   }
 }
 
 // Notification Detail
 .notification-detail {
   .detail-header {
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid admin.$admin-gray-200;
     padding-bottom: 1rem;
 
     h4 {
-      color: #2c3e50;
+      color: admin.$admin-gray-900;
       font-weight: 700;
       margin-bottom: 1rem;
     }
@@ -142,19 +162,19 @@
   .detail-content {
     margin: 1.5rem 0;
     padding: 1rem;
-    background: #f8f9fa;
+    background: admin.$admin-gray-100;
     border-radius: 10px;
-    color: #495057;
+    color: admin.$admin-gray-900;
     line-height: 1.8;
   }
 
   .detail-info {
     p {
       margin-bottom: 0.5rem;
-      color: #6c757d;
+      color: admin.$admin-gray-500;
 
       strong {
-        color: #2c3e50;
+        color: admin.$admin-gray-900;
       }
     }
   }
@@ -166,11 +186,11 @@
   gap: 0.75rem;
   align-items: center;
   flex-wrap: wrap;
-  
+
   @media (max-width: 768px) {
     width: 100%;
     justify-content: space-between;
-    
+
     button {
       flex: 1;
       min-width: auto;

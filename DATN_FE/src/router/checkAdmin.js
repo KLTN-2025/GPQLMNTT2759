@@ -12,6 +12,9 @@ export default function (to, from, next) {
     .then((res) => {
       if (res.data.status) {
         localStorage.setItem("ho_ten_admin", res.data.ho_va_ten);
+        localStorage.setItem("avatar_admin", res.data.avatar);
+        localStorage.setItem("chuc_vu_admin", res.data.chuc_vu);
+        localStorage.setItem("email_admin", res.data.email);
         next();
       } else {
         next("/admin/login");

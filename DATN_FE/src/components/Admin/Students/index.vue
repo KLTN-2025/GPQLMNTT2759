@@ -74,11 +74,13 @@
     <div class="col-xl-3 col-md-6">
       <div class="stats-card stats-info">
         <div class="stats-icon">
-          <i class="fas fa-graduation-cap"></i>
+          <i class="fas fa-mars"></i>
         </div>
         <div class="stats-content">
-          <h3 class="stats-number">{{ getUniqueClasses().length }}</h3>
-          <p class="stats-label">Lớp Học</p>
+          <h3 class="stats-number">
+            {{list_hoc_sinh.filter((hs) => hs.gioi_tinh == 1).length}}
+          </h3>
+          <p class="stats-label">Học Sinh Nam</p>
         </div>
       </div>
     </div>
@@ -97,10 +99,15 @@
               <p class="card-subtitle">Quản lý thông tin học sinh hệ thống</p>
             </div>
           </div>
-          <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
-            <i class="fas fa-user-plus"></i>
-            Thêm Học Sinh
-          </button>
+          <div class="header-actions">
+            <button class="btn btn-outline-success btn-sm me-2" @click="exportStudentsExcel">
+              <i class="fas fa-file-excel"></i> Xuất Excel
+            </button>
+            <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#themModal">
+              <i class="fas fa-user-plus"></i>
+              Thêm Học Sinh
+            </button>
+          </div>
         </div>
 
         <div class="card-body">
@@ -123,11 +130,9 @@
                 </select>
                 <select v-on:change="TiemKiem()" class="filter-select" v-model="search.lop_hoc">
                   <option value="">Tất cả lớp</option>
-                  <option value="Lớp Mầm">Lớp Mầm</option>
-                  <option value="Lớp Chồi">Lớp Chồi</option>
-                  <option value="Lớp Lá">Lớp Lá</option>
-                  <option value="Lớp Hoa">Lớp Hoa</option>
-                  <option value="Lớp Búp">Lớp Búp</option>
+                  <option v-for="lop in list_lop_hoc" :key="lop.id" :value="lop.ten_lop">
+                    {{ lop.ten_lop }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -143,7 +148,7 @@
                   <th class="text-center">Thông Tin</th>
                   <th class="text-center">Lớp Học</th>
                   <th class="text-center">Phụ Huynh</th>
-                  <th class="text-center">Ngày Nhập Học</th>
+                  <th class="text-center">Địa Chỉ</th>
                   <th class="text-center">Trạng Thái</th>
                   <th class="text-center">Thao Tác</th>
                 </tr>
@@ -169,23 +174,20 @@
                       <div class="info-group">
                         <div class="info-item">
                           <i
-                            :class="value.gioi_tinh === 1 ? 'fas fa-mars text-primary' : 'fas fa-venus text-danger'"></i>
-                          <span>{{ value.gioi_tinh === 1 ? "Nam" : "Nữ" }}</span>
+                            :class="value.gioi_tinh == 1 ? 'fas fa-mars text-primary' : 'fas fa-venus text-danger'"></i>
+                          <span>{{ value.gioi_tinh == 1 ? "Nam" : "Nữ" }}</span>
                         </div>
                         <div class="info-item">
                           <i class="fas fa-birthday-cake"></i>
                           <span>{{ formatDate(value.ngay_sinh) }}</span>
                         </div>
-                        <div class="info-item" v-if="value.ghi_chu">
-                          <i class="fas fa-sticky-note"></i>
-                          <span>{{ value.ghi_chu }}</span>
-                        </div>
+
                       </div>
                     </td>
                     <td class="text-center">
                       <span class="class-badge">
                         <i class="fas fa-graduation-cap"></i>
-                        {{ value.lop_hoc }}
+                        {{ value.ten_lop }}
                       </span>
                     </td>
                     <td class="text-center">
@@ -195,9 +197,8 @@
                       </div>
                     </td>
                     <td class="text-center">
-                      <div class="date-info">
-                        <div class="date">{{ formatDate(value.ngay_nhap_hoc) }}</div>
-                        <small class="duration">{{ getStudyDuration(value.ngay_nhap_hoc) }}</small>
+                      <div class="address-info">
+                        <span>{{ value.dia_chi || 'Chưa cập nhật' }}</span>
                       </div>
                     </td>
                     <td class="text-center">
@@ -276,13 +277,11 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label for="updateLopHoc" class="form-label">Lớp Học *</label>
-                  <select class="form-select" id="updateLopHoc" v-model="update_hoc_sinh.lop_hoc" required>
+                  <select class="form-select" id="updateLopHoc" v-model="update_hoc_sinh.id_lop_hoc" required>
                     <option value="">Chọn lớp học</option>
-                    <option value="Lớp Mầm">Lớp Mầm</option>
-                    <option value="Lớp Chồi">Lớp Chồi</option>
-                    <option value="Lớp Lá">Lớp Lá</option>
-                    <option value="Lớp Hoa">Lớp Hoa</option>
-                    <option value="Lớp Búp">Lớp Búp</option>
+                    <option v-for="lop in list_lop_hoc" :key="lop.id" :value="lop.id">
+                      {{ lop.ten_lop }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -301,9 +300,9 @@
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label for="updateNgayNhapHoc" class="form-label">Ngày Nhập Học *</label>
-                  <input type="date" class="form-control" id="updateNgayNhapHoc" v-model="update_hoc_sinh.ngay_nhap_hoc"
-                    required />
+                  <label for="updateDiaChi" class="form-label">Địa Chỉ *</label>
+                  <input type="text" class="form-control" id="updateDiaChi" v-model="update_hoc_sinh.dia_chi"
+                    placeholder="Nhập địa chỉ" required />
                 </div>
               </div>
             </div>
@@ -324,11 +323,6 @@
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <label for="updateGhiChu" class="form-label">Ghi Chú</label>
-              <textarea class="form-control" id="updateGhiChu" rows="3" v-model="update_hoc_sinh.ghi_chu"
-                placeholder="Ghi chú về học sinh..."></textarea>
             </div>
           </form>
         </div>
@@ -425,13 +419,11 @@
               </div>
               <div class="col-md-6">
                 <label for="lopHoc" class="form-label">Lớp Học *</label>
-                <select class="form-select" id="lopHoc" v-model="create_hoc_sinh.lop_hoc" required>
+                <select class="form-select" id="lopHoc" v-model="create_hoc_sinh.id_lop_hoc" required>
                   <option value="">Chọn lớp học</option>
-                  <option value="Lớp Mầm">Lớp Mầm</option>
-                  <option value="Lớp Chồi">Lớp Chồi</option>
-                  <option value="Lớp Lá">Lớp Lá</option>
-                  <option value="Lớp Hoa">Lớp Hoa</option>
-                  <option value="Lớp Búp">Lớp Búp</option>
+                  <option v-for="lop in list_lop_hoc" :key="lop.id" :value="lop.id">
+                    {{ lop.ten_lop }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -446,9 +438,9 @@
                 </select>
               </div>
               <div class="col-md-6">
-                <label for="ngayNhapHoc" class="form-label">Ngày Nhập Học *</label>
-                <input type="date" class="form-control" id="ngayNhapHoc" v-model="create_hoc_sinh.ngay_nhap_hoc"
-                  required />
+                <label for="diaChi" class="form-label">Địa Chỉ *</label>
+                <input type="text" class="form-control" id="diaChi" v-model="create_hoc_sinh.dia_chi"
+                  placeholder="Nhập địa chỉ" required />
               </div>
             </div>
             <div class="row">
@@ -463,13 +455,6 @@
                   <option value="1">Đang Học</option>
                   <option value="0">Tạm Nghỉ</option>
                 </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <label for="ghiChu" class="form-label">Ghi Chú</label>
-                <textarea class="form-control" id="ghiChu" rows="3" v-model="create_hoc_sinh.ghi_chu"
-                  placeholder="Ghi chú về học sinh..."></textarea>
               </div>
             </div>
           </form>
@@ -493,22 +478,24 @@
 <script>
 import axios from "axios";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
+import { ExcelExportMixin } from '../../../mixins/ExcelExportMixin';
 
 export default {
+  mixins: [ExcelExportMixin],
   data() {
     return {
       list_hoc_sinh: [],
       list_phu_huynh: [],
+      list_lop_hoc: [],
       create_hoc_sinh: {
         ho_va_ten: "",
         gioi_tinh: "",
         ngay_sinh: "",
         lop_hoc: "",
         id_phu_huynh: "",
-        ngay_nhap_hoc: "",
+        dia_chi: "",
         avatar: "",
         tinh_trang: "1",
-        ghi_chu: "",
       },
       update_hoc_sinh: {
         id: "",
@@ -517,10 +504,9 @@ export default {
         ngay_sinh: "",
         lop_hoc: "",
         id_phu_huynh: "",
-        ngay_nhap_hoc: "",
+        dia_chi: "",
         avatar: "",
         tinh_trang: "",
-        ghi_chu: "",
       },
       delete_hoc_sinh: {
         id: "",
@@ -540,9 +526,25 @@ export default {
   mounted() {
     this.loadData();
     this.loadPhuHuynh();
+    this.loadLopHoc();
   },
 
   methods: {
+    exportStudentsExcel() {
+      const columns = [
+        { header: 'Họ và Tên', value: 'ho_va_ten', width: 25 },
+        { header: 'Ngày Sinh', value: (item) => this.formatDate(item.ngay_sinh), width: 15 },
+        { header: 'Giới Tính', value: (item) => item.gioi_tinh == 1 ? 'Nam' : 'Nữ', width: 12 },
+        { header: 'Lớp', value: 'ten_lop', width: 20 },
+        { header: 'Phụ Huynh', value: 'ten_phu_huynh', width: 25 },
+        { header: 'Số Điện Thoại', value: 'sdt_phu_huynh', width: 15 },
+        { header: 'Địa Chỉ', value: 'dia_chi', width: 40 },
+        { header: 'Trạng Thái', value: (item) => item.tinh_trang == 1 ? 'Đang học' : 'Tạm nghỉ', width: 15 }
+      ];
+
+      this.exportToExcel(this.list_hoc_sinh, columns, 'danh-sach-hoc-sinh');
+    },
+
     formatDate(dateString) {
       if (!dateString) return "";
       const date = new Date(dateString);
@@ -622,6 +624,19 @@ export default {
         })
         .catch((err) => {
           console.log("Không thể tải danh sách phụ huynh");
+        });
+    },
+
+    loadLopHoc() {
+      baseRequestAdmin
+        .get("admin/lop-hoc/data")
+        .then((res) => {
+          if (res.data.status) {
+            this.list_lop_hoc = res.data.data;
+          }
+        })
+        .catch((err) => {
+          console.log("Không thể tải danh sách lớp học");
         });
     },
 
@@ -763,10 +778,9 @@ export default {
         ngay_sinh: "",
         lop_hoc: "",
         id_phu_huynh: "",
-        ngay_nhap_hoc: "",
+        dia_chi: "",
         avatar: "",
         tinh_trang: "1",
-        ghi_chu: "",
       };
     },
   },

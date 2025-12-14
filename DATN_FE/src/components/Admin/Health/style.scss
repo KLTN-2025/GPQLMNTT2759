@@ -1,207 +1,17 @@
-// Health Management Styles
-.education-theme {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem 0;
-  margin-bottom: 2rem;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
+@use "../admin-styles" as admin;
 
-.page-header {
-  .page-header-content {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .page-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-  }
-
-  .page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0;
-  }
-
-  .page-subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-    margin: 0.5rem 0 0 0;
-  }
-
-  .breadcrumb-nav {
-    .breadcrumb {
-      background: transparent;
-      margin: 0;
-      padding: 0;
-
-      .breadcrumb-item {
-        color: rgba(255, 255, 255, 0.8);
-        
-        &.active {
-          color: white;
-          font-weight: 600;
-        }
-
-        a {
-          color: rgba(255, 255, 255, 0.8);
-          text-decoration: none;
-          
-          &:hover {
-            color: white;
-          }
-        }
-
-        i {
-          margin-right: 0.5rem;
-        }
-      }
-    }
-  }
-}
-
-// Stats Cards
-.stats-card {
-  background: white;
-  border-radius: 15px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: none;
-  height: 100%;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  }
-
-  .stats-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .stats-content {
-    .stats-number {
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 0;
-      color: #2c3e50;
-    }
-
-    .stats-label {
-      font-size: 0.9rem;
-      color: #6c757d;
-      margin: 0.5rem 0 0 0;
-      font-weight: 500;
-    }
-  }
-
-  &.stats-primary .stats-icon {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-  }
-
-  &.stats-success .stats-icon {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-  }
-
-  &.stats-warning .stats-icon {
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
-    color: white;
-  }
-
-  &.stats-danger .stats-icon {
-    background: linear-gradient(135deg, #dc3545, #e83e8c);
-    color: white;
-  }
-}
-
-// Dashboard Cards
-.dashboard-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  height: 100%;
-
-  .card-header-custom {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 1.5rem;
-    border-bottom: 1px solid #dee2e6;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-
-      .header-icon {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-      }
-
-      .header-text {
-        .card-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-          margin: 0;
-          color: #2c3e50;
-        }
-
-        .card-subtitle {
-          font-size: 0.9rem;
-          color: #6c757d;
-          margin: 0.25rem 0 0 0;
-        }
-      }
-    }
-  }
-
-  .card-body {
-    padding: 1.5rem;
-  }
-}
-
-// Health Chart Container
 .health-chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
   .health-chart-item {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    @include admin.card-base($padding: 1.25rem);
+    background: admin.$admin-gray-100;
 
     &:hover {
-      background: #e9ecef;
-      transform: translateX(5px);
+      background: admin.$admin-gray-200;
+      transform: translateX(4px);
     }
 
     .chart-header {
@@ -211,16 +21,18 @@
       margin-bottom: 1rem;
 
       .class-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+
         .class-name {
           font-weight: 600;
-          color: #2c3e50;
-          font-size: 1rem;
+          color: admin.$admin-gray-900;
         }
 
         .student-count {
-          color: #6c757d;
           font-size: 0.85rem;
-          margin-left: 0.5rem;
+          color: admin.$admin-gray-500;
         }
       }
 
@@ -228,41 +40,41 @@
         text-align: right;
 
         .percentage {
-          font-size: 1.5rem;
+          font-size: 1.65rem;
           font-weight: 700;
-          color: #28a745;
+          color: admin.$admin-success-start;
+          display: block;
         }
 
         small {
-          color: #6c757d;
           font-size: 0.8rem;
+          color: admin.$admin-gray-500;
         }
       }
     }
 
     .progress-container {
       .progress-bar {
-        height: 8px;
-        background: #e9ecef;
-        border-radius: 4px;
-        overflow: hidden;
         display: flex;
-        margin-bottom: 0.5rem;
+        height: 10px;
+        background: admin.$admin-gray-200;
+        border-radius: 999px;
+        overflow: hidden;
 
         .progress-fill {
           height: 100%;
-          transition: width 0.6s ease;
+          transition: width 0.4s ease;
 
           &.good {
-            background: linear-gradient(135deg, #28a745, #20c997);
+            @include admin.gradient-bg(admin.$admin-success-start, admin.$admin-success-end);
           }
 
           &.monitor {
-            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            @include admin.gradient-bg(admin.$admin-warning-start, admin.$admin-warning-end);
           }
 
           &.intervention {
-            background: linear-gradient(135deg, #dc3545, #e83e8c);
+            @include admin.gradient-bg(admin.$admin-danger-start, admin.$admin-danger-end);
           }
         }
       }
@@ -271,175 +83,206 @@
         display: flex;
         justify-content: space-between;
         font-size: 0.8rem;
+        color: admin.$admin-gray-500;
+        font-weight: 600;
+        margin-top: 0.5rem;
 
         .label {
-          &.good {
-            color: #28a745;
-            font-weight: 600;
-          }
-
-          &.monitor {
-            color: #ffc107;
-            font-weight: 600;
-          }
-
-          &.intervention {
-            color: #dc3545;
-            font-weight: 600;
-          }
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
         }
       }
     }
   }
 }
 
-// Health Stats
 .health-stats {
-  .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-    &:hover {
-      background: #e9ecef;
-      transform: translateX(5px);
-    }
+  .stat-item {
+    @include admin.card-base($padding: 1rem, $shadow: admin.$admin-shadow-soft);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: admin.$admin-gray-100;
 
     .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: white;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      color: admin.$admin-gray-50;
+      font-size: 1.3rem;
+      @include admin.flex-center;
+      @include admin.gradient-bg(admin.$admin-primary, admin.$admin-secondary);
     }
 
     .stat-content {
       flex: 1;
 
       .stat-title {
-        font-weight: 600;
-        color: #2c3e50;
         font-size: 0.9rem;
+        font-weight: 600;
+        color: admin.$admin-gray-500;
       }
 
       .stat-value {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 700;
-        color: #2c3e50;
-        margin: 0.25rem 0;
+        color: admin.$admin-gray-900;
       }
 
       .stat-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
         font-size: 0.8rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 12px;
-        font-weight: 500;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
 
         &.completed {
-          background: #d4edda;
-          color: #155724;
+          background: rgba(admin.$admin-success-start, 0.15);
+          color: admin.$admin-success-start;
         }
 
         &.in-progress {
-          background: #fff3cd;
-          color: #856404;
+          background: rgba(admin.$admin-warning-start, 0.2);
+          color: admin.$admin-warning-start;
         }
 
         &.pending {
-          background: #d1ecf1;
-          color: #0c5460;
+          background: rgba(admin.$admin-info-start, 0.15);
+          color: admin.$admin-info-start;
         }
       }
     }
   }
 }
 
-// Management Card
-.management-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: all 0.3s ease;
-
-  &.no-hover {
-    pointer-events: none;
-  }
-
-  .card-header-custom {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 1.5rem;
-    border-bottom: 1px solid #dee2e6;
+.student-info {
+  .student-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     gap: 1rem;
 
-    .header-content {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+    .student-avatar {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2px solid admin.$admin-gray-200;
+      overflow: hidden;
+      box-shadow: admin.$admin-shadow-soft;
 
-      .header-icon {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-      }
-
-      .header-text {
-        .card-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-          margin: 0;
-          color: #2c3e50;
-        }
-
-        .card-subtitle {
-          font-size: 0.9rem;
-          color: #6c757d;
-          margin: 0.25rem 0 0 0;
-        }
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
 
-    .btn-modern {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-      border-radius: 10px;
-      padding: 0.75rem 1.5rem;
-      color: white;
-      font-weight: 500;
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    .student-details {
+      .student-name {
+        font-weight: 600;
+        color: admin.$admin-gray-900;
       }
 
-      i {
-        margin-right: 0.5rem;
+      .student-class {
+        color: admin.$admin-gray-500;
+        font-size: 0.85rem;
       }
     }
   }
+}
 
-  .card-body {
-    padding: 0;
+.health-info {
+  .health-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 0.5rem;
+
+    .metric-item {
+      @include admin.card-base($padding: 0.75rem, $radius: 10px, $shadow: admin.$admin-shadow-soft);
+      background: admin.$admin-gray-100;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+
+      i {
+        color: admin.$admin-primary;
+      }
+    }
+  }
+}
+
+.health-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  color: admin.$admin-gray-50;
+
+  &.is-good {
+    @include admin.gradient-bg(admin.$admin-success-start, admin.$admin-success-end);
+  }
+
+  &.is-monitor {
+    @include admin.gradient-bg(admin.$admin-warning-start, admin.$admin-warning-end);
+  }
+
+  &.is-intervention {
+    @include admin.gradient-bg(admin.$admin-danger-start, admin.$admin-danger-end);
+  }
+
+  &.is-unknown {
+    background: admin.$admin-gray-300;
+    color: admin.$admin-gray-900;
+  }
+}
+
+.last-checkup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  .checkup-date {
+    font-weight: 600;
+    color: admin.$admin-gray-900;
+  }
+  .checkup-type {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: admin.$admin-gray-500;
+  }
+}
+
+.health-modal {
+  .modal-content {
+    border-radius: 16px;
+    box-shadow: admin.$admin-shadow-deep;
+  }
+
+  .modal-body {
+    .section-title {
+      font-weight: 600;
+      color: admin.$admin-gray-900;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .health-info .health-metrics {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .health-chart-container .health-chart-item {
+    padding: 1rem;
   }
 }
 

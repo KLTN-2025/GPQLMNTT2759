@@ -47,7 +47,7 @@
 .scroll-reveal {
   opacity: 0;
   transition: all 0.6s ease-out;
-
+  
   &.revealed {
     opacity: 1;
     animation-fill-mode: both;
@@ -89,25 +89,25 @@
       }
     }
   }
-
+  
   .meal-main {
     margin-top: 50px;
-
+    
     h1 {
       text-align: center;
-
+      
       // Animation cho title
       &.scroll-reveal.revealed {
         animation: fadeInUp 0.8s ease-out;
       }
     }
-
+    
     .form-posts {
       margin-top: 80px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
-
+      
       .item-post {
         cursor: pointer;
         width: 310px;
@@ -116,12 +116,12 @@
         overflow: hidden;
         background-color: #fff;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-
+        
         // Animation cho post items
         &.scroll-reveal.revealed {
           animation: fadeInUp 0.8s ease-out;
         }
-
+        
         &:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -131,7 +131,7 @@
           width: 100%;
           height: 200px;
           overflow: hidden;
-
+          
           .img-post {
             width: 100%;
             height: 100%;
@@ -151,7 +151,7 @@
             display: flex;
             gap: 8px;
             margin-bottom: 8px;
-
+            
             .tag {
               font-size: 12px;
               padding: 4px 8px;
@@ -159,16 +159,16 @@
               font-weight: 500;
               transition: transform 0.2s ease;
             }
-
+            
             .tag:hover {
               transform: scale(1.05);
             }
-
+            
             .tag-news {
               background-color: #fcefea;
               color: #d04f2a;
             }
-
+            
             .tag-inspiration {
               background-color: #eee9fb;
               color: #7b5fc0;
@@ -193,7 +193,7 @@
           .author-info {
             display: flex;
             align-items: center;
-
+            
             .author-avatar {
               width: 32px;
               height: 32px;
@@ -201,14 +201,14 @@
               margin-right: 8px;
               transition: transform 0.3s ease;
             }
-
+            
             .author-meta {
               .author-name {
                 font-size: 14px;
                 font-weight: 500;
                 margin-bottom: 5px;
               }
-
+              
               .author-date {
                 font-size: 12px;
                 color: #999;
@@ -216,14 +216,14 @@
               }
             }
           }
-
+          
           &:hover .author-avatar {
             transform: scale(1.1);
           }
         }
       }
     }
-
+    
     .form-btn {
       width: 100%;
       display: flex;
@@ -231,12 +231,12 @@
       justify-content: center;
       color: white;
       margin-top: 40px;
-
+      
       // Animation cho button
       &.scroll-reveal.revealed {
         animation: fadeInUp 0.8s ease-out;
       }
-
+      
       .btn-show {
         width: 120px;
         border-radius: 10px;
@@ -249,20 +249,20 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
-
+        
         &:hover {
           background-color: #00796b;
           transform: translateY(-2px);
           box-shadow: 0 4px 15px rgba(0, 150, 136, 0.3);
         }
-
+        
         &:active {
           transform: translateY(0);
         }
-
+        
         // Ripple effect
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           top: 50%;
           left: 50%;
@@ -273,7 +273,7 @@
           transition: width 0.3s, height 0.3s;
           transform: translate(-50%, -50%);
         }
-
+        
         &:active::before {
           width: 120px;
           height: 120px;
@@ -287,11 +287,11 @@
 @media (max-width: 768px) {
   .meal-container {
     padding: 20px 20px;
-
+    
     .form-posts {
       .item-post {
         width: 100%;
-
+        
         &.scroll-reveal.revealed {
           animation: fadeInUp 0.6s ease-out;
         }
@@ -304,16 +304,16 @@
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal {
     transition: opacity 0.3s ease;
-
+    
     &.revealed {
       animation: none;
     }
   }
-
+  
   .meal-container .form-posts .item-post:hover {
     transform: none;
   }
-
+  
   .meal-container .form-btn .btn-show:hover {
     transform: none;
   }
