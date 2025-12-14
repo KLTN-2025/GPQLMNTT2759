@@ -1,0 +1,140 @@
+// Classes Management Styles
+@use "../shared-styles";
+
+// Class Info
+.class-info {
+  .class-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .class-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .class-details {
+      .class-name {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+      }
+
+      .class-code {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// Class Details Info
+.class-details-info {
+  .info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #6c757d;
+
+      i {
+        width: 16px;
+        text-align: center;
+        color: #667eea;
+      }
+    }
+  }
+}
+
+// Teacher Info
+.teacher-info {
+  .teacher-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .teacher-role {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Student Count
+.student-count {
+  .count-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .count-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Progress Bar
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+}
+
+// Fee Info
+.fee-info {
+  .fee-amount {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+  }
+
+  .fee-period {
+    color: #6c757d;
+    font-size: 0.8rem;
+  }
+}
+
+// Responsive for class specific styles
+@media (max-width: 768px) {
+  .class-info {
+    .class-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+
+  .class-details-info {
+    .info-group {
+      .info-item {
+        justify-content: center;
+      }
+    }
+  }
+}

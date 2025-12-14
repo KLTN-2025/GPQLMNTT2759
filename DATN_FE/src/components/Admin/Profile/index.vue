@@ -1,146 +1,139 @@
 <template>
-  <div class="container-fluid">
+  <div class="profile-dashboard">
     <!-- Header Section -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="page-title-box d-flex align-items-center justify-content-between">
-          <h4 class="mb-0">Hồ sơ cá nhân</h4>
-          <div class="page-title-right">
-            <ol class="breadcrumb m-0">
-              <li class="breadcrumb-item"><a href="javascript: void(0);">Admin</a></li>
-              <li class="breadcrumb-item active">Hồ sơ</li>
-            </ol>
-          </div>
+    <div class="profile-header">
+      <div class="header-content">
+        <div>
+          <h1 class="page-title">
+            <i class="bx bx-user me-2"></i>
+            Hồ sơ cá nhân
+          </h1>
+          <p class="page-subtitle">Quản lý thông tin cá nhân và cài đặt tài khoản</p>
+        </div>
+        <div class="breadcrumb-nav">
+          <span class="breadcrumb-item">Admin</span>
+          <i class="bx bx-chevron-right"></i>
+          <span class="breadcrumb-item active">Hồ sơ</span>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <!-- Profile Info -->
+      <!-- Left Sidebar -->
       <div class="col-xl-4">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="position-relative d-inline-block">
-              <img :src="thong_tin.avatar" alt="avatar"
-                class="rounded-circle avatar-lg img-thumbnail">
-              <div class="avatar-online">
-                <span class="avatar-status-online"></span>
-              </div>
+        <!-- Profile Info Card -->
+        <div class="profile-info-card">
+          <div class="profile-avatar-section">
+            <div class="avatar-container">
+              <img :src="thong_tin.avatar || '/default-avatar.png'" alt="avatar" class="profile-avatar">
+              <div class="avatar-status"></div>
             </div>
-            <h5 class="mt-3 mb-1">{{ thong_tin.ho_va_ten }}</h5>
-            <p class="text-muted">{{ thong_tin.ten_chuc_vu }}</p>
-            <div class="mt-3">
-              <button v-on:click="Object.assign(update_tt, thong_tin)" type="button" class="btn btn-primary me-2">
-                <i class="bx bx-edit me-1"></i>Chỉnh sửa
+            <h3 class="profile-name">{{ thong_tin.ho_va_ten || 'Nguyễn Văn Admin' }}</h3>
+            <p class="profile-title">{{ thong_tin.ten_chuc_vu || 'Quản trị viên' }}</p>
+            <div class="profile-actions">
+              <button @click="Object.assign(update_tt, thong_tin)" class="btn-edit">
+                <i class="bx bx-edit"></i>
+                Chỉnh sửa
               </button>
-              <button type="button" class="btn btn-outline-secondary">
-                <i class="bx bx-camera me-1"></i>Đổi ảnh
+              <button class="btn-avatar">
+                <i class="bx bx-camera"></i>
+                Đổi ảnh
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Contact Info -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Thông tin liên hệ</h5>
+        <!-- Contact Info Card -->
+        <div class="contact-info-card">
+          <div class="contact-header">
+            <h5 class="contact-title">
+              <i class="bx bx-phone me-2"></i>
+              Thông tin liên hệ
+            </h5>
           </div>
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <div class="flex-shrink-0">
-                <div class="avatar-xs">
-                  <span class="avatar-title rounded-circle bg-primary">
-                    <i class="bx bx-envelope"></i>
-                  </span>
-                </div>
+          <div class="contact-body">
+            <div class="contact-item">
+              <div class="contact-icon email">
+                <i class="bx bx-envelope"></i>
               </div>
-              <div class="flex-grow-1 ms-3">
-                <h6 class="mb-0">Email</h6>
-                <p class="text-muted mb-0">{{ thong_tin.email }}</p>
+              <div class="contact-info">
+                <p class="contact-label">Email</p>
+                <p class="contact-value">{{ thong_tin.email || 'admin@qlmn.edu.vn' }}</p>
               </div>
             </div>
-            <div class="d-flex align-items-center mb-3">
-              <div class="flex-shrink-0">
-                <div class="avatar-xs">
-                  <span class="avatar-title rounded-circle bg-success">
-                    <i class="bx bx-phone"></i>
-                  </span>
-                </div>
+            <div class="contact-item">
+              <div class="contact-icon phone">
+                <i class="bx bx-phone"></i>
               </div>
-              <div class="flex-grow-1 ms-3">
-                <h6 class="mb-0">Điện thoại</h6>
-                <p class="text-muted mb-0">{{ thong_tin.so_dien_thoai }}</p>
+              <div class="contact-info">
+                <p class="contact-label">Điện thoại</p>
+                <p class="contact-value">{{ thong_tin.so_dien_thoai || '0901 234 567' }}</p>
               </div>
             </div>
-            <div class="d-flex align-items-center mb-3">
-              <div class="flex-shrink-0">
-                <div class="avatar-xs">
-                  <span class="avatar-title rounded-circle bg-info">
-                    <i class="bx bx-map"></i>
-                  </span>
-                </div>
+            <div class="contact-item">
+              <div class="contact-icon location">
+                <i class="bx bx-map"></i>
               </div>
-              <div class="flex-grow-1 ms-3">
-                <h6 class="mb-0">Địa chỉ</h6>
-                <p class="text-muted mb-0">{{ thong_tin.dia_chi }}</p>
+              <div class="contact-info">
+                <p class="contact-label">Địa chỉ</p>
+                <p class="contact-value">{{ thong_tin.dia_chi || '123 Đường ABC, Quận 1, TP.HCM' }}</p>
               </div>
             </div>
-            <div class="d-flex align-items-center">
-              <div class="flex-shrink-0">
-                <div class="avatar-xs">
-                  <span class="avatar-title rounded-circle bg-warning">
-                    <i class="bx bx-calendar"></i>
-                  </span>
-                </div>
+            <div class="contact-item">
+              <div class="contact-icon calendar">
+                <i class="bx bx-calendar"></i>
               </div>
-              <div class="flex-grow-1 ms-3">
-                <h6 class="mb-0">Ngày sinh</h6>
-                <p class="text-muted mb-0">{{ thong_tin.ngay_sinh }}</p>
+              <div class="contact-info">
+                <p class="contact-label">Ngày sinh</p>
+                <p class="contact-value">{{ thong_tin.ngay_sinh || '15/03/1985' }}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Skills -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Kỹ năng chuyên môn</h5>
+        <!-- Skills Card -->
+        <div class="skills-card">
+          <div class="skills-header">
+            <h5 class="skills-title">
+              <i class="bx bx-trophy me-2"></i>
+              Kỹ năng chuyên môn
+            </h5>
           </div>
-          <div class="card-body">
-            <div class="mb-3">
-              <div class="d-flex justify-content-between mb-1">
-                <span>Quản lý hệ thống</span>
-                <span>95%</span>
+          <div class="skills-body">
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">Quản lý hệ thống</span>
+                <span class="skill-percentage">95%</span>
               </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-primary" style="width: 95%"></div>
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between mb-1">
-                <span>Quản lý nhân sự</span>
-                <span>88%</span>
-              </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-success" style="width: 88%"></div>
+              <div class="skill-progress">
+                <div class="skill-progress-bar primary" style="width: 95%"></div>
               </div>
             </div>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between mb-1">
-                <span>Báo cáo tài chính</span>
-                <span>92%</span>
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">Quản lý nhân sự</span>
+                <span class="skill-percentage">88%</span>
               </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-info" style="width: 92%"></div>
+              <div class="skill-progress">
+                <div class="skill-progress-bar success" style="width: 88%"></div>
               </div>
             </div>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between mb-1">
-                <span>Phân tích dữ liệu</span>
-                <span>85%</span>
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">Báo cáo tài chính</span>
+                <span class="skill-percentage">92%</span>
               </div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-warning" style="width: 85%"></div>
+              <div class="skill-progress">
+                <div class="skill-progress-bar info" style="width: 92%"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">Phân tích dữ liệu</span>
+                <span class="skill-percentage">85%</span>
+              </div>
+              <div class="skill-progress">
+                <div class="skill-progress-bar warning" style="width: 85%"></div>
               </div>
             </div>
           </div>
@@ -150,147 +143,180 @@
       <!-- Main Content -->
       <div class="col-xl-8">
         <!-- Personal Info Form -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Thông tin cá nhân</h5>
+        <div class="personal-info-card">
+          <div class="personal-info-header">
+            <h5 class="personal-info-title">
+              <i class="bx bx-user-detail me-2"></i>
+              Thông tin cá nhân
+            </h5>
           </div>
-          <div class="card-body">
-            <form>
+          <div class="personal-info-body">
+            <form @submit.prevent="updateProfile">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="firstName" class="form-label">Họ và tên đệm</label>
-                    <input type="text" class="form-control" id="firstName" value="Nguyễn Văn">
+                  <div class="form-group">
+                    <label for="firstName" class="form-label">Họ và tên đệm <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="firstName" v-model="update_tt.ho_va_ten"
+                      placeholder="Nhập họ và tên đệm" required>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="mb-3">
+                  <div class="form-group">
                     <label for="lastName" class="form-label">Tên</label>
-                    <input type="text" class="form-control" id="lastName" value="Admin">
+                    <input type="text" class="form-control" id="lastName" v-model="update_tt.ten"
+                      placeholder="Nhập tên">
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" value="admin@qlmn.edu.vn">
+                  <div class="form-group">
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" v-model="update_tt.email"
+                      placeholder="Nhập email" required>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="mb-3">
+                  <div class="form-group">
                     <label for="phone" class="form-label">Điện thoại</label>
-                    <input type="tel" class="form-control" id="phone" value="0901 234 567">
+                    <input type="tel" class="form-control" id="phone" v-model="update_tt.so_dien_thoai"
+                      placeholder="Nhập số điện thoại">
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
-                  <div class="mb-3">
+                  <div class="form-group">
                     <label for="birthDate" class="form-label">Ngày sinh</label>
-                    <input type="date" class="form-control" id="birthDate" value="1985-03-15">
+                    <input type="date" class="form-control" id="birthDate" v-model="update_tt.ngay_sinh">
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="mb-3">
+                  <div class="form-group">
                     <label for="gender" class="form-label">Giới tính</label>
-                    <select class="form-select" id="gender">
-                      <option value="male" selected>Nam</option>
-                      <option value="female">Nữ</option>
-                      <option value="other">Khác</option>
+                    <select class="form-select" id="gender" v-model="update_tt.gioi_tinh">
+                      <option value="Nam">Nam</option>
+                      <option value="Nữ">Nữ</option>
+                      <option value="Khác">Khác</option>
                     </select>
                   </div>
                 </div>
               </div>
-              <div class="mb-3">
+              <div class="form-group">
                 <label for="address" class="form-label">Địa chỉ</label>
-                <textarea class="form-control" id="address" rows="3">123 Đường ABC, Quận 1, TP.HCM</textarea>
+                <textarea class="form-control" id="address" rows="3" v-model="update_tt.dia_chi"
+                  placeholder="Nhập địa chỉ"></textarea>
               </div>
               <div class="row">
                 <div class="col-md-6">
-                  <div class="mb-3">
+                  <div class="form-group">
                     <label for="department" class="form-label">Phòng ban</label>
-                    <input type="text" class="form-control" id="department" value="Quản trị hệ thống">
+                    <input type="text" class="form-control" id="department" v-model="update_tt.phong_ban"
+                      placeholder="Nhập phòng ban">
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="mb-3">
+                  <div class="form-group">
                     <label for="position" class="form-label">Chức vụ</label>
-                    <input type="text" class="form-control" id="position" value="Quản trị viên">
+                    <input type="text" class="form-control" id="position" v-model="update_tt.ten_chuc_vu"
+                      placeholder="Nhập chức vụ">
                   </div>
                 </div>
               </div>
-              <div class="text-end">
-                <button type="button" class="btn btn-secondary me-2">Hủy</button>
-                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+              <div class="form-actions">
+                <button type="button" class="btn-cancel" @click="resetForm">Hủy</button>
+                <button type="submit" class="btn-save">
+                  <i class="bx bx-save me-1"></i>
+                  Lưu thay đổi
+                </button>
               </div>
             </form>
           </div>
         </div>
 
         <!-- Change Password -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Đổi mật khẩu</h5>
+        <div class="password-card">
+          <div class="password-header">
+            <h5 class="password-title">
+              <i class="bx bx-lock me-2"></i>
+              Đổi mật khẩu
+            </h5>
           </div>
-          <div class="card-body">
-            <form>
-              <div class="mb-3">
+          <div class="password-body">
+            <form @submit.prevent="changePassword">
+              <div class="form-group">
                 <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
-                <input type="password" class="form-control" id="currentPassword">
+                <input type="password" class="form-control" id="currentPassword" v-model="passwordForm.currentPassword"
+                  placeholder="Nhập mật khẩu hiện tại">
               </div>
-              <div class="mb-3">
+              <div class="form-group">
                 <label for="newPassword" class="form-label">Mật khẩu mới</label>
-                <input type="password" class="form-control" id="newPassword">
+                <input type="password" class="form-control" id="newPassword" v-model="passwordForm.newPassword"
+                  placeholder="Nhập mật khẩu mới">
               </div>
-              <div class="mb-3">
+              <div class="form-group">
                 <label for="confirmPassword" class="form-label">Xác nhận mật khẩu mới</label>
-                <input type="password" class="form-control" id="confirmPassword">
+                <input type="password" class="form-control" id="confirmPassword" v-model="passwordForm.confirmPassword"
+                  placeholder="Xác nhận mật khẩu mới">
               </div>
               <div class="text-end">
-                <button type="submit" class="btn btn-warning">Đổi mật khẩu</button>
+                <button type="submit" class="btn-change-password">
+                  <i class="bx bx-key me-1"></i>
+                  Đổi mật khẩu
+                </button>
               </div>
             </form>
           </div>
         </div>
 
         <!-- Activity Log -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Hoạt động gần đây</h5>
+        <div class="activity-card">
+          <div class="activity-header">
+            <h5 class="activity-title">
+              <i class="bx bx-time-five me-2"></i>
+              Hoạt động gần đây
+            </h5>
           </div>
-          <div class="card-body">
-            <div class="timeline-alt pb-0">
+          <div class="activity-body">
+            <div class="timeline">
               <div class="timeline-item">
-                <i class="bx bx-log-in bg-success-light text-success timeline-icon"></i>
-                <div class="timeline-item-info">
-                  <a href="#" class="text-info fw-bold mb-1 d-block">Đăng nhập hệ thống</a>
-                  <small class="text-muted">2 phút trước</small>
-                  <p class="mb-0 mt-1">Đăng nhập thành công từ IP: 192.168.1.100</p>
+                <div class="timeline-icon success">
+                  <i class="bx bx-log-in"></i>
+                </div>
+                <div class="timeline-content">
+                  <h6 class="timeline-title">Đăng nhập hệ thống</h6>
+                  <p class="timeline-time">2 phút trước</p>
+                  <p class="timeline-description">Đăng nhập thành công từ IP: 192.168.1.100</p>
                 </div>
               </div>
               <div class="timeline-item">
-                <i class="bx bx-edit bg-primary-light text-primary timeline-icon"></i>
-                <div class="timeline-item-info">
-                  <a href="#" class="text-info fw-bold mb-1 d-block">Cập nhật thông tin học sinh</a>
-                  <small class="text-muted">1 giờ trước</small>
-                  <p class="mb-0 mt-1">Cập nhật thông tin lớp học cho 15 học sinh</p>
+                <div class="timeline-icon primary">
+                  <i class="bx bx-edit"></i>
+                </div>
+                <div class="timeline-content">
+                  <h6 class="timeline-title">Cập nhật thông tin học sinh</h6>
+                  <p class="timeline-time">1 giờ trước</p>
+                  <p class="timeline-description">Cập nhật thông tin lớp học cho 15 học sinh</p>
                 </div>
               </div>
               <div class="timeline-item">
-                <i class="bx bx-file bg-info-light text-info timeline-icon"></i>
-                <div class="timeline-item-info">
-                  <a href="#" class="text-info fw-bold mb-1 d-block">Xuất báo cáo tài chính</a>
-                  <small class="text-muted">3 giờ trước</small>
-                  <p class="mb-0 mt-1">Xuất báo cáo thu chi tháng 12/2024</p>
+                <div class="timeline-icon info">
+                  <i class="bx bx-file"></i>
+                </div>
+                <div class="timeline-content">
+                  <h6 class="timeline-title">Xuất báo cáo tài chính</h6>
+                  <p class="timeline-time">3 giờ trước</p>
+                  <p class="timeline-description">Xuất báo cáo thu chi tháng 12/2024</p>
                 </div>
               </div>
               <div class="timeline-item">
-                <i class="bx bx-user-plus bg-warning-light text-warning timeline-icon"></i>
-                <div class="timeline-item-info">
-                  <a href="#" class="text-info fw-bold mb-1 d-block">Thêm giáo viên mới</a>
-                  <small class="text-muted">1 ngày trước</small>
-                  <p class="mb-0 mt-1">Thêm giáo viên Nguyễn Thị B vào hệ thống</p>
+                <div class="timeline-icon warning">
+                  <i class="bx bx-user-plus"></i>
+                </div>
+                <div class="timeline-content">
+                  <h6 class="timeline-title">Thêm giáo viên mới</h6>
+                  <p class="timeline-time">1 ngày trước</p>
+                  <p class="timeline-description">Thêm giáo viên Nguyễn Thị B vào hệ thống</p>
                 </div>
               </div>
             </div>
@@ -311,6 +337,11 @@ export default {
       thong_tin: {},
       update_tt: {},
       is_update: false,
+      passwordForm: {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
     }
   },
   mounted() {
@@ -323,187 +354,101 @@ export default {
         .then((res) => {
           if (res.data.status) {
             this.thong_tin = res.data.data;
-            this.$toast.success(res.data.message);
+            // Không hiển thị toast khi load data thành công
           } else {
             this.$toast.error(res.data.message);
           }
         })
         .catch((err) => {
-          const listErr = err.res.data.errors;
-          Object.values(listErr).forEach((error) => {
-            this.$toast.error(error[0]);
-          });
+          if (err.response && err.response.data && err.response.data.errors) {
+            const listErr = err.response.data.errors;
+            Object.values(listErr).forEach((error) => {
+              this.$toast.error(error[0]);
+            });
+          } else {
+            this.$toast.error('Có lỗi xảy ra khi tải dữ liệu');
+          }
         });
     },
+
+    updateProfile() {
+      if (!this.update_tt.ho_va_ten || !this.update_tt.email) {
+        this.$toast.error('Vui lòng điền đầy đủ thông tin bắt buộc');
+        return;
+      }
+
+      baseRequestAdmin
+        .put("admin/profile/update", this.update_tt)
+        .then((res) => {
+          if (res.data.status) {
+            this.thong_tin = { ...this.thong_tin, ...this.update_tt };
+            this.$toast.success('Cập nhật thông tin thành công');
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.errors) {
+            const listErr = err.response.data.errors;
+            Object.values(listErr).forEach((error) => {
+              this.$toast.error(error[0]);
+            });
+          } else {
+            this.$toast.error('Có lỗi xảy ra khi cập nhật thông tin');
+          }
+        });
+    },
+
+    changePassword() {
+      if (!this.passwordForm.currentPassword || !this.passwordForm.newPassword || !this.passwordForm.confirmPassword) {
+        this.$toast.error('Vui lòng điền đầy đủ thông tin');
+        return;
+      }
+
+      if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
+        this.$toast.error('Mật khẩu mới và xác nhận mật khẩu không khớp');
+        return;
+      }
+
+      if (this.passwordForm.newPassword.length < 6) {
+        this.$toast.error('Mật khẩu mới phải có ít nhất 6 ký tự');
+        return;
+      }
+
+      baseRequestAdmin
+        .put("admin/profile/change-password", this.passwordForm)
+        .then((res) => {
+          if (res.data.status) {
+            this.$toast.success('Đổi mật khẩu thành công');
+            this.passwordForm = {
+              currentPassword: '',
+              newPassword: '',
+              confirmPassword: ''
+            };
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.errors) {
+            const listErr = err.response.data.errors;
+            Object.values(listErr).forEach((error) => {
+              this.$toast.error(error[0]);
+            });
+          } else {
+            this.$toast.error('Có lỗi xảy ra khi đổi mật khẩu');
+          }
+        });
+    },
+
+    resetForm() {
+      this.update_tt = {};
+      this.$toast.info('Đã hủy thay đổi');
+    }
   }
 }
 </script>
 
 <style scoped>
-.page-title-box {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-}
-
-.page-title-box h4 {
-  color: white;
-  margin: 0;
-}
-
-.breadcrumb {
-  background: transparent;
-  margin: 0;
-}
-
-.breadcrumb-item a {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.breadcrumb-item.active {
-  color: white;
-}
-
-.card {
-  border: none;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  margin-bottom: 24px;
-}
-
-.card-header {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-bottom: none;
-  border-radius: 15px 15px 0 0 !important;
-}
-
-.card-title {
-  color: #2c3e50;
-  font-weight: 600;
-}
-
-.avatar-lg {
-  width: 150px;
-  height: 150px;
-}
-
-.avatar-xs {
-  width: 32px;
-  height: 32px;
-}
-
-.avatar-online {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.avatar-status-online {
-  width: 20px;
-  height: 20px;
-  background-color: #28a745;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  display: block;
-}
-
-.btn {
-  border-radius: 25px;
-  padding: 10px 20px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.form-control,
-.form-select {
-  border-radius: 10px;
-  border: 1px solid #e9ecef;
-  padding: 12px 15px;
-  transition: all 0.3s ease;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-}
-
-.progress {
-  border-radius: 10px;
-  background-color: #f8f9fa;
-}
-
-.progress-bar {
-  border-radius: 10px;
-}
-
-.timeline-alt {
-  position: relative;
-}
-
-.timeline-item {
-  position: relative;
-  padding-bottom: 1.5rem;
-}
-
-.timeline-item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline-icon {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-
-.timeline-item-info {
-  margin-left: 50px;
-  padding-top: 5px;
-}
-
-.bg-success-light {
-  background-color: rgba(40, 167, 69, 0.2);
-}
-
-.bg-primary-light {
-  background-color: rgba(0, 123, 255, 0.2);
-}
-
-.bg-info-light {
-  background-color: rgba(23, 162, 184, 0.2);
-}
-
-.bg-warning-light {
-  background-color: rgba(255, 193, 7, 0.2);
-}
-
-@media (max-width: 768px) {
-  .page-title-box {
-    padding: 15px;
-  }
-
-  .btn {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-
-  .avatar-lg {
-    width: 120px;
-    height: 120px;
-  }
-}
+@import "./style.scss";
 </style>

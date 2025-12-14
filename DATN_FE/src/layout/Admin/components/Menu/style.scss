@@ -137,7 +137,6 @@
     top: 0;
     left: 0;
     height: 100vh;
-    z-index: 1001;
     overflow-y: auto;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 
@@ -162,6 +161,10 @@
       i {
         font-size: 14px;
         transition: transform 0.3s ease;
+      }
+      span {
+        font-size: 14px;
+        font-family: "Times New Roman", Times, serif;
       }
     }
 
@@ -196,6 +199,7 @@
       opacity: 0;
       max-height: 0;
     }
+
     to {
       opacity: 1;
       max-height: 200px;

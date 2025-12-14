@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DiemDanhSeeder extends Seeder
 {
@@ -17,159 +17,73 @@ class DiemDanhSeeder extends Seeder
         DB::table('diem_danhs')->delete();
         DB::table('diem_danhs')->truncate();
 
-        $diemDanhs = [
-            // Lớp Mầm - Ngày 06/01/2025
-            [
-                'id' => 1,
-                'id_lop_hoc' => 1,
-                'id_hoc_sinh' => 1,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 2,
-                'id_lop_hoc' => 1,
-                'id_hoc_sinh' => 2,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 3,
-                'id_lop_hoc' => 1,
-                'id_hoc_sinh' => 3,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => false, // Vắng mặt
-                'ghi_chu' => 'Bị ốm, phụ huynh đã xin phép',
-            ],
-            // Lớp Chồi - Ngày 06/01/2025
-            [
-                'id' => 4,
-                'id_lop_hoc' => 2,
-                'id_hoc_sinh' => 4,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 5,
-                'id_lop_hoc' => 2,
-                'id_hoc_sinh' => 5,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 6,
-                'id_lop_hoc' => 2,
-                'id_hoc_sinh' => 6,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => false, // Vắng mặt
-                'ghi_chu' => 'Gia đình có việc',
-            ],
-            // Lớp Lá - Ngày 06/01/2025
-            [
-                'id' => 7,
-                'id_lop_hoc' => 3,
-                'id_hoc_sinh' => 7,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 8,
-                'id_lop_hoc' => 3,
-                'id_hoc_sinh' => 8,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 9,
-                'id_lop_hoc' => 3,
-                'id_hoc_sinh' => 9,
-                'ngay_diem_danh' => '2025-01-06',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            // Lớp Mầm - Ngày 07/01/2025
-            [
-                'id' => 10,
-                'id_lop_hoc' => 1,
-                'id_hoc_sinh' => 1,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 11,
-                'id_lop_hoc' => 1,
-                'id_hoc_sinh' => 2,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 12,
-                'id_lop_hoc' => 1,
-                'id_hoc_sinh' => 3,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đã khỏi ốm, trở lại học',
-            ],
-            // Lớp Chồi - Ngày 07/01/2025
-            [
-                'id' => 13,
-                'id_lop_hoc' => 2,
-                'id_hoc_sinh' => 4,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 14,
-                'id_lop_hoc' => 2,
-                'id_hoc_sinh' => 5,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => false, // Vắng mặt
-                'ghi_chu' => 'Bị sốt, phụ huynh đã xin phép',
-            ],
-            [
-                'id' => 15,
-                'id_lop_hoc' => 2,
-                'id_hoc_sinh' => 6,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đã trở lại học',
-            ],
-            // Lớp Lá - Ngày 07/01/2025
-            [
-                'id' => 16,
-                'id_lop_hoc' => 3,
-                'id_hoc_sinh' => 7,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 17,
-                'id_lop_hoc' => 3,
-                'id_hoc_sinh' => 8,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => true, // Có mặt
-                'ghi_chu' => 'Đi học đầy đủ',
-            ],
-            [
-                'id' => 18,
-                'id_lop_hoc' => 3,
-                'id_hoc_sinh' => 9,
-                'ngay_diem_danh' => '2025-01-07',
-                'tinh_trang' => false, // Vắng mặt
-                'ghi_chu' => 'Gia đình đi du lịch',
-            ],
+        $diemDanhs = [];
+        $ghiChuCoMat = [
+            'Đi học đầy đủ',
+            'Đi học đúng giờ',
+            'Học tập tốt',
+            'Tích cực tham gia',
+            'Chăm chỉ học tập',
         ];
 
-        DB::table('diem_danhs')->insert($diemDanhs);
+        $ghiChuVang = [
+            'Bị ốm, phụ huynh đã xin phép',
+            'Gia đình có việc',
+            'Bị sốt, phụ huynh đã xin phép',
+            'Đi khám sức khỏe',
+            'Gia đình đi du lịch',
+            'Nghỉ phép',
+            'Vắng mặt có phép',
+        ];
+
+        // Tạo điểm danh cho 10 ngày gần đây (từ 10 ngày trước đến hôm nay)
+        $today = Carbon::now();
+        $daysToGenerate = 10;
+
+        // 20 lớp học, mỗi lớp có 25 học sinh
+        // Học sinh id: Lớp 1 = 1-25, Lớp 2 = 26-50, ..., Lớp 20 = 476-500
+        $studentsPerClass = 25;
+
+        for ($dayOffset = $daysToGenerate; $dayOffset >= 0; $dayOffset--) {
+            $ngayDiemDanh = $today->copy()->subDays($dayOffset)->format('Y-m-d');
+
+            // Bỏ qua thứ 7 và chủ nhật (chỉ điểm danh thứ 2-6)
+            $dayOfWeek = Carbon::parse($ngayDiemDanh)->dayOfWeek;
+            if ($dayOfWeek == Carbon::SATURDAY || $dayOfWeek == Carbon::SUNDAY) {
+                continue;
+            }
+
+            // Điểm danh cho tất cả lớp học (20 lớp)
+            for ($lopId = 1; $lopId <= 20; $lopId++) {
+                // Tính ID học sinh đầu tiên của lớp này
+                $firstStudentId = (($lopId - 1) * $studentsPerClass) + 1;
+
+                // Điểm danh cho tất cả học sinh trong lớp
+                for ($studentIndex = 0; $studentIndex < $studentsPerClass; $studentIndex++) {
+                    $studentId = $firstStudentId + $studentIndex;
+
+                    // 85% học sinh có mặt, 15% vắng mặt (tỷ lệ thực tế)
+                    $isPresent = rand(1, 100) <= 85;
+
+                    $diemDanhs[] = [
+                        'id_lop_hoc' => $lopId,
+                        'id_hoc_sinh' => $studentId,
+                        'ngay_diem_danh' => $ngayDiemDanh,
+                        'tinh_trang' => $isPresent ? 1 : 0, // 1 = có mặt, 0 = vắng mặt
+                        'ghi_chu' => $isPresent
+                            ? $ghiChuCoMat[array_rand($ghiChuCoMat)]
+                            : $ghiChuVang[array_rand($ghiChuVang)],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+        }
+
+        // Chèn dữ liệu theo batch để tránh memory limit
+        $chunks = array_chunk($diemDanhs, 500);
+        foreach ($chunks as $chunk) {
+            DB::table('diem_danhs')->insert($chunk);
+        }
     }
 }

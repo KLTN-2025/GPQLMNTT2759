@@ -1,0 +1,202 @@
+Mục lục
+Phần 1: Swagger là gì?	2
+Phần 2: Cài đặt Laravel	2
+Phần 3: Cài đặt swagger trong Laravel	2
+3.1. Cài đặt thư viện darkaonline/l5-swagger bằng lệnh sau:	2
+3.2. publish L5-Swagger's config	2
+3.3. Cấu hình env	3
+3.4. Cấu trúc swagger chuẩn trong Laravel	3
+3.4.1. Cấp bậc và vị trí	3
+3.5. Cấu trúc khai báo Swagger	3
+3.6. File mô tả chung	4
+3.7. Ví dụ minh hoạ Swagger	5
+
+
+ 
+Phần 1: Swagger là gì?
+Swagger là một Ngôn ngữ mô tả giao diện để mô tả các API RESTful được thể hiện bằng JSON.
+Swagger được sử dụng cùng với một bộ công cụ phần mềm mã nguồn mở để thiết kế, xây dựng, lập tài liệu và sử dụng các dịch vụ web RESTful.
+Swagger bao gồm tài liệu tự động, tạo mã (sang nhiều ngôn ngữ lập trình) và tạo test-case.
+Phần 2: Cài đặt Laravel
+Đầu tiên, chúng ta cần tạo một dự án Laravel mới, sử dụng lệnh sau: 
+composer create-project --prefer-dist laravel/laravel laravel_swagger
+Tiếp theo, chúng ta sẽ kết nối với cơ sở dữ liệu như sau:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_swagger
+DB_USERNAME=root
+DB_PASSWORD=
+Cuối cùng, hãy chạy lệnh sau để tạo cấu trúc bảng cơ sở dữ liệu:
+php artisan migrate
+Phần 3: Cài đặt swagger trong Laravel
+3.1. Cài đặt thư viện darkaonline/l5-swagger bằng lệnh sau:
+composer require "darkaonline/l5-swagger"
+3.2. publish L5-Swagger's config
+php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+3.3. Cấu hình env
+L5_SWAGGER_GENERATE_ALWAYS=true (Để cho dự án Laravel có thể tự động cập nhập lại tài liệu)
+L5_SWAGGER_CONST_HOST=http://localhost:8000
+3.4. Cấu trúc swagger chuẩn trong Laravel
+3.4.1. Cấp bậc và vị trí 
+Không được đặt @OA\Server bên trong @OA\Info. Cả hai phải là thành phần cùng cấp (top-level) — hoặc nằm trong một wrapper @OA\OpenApi(...).
+/**
+ * @OA\OpenApi(
+ *   @OA\Info(...),
+ *   @OA\Server(...)
+ * )
+ */
+
+Hoặc
+/**
+ * @OA\Info(...)
+ * @OA\Server(...)
+ */
+3.5. Cấu trúc khai báo Swagger
+Swagger trong Laravel sử dụng annotation PHP (ghi chú bằng @OA\... trong comment block).: 
+-	@OA\Info : Thông tin tổng quan về API
+-	@OA\Server : Danh sách server triển khai
+-	@OA\Tag : Gom nhóm
+-	@OA\Get / @OA\Post : Định nghĩa
+-	Path : Đường dẫn endpoint
+-	Summary: Mô tả ngắn
+-	@OA\Parameter: tham số truyền vào
+-	@OA\Response: Cấu trúc phản hồi trả về
+-	@OA\JsonContent: Dạng JSON trả về
+-	Example : giá trị mẫu hiển thị
+-	Type :  kiểu dữ liệu
+-	Property:  trường
+3.6. File mô tả chung
+Mỗi swagger cần có 1 file mô tả chung có thể đặt trong app/Http/Controllers/Controller.php
+/**
+ * @OA\Info(
+ *     title="My Laravel API",
+ *     version="1.0.0",
+ *     description="Tài liệu API cho hệ thống Laravel",
+ *     @OA\Contact(
+ *         email="support@yourapp.com"
+ *     )
+ * )
+ *
+ * @OA\Server(
+ *     url="http://127.0.0.1:8000",
+ *     description="Local development server"
+ * )
+ */
+
+Giải thích: 
+-	@OA\Info(…) 
+•	Title:  tên tài liệu Api
+•	Version:  là version của API/documentation
+•	Description: Mô tả ngắn/chi tiết về API
+•	@OA\Contact(...): thông tin liên hệ hỗ trợ vd: name, email, …
+•	@OA\Server(...) có thể khai báo nhiều server
+url: URL của API Ví dụ http://127.0.0.1:8000 — Swagger UI sẽ dùng URL này để sinh curl/requests.
+		description: Mô tả server (ví dụ "Local development server").
+3.7. Ví dụ minh hoạ Swagger
+Ví dụ: method Get
+/**
+     * @OA\Get( 
+     *     path="/api/khach-hang/get-data",
+     *     summary="Lấy danh sách khách hàng",
+     *     tags={"Khách Hàng"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Danh sách khách hàng trả về thành công",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="ho_ten", type="string", example="Nguyễn Văn A"),
+     *                     @OA\Property(property="email", type="string", example="a@gmail.com"),
+     *                     @OA\Property(property="so_dien_thoai", type="string", example="0901234567")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+Giải thích: 
+-	@OA\Get(…), @OA\Post, @OA\Put, @OA\Delete : là API Get, Post, put, delete
+-	path=”…” : Đường dẫn API
+-	summary="…" : Mô tả về API
+-	tags={"…"} :  gom nhóm các API cùng loại
+-	@OA\Response(…) : Định nghĩa phản hồi
+-	response=200 : trạng thái trả về
+-	description="…" : mô tả
+-	@OA\JsonContent(…) Mô rả json trả về
+-	type="…" : kiểu dữ liệu trả về
+-	@OA\Property(…) : định nghĩa các thuộc tính trong json
+-	@OA\Items( mô tả cấu trúc của từng phần tử trong một mảng
+o	property : tên trường trong object.
+o	type: kiểu dữ liệu
+o	example: ví dụ hiển thị trong Swagger UI
+o	nullable=true : cho phép null
+o	description: mô tả ngắn cho field
+o	default: giá trị mặc định.
+-	)
+
+Ví du: method post
+/**
+ * @OA\Post(
+ *     path="/api/khach-hang/store",
+ *     summary="Thêm mới khách hàng",
+ *     tags={"Khách Hàng"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Dữ liệu khách hàng cần thêm",
+ *         @OA\JsonContent(
+ *             required={"ho_ten","email","so_dien_thoai"},
+ *             @OA\Property(property="ho_ten", type="string", example="Nguyễn Văn B"),
+ *             @OA\Property(property="email", type="string", example="b@gmail.com"),
+ *             @OA\Property(property="so_dien_thoai", type="string", example="0908765432"),
+ *             @OA\Property(property="dia_chi", type="string", example="123 Nguyễn Văn Linh, Đà Nẵng")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Tạo khách hàng thành công",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Thêm khách hàng thành công"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="id", type="integer", example=10),
+ *                 @OA\Property(property="ho_ten", type="string", example="Nguyễn Văn B"),
+ *                 @OA\Property(property="email", type="string", example="b@gmail.com"),
+ *                 @OA\Property(property="so_dien_thoai", type="string", example="0908765432"),
+ *                 @OA\Property(property="dia_chi", type="string", example="123 Nguyễn Văn Linh, Đà Nẵng")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Dữ liệu không hợp lệ hoặc thiếu trường bắt buộc"
+ *     )
+ * )
+ */
+
+
+Giải thích: 
+-	@OA\Post(...) : Xác định phương thức HTTP là POST, dùng để tạo mới dữ liệu. (Tương tự có @OA\Get, @OA\Put, @OA\Delete)
+-	Path”...” : Đường dẫn API mà client sẽ gửi request tới.
+-	summary="..." : Mô tả ngắn gọn chức năng của API
+-	tags={" "} : Gom nhóm các API thuộc cùng lĩnh vực
+-	@OA\RequestBody(...) : Mô tả dữ liệu mà client gửi lên
+-	required=true : Bắt buộc phải có dữ liệu trong body.
+-	description="..." : Mô tả nội dung dữ liệu gửi lên.
+-	@OA\JsonContent(...) :  Định nghĩa cấu trúc JSON mà client cần gửi.
+-	required={...} : Các trường bắt buộc phải có trong JSON request
+-	@OA\Property(property="ho_ten", type="string", example="...") : Mô tả từng trường trong request body
+-	@OA\Response(...) : Mô tả các phản hồi có thể trả về từ API
+-	response=201 : Mã trạng thái HTTP
+-	description="..." : Mô tả chi tiết phản hồi.
+-	@OA\JsonContent(...) : Mô tả cấu trúc JSON trong phản hồi.
+-	@OA\Property(property="status", type="boolean", example=true) : Thuộc tính trong JSON trả về, ví dụ status là boolean, message là string.
+-	@OA\Property(property="data", type="object", ...) : Mô tả chi tiết object data chứa thông tin khách hàng mới được tạo.
+
