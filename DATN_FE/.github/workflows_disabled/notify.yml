@@ -1,0 +1,30 @@
+name: Notify on Deployment
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Vercel", "Deploy to Netlify", "Deploy to FTP Server"]
+    types:
+      - completed
+
+jobs:
+  notify:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != '' }}
+
+    steps:
+      - name: Notify on Success
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        run: |
+          echo "✅ Deployment successful!"
+          echo "Workflow: ${{ github.event.workflow_run.name }}"
+          echo "Commit: ${{ github.event.workflow_run.head_sha }}"
+
+      - name: Notify on Failure
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Workflow: ${{ github.event.workflow_run.name }}"
+          echo "Commit: ${{ github.event.workflow_run.head_sha }}"
+          exit 1
+

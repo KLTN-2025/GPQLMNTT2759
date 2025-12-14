@@ -1,0 +1,220 @@
+.header-menu-container {
+  padding: 0px 150px;
+  margin-top: 75px;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1000;
+  background-color: #fff;
+  box-shadow: 0 7px 6px -1px rgb(110, 106, 106);
+
+  .header-menu {
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+    display: flex;
+
+    .form-nav {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      align-items: center;
+
+      .nav-menu {
+        width: 100%;
+        justify-content: space-between;
+        display: flex;
+      }
+
+      .item-home {
+        white-space: nowrap;
+        text-align: center;
+        color: black;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 17px;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+
+        &:hover {
+          color: rgb(88, 48, 55);
+        }
+      }
+
+      .post-wrapper {
+        position: relative;
+        display: inline-block;
+
+        .item-home {
+          text-align: center;
+          color: black;
+          font-weight: 500;
+          cursor: pointer;
+          font-size: 17px;
+          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+
+          &:hover {
+            color: rgb(88, 48, 55);
+          }
+        }
+
+        .blog-dropdown {
+          position: absolute;
+          top: calc(100% + 0px);
+          left: -20%;
+          width: 160px;
+          z-index: 999;
+          padding: 8px 0;
+          border-radius: 8px;
+          background-color: white;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .fade-slide-enter-active,
+        .fade-slide-leave-active {
+          transition: all 0.25s ease;
+        }
+
+        .fade-slide-enter-from,
+        .fade-slide-leave-to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+
+        .fade-slide-enter-to,
+        .fade-slide-leave-from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .v-list-item {
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
+
+      .fade-slide-enter-active,
+      .fade-slide-leave-active {
+        transition: all 0.3s ease;
+      }
+
+      .fade-slide-enter-from,
+      .fade-slide-leave-to {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+    }
+  }
+
+  // Overlay cho mobile
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  // Sidebar menu styles
+  .sidebar-menu {
+    width: 250px;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+
+    .sidebar-item {
+      padding: 15px 20px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #333;
+      font-size: 16px;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #f8f9fa;
+        color: rgb(88, 48, 55);
+      }
+
+      i {
+        font-size: 14px;
+        transition: transform 0.3s ease;
+      }
+      span {
+        font-size: 14px;
+        font-family: "Times New Roman", Times, serif;
+      }
+    }
+
+    .sidebar-sub {
+      background: #f8f9fa;
+      border-left: 3px solid rgb(88, 48, 55);
+      animation: slideDown 0.3s ease;
+
+      .sub-item {
+        padding: 12px 20px 12px 40px;
+        cursor: pointer;
+        color: #666;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #e9ecef;
+
+        &:hover {
+          background-color: #e9ecef;
+          color: rgb(88, 48, 55);
+          padding-left: 45px;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      max-height: 0;
+    }
+
+    to {
+      opacity: 1;
+      max-height: 200px;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 991px) {
+    .header-menu-container {
+      padding: 0;
+      margin-top: 0;
+      height: auto;
+      position: relative;
+      z-index: 1000;
+      box-shadow: none;
+    }
+  }
+}
